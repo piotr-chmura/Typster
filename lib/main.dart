@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'database.dart';
+import 'backend/database.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,23 +38,22 @@ class _MyHomePageState extends State<MyHomePage> {
   var name = '';
 
   //baza
-  Future <String> getName() async{
-    String name2 ="";
-    await db.getConn().then((conn) async{
-        String sql = 'select nazwisko from test.testowa where id_testowa = 1;';
-        await conn.connect();
-        await conn.execute(sql).then((results){
-            for(var row in results.rows){
-              name2 = row.colAt(0)!;
-            }
-        });  
+  Future<String> getName() async {
+    String name2 = "";
+    await db.getConn().then((conn) async {
+      String sql = 'select nazwisko from test.testowa where id_testowa = 1;';
+      await conn.connect();
+      await conn.execute(sql).then((results) {
+        for (var row in results.rows) {
+          name2 = row.colAt(0)!;
+        }
+      });
     });
     return name2;
   }
 
-  void _setName(){
-    getName().then((results)
-    {
+  void _setName() {
+    getName().then((results) {
       setState(() {
         name = results;
       });
@@ -71,10 +70,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(widget.title),
-        )
-      ),
+          title: Center(
+        child: Text(widget.title),
+      )),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -85,11 +83,14 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$name'
               '$_counter',
-               style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
             TextButton(
               onPressed: _setName,
-              child: const Icon(Icons.add, color: Color.fromARGB(255, 255, 0, 0),),
+              child: const Icon(
+                Icons.add,
+                color: Color.fromARGB(255, 255, 0, 0),
+              ),
             )
           ],
         ),
