@@ -13,7 +13,7 @@ Future<void> main2() async {
   );
   await conn.connect();
   // Create a table
-  await conn.execute('INSERT INTO testowa values (2, "Kowalski")');
+  await conn.execute('INSERT INTO testowa values (2, "Kowalskis")');
 
   // Finally, close the connection
   await conn.close();
