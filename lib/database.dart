@@ -1,20 +1,22 @@
 import 'package:mysql_client/mysql_client.dart';
 import 'dart:async';
 
-Future<void> main2() async {
-  // Open a connection (testdb should already exist)
+class Mysql{
+  static String host = "217.96.203.20",
+    userName = "Host_PCH_API_UPDATE",
+    password = "h>k96{U9M8#2Qr8_",
+    databaseName = "test";
 
-  final conn = await MySQLConnection.createConnection(
-    host: "217.96.203.20",
-    port: 3306,
-    userName: "Host_PCH_API_UPDATE",
-    password: "h>k96{U9M8#2Qr8_",
-    databaseName: "test", // optional
-  );
-  await conn.connect();
-  // Create a table
-  await conn.execute('INSERT INTO testowa values (2, "Kowalskis")');
+  static int port = 3306;
 
-  // Finally, close the connection
-  await conn.close();
+  Mysql();
+
+  Future <MySQLConnection> getConn() async {
+
+    return await MySQLConnection.createConnection(
+      host: host, 
+      port: port, 
+      userName: userName, 
+      password: password);
+  }
 }
