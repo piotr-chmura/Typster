@@ -16,3 +16,19 @@ class Mysql {
         host: host, port: port, userName: userName, password: password);
   }
 }
+
+class User {
+  int? id;
+  String? username, password, email;
+
+  User(this.username,this.password,this.email, {this.id});
+
+  User.def() {
+    id = null;
+    username = '';
+    password = '';
+    email = '';
+
+  }
+}
+

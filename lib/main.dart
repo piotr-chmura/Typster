@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/backend/Data%20Acces%20Object.dart';
 
 import 'backend/database.dart';
 
@@ -33,38 +34,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  var db = Mysql();
+  var dao = DAO();
   var name = '';
 
   //baza
-  Future<String> getName() async {
-    String name2 = "";
-    await db.getConn().then((conn) async {
-      String sql = 'select nazwisko from test.testowa where id_testowa = 1;';
-      await conn.connect();
-      await conn.execute(sql).then((results) {
-        for (var row in results.rows) {
-          name2 = row.colAt(0)!;
-        }
-      });
-    });
-    return name2;
-  }
-
-  void _setName() {
-    getName().then((results) {
+  void _readUser() {
+    dao.getUser().then((results) {
       setState(() {
-        name = results;
+        name = results[0].username!;
       });
     });
   }
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  void _Insert() {
+    User user = User("user", "word", "whatever@gmail.com");
+    dao.insertUser(user);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -81,12 +67,11 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$name'
-              '$_counter',
+              '$name',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             TextButton(
-              onPressed: _setName,
+              onPressed: _readUser,
               child: const Icon(
                 Icons.add,
                 color: Color.fromARGB(255, 255, 0, 0),
@@ -96,8 +81,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       bottomNavigationBar: const BottomAppBar(
-        child: Text('bottom'),
         elevation: 0,
+        child: Text('bottom'),
       ),
     );
   }
