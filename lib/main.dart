@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/backend/Data%20Acces%20Object.dart';
-
 import 'backend/database.dart';
+import 'backend/Data Acces Object.dart';
+import 'login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,12 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Login Typster',
       theme: ThemeData(
-        // This is the theme of your application.
-        primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
+        primarySwatch: Colors.green
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Login(),
     );
   }
 }
