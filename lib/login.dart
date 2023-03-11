@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/backend/Data%20Acces%20Object.dart';
 import 'package:test_app/backend/database.dart';
+import 'package:test_app/register.dart';
+import 'package:test_app/mainMenu.dart';
 
 class Login extends StatefulWidget{
+  const Login({super.key});
+
   @override
   _LoginState createState() => _LoginState();
 }
@@ -91,7 +95,10 @@ class _LoginState extends State<Login>{
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: ElevatedButton(
                   onPressed: () { 
-
+                      Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MainMenu())
+                      );
                   },
                   child: const Text("Zaloguj")
 
@@ -104,7 +111,10 @@ class _LoginState extends State<Login>{
                   InkWell(
                     child: TextButton(
                     onPressed: (){
-
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Register())
+                      );
                     },
                     child: const Text("Załóż konto"),
                     ),

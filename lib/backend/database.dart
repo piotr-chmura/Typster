@@ -23,12 +23,5 @@ class User {
 
   User(this.username,this.password,this.email, {this.id});
 
-  User.def() {
-    id = null;
-    username = '';
-    password = '';
-    email = '';
-
-  }
 }
 

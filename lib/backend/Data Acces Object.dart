@@ -35,7 +35,7 @@ class DAO {
           }
       }, onError: (details) {
         if (kDebugMode) {
-          print("Insert faild");
+          print("Insert failed");
         }
       });
       await prepareStatment.deallocate();
