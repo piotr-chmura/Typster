@@ -18,6 +18,7 @@ class _LoginState extends State<Login>{
   bool hidePassword = true;
   late List<User> users;
 
+//alert typu pop-up
   void openDialog(BuildContext context, String dialogTitle, String dialogContent){
     showDialog(
       context: context, 
@@ -34,7 +35,7 @@ class _LoginState extends State<Login>{
           ],
         );
       }
-      );
+    );
   }
 
   @override

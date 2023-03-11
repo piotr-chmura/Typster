@@ -14,12 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login Typster',
+      title: 'Typster',
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.green
       ),
-      home: Login(),
+      home: const Login(),
     );
   }
 }
@@ -45,13 +45,12 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     });
   }
-
+/*
   void _Insert() {
     User user = User("user", "word", "whatever@gmail.com");
     dao.insertUser(user);
   }
-
-
+*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
