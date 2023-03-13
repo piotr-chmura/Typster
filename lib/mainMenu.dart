@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/backend/Buissnes%20Object.dart';
+import 'package:test_app/side_menu.dart';
 
 class MainMenu extends StatefulWidget{
   const MainMenu({super.key});
@@ -21,9 +22,13 @@ class _MainMenu extends State<MainMenu> {
   @override
   Widget build (BuildContext context){
     return Scaffold(
+      drawer: NavDrawer(),
       appBar: AppBar(
-        title: const Center(
-          child: Text('Typster')
+        title: Container(
+          margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+          child:const Center(
+            child:Text('Typster')
+            )
           )
       ),
       body: Padding(

@@ -17,6 +17,7 @@ class _LoginState extends State<Login>{
   TextEditingController passwordController = TextEditingController();
   bool hidePassword = true;
   late List<User> users;
+  bool isChecked = false;
 
 //alert typu pop-up
   void openDialog(BuildContext context, String dialogTitle, String dialogContent){
@@ -43,6 +44,13 @@ class _LoginState extends State<Login>{
     super.initState();
   }
 
+    @override
+  void dispose() {
+    super.dispose();
+    usernameController .dispose();
+    passwordController.dispose();
+  }
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -65,21 +73,21 @@ class _LoginState extends State<Login>{
               ),
               Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
                 child: TextField(
                   controller: usernameController,
-                  decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "Username"),
+                  decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "Nazwa użytkownika"),
                 )
               ),
               Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 50),
                 child: TextField(
                   obscureText: hidePassword,
                   controller: passwordController,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(), 
-                    labelText: "Password",
+                    labelText: "Hasło",
                     suffixIcon: IconButton(
                       icon: Icon(hidePassword? Icons.visibility_off : Icons.visibility), 
                       onPressed: () {  
@@ -87,10 +95,27 @@ class _LoginState extends State<Login>{
                           hidePassword = !hidePassword;
                         });
                       },
-                      )
-                    ),
+                    )
+                  ),
                 )
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text("Zapamiętaj dane logowania"),
+                  Checkbox(
+                    value: isChecked, 
+                    checkColor: Colors.white,
+                    fillColor: MaterialStateProperty.resolveWith((states) => Colors.green),
+                    onChanged: (bool? value){
+                      setState(() {
+                        isChecked = value!;
+                      });
+                    }
+                    )
+                ]
+              ),
+              const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
               Container(
                 height: 50,
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -105,6 +130,7 @@ class _LoginState extends State<Login>{
 
                   ),
               ),
+              const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
