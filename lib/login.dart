@@ -20,24 +20,6 @@ class _LoginState extends State<Login>{
   bool isChecked = false;
 
 //alert typu pop-up
-  void openDialog(BuildContext context, String dialogTitle, String dialogContent){
-    showDialog(
-      context: context, 
-      builder: (context){
-        return AlertDialog(
-          title: Text(dialogTitle),
-          content: Text(dialogContent),
-          actions: <Widget>[
-              TextButton(
-              onPressed: (){
-                Navigator.of(context).pop();
-              }, 
-              child: const Text('Back'))
-          ],
-        );
-      }
-    );
-  }
 
   @override
   void initState() {
