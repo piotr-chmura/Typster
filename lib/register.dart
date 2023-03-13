@@ -30,13 +30,14 @@ class _RegisterState extends State<Register> {
     _controller1.dispose();
     _controller2.dispose();
     _controller3.dispose();
+    _controller4.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:
-          AppBar(title: const Center(child: Text('Rejestracja           '))),
+          AppBar(title: const Center(child: Text('Rejestracja'))),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -47,26 +48,44 @@ class _RegisterState extends State<Register> {
           children: <Widget>[
             TextField(
               decoration: InputDecoration(
-              labelText: 'Username',
+              labelText: 'Nazwa użytkownika',
               errorText: validate1? null : 'Pole nie może być puste'
               ),
             controller: _controller1,
             ),
             const SizedBox(height: 10),
             TextField(
+              obscureText: hidePassword,
               decoration: InputDecoration(
-              labelText: 'Password',
+              labelText: 'Hasło',
+              suffixIcon: IconButton(
+                icon: Icon(hidePassword? Icons.visibility_off : Icons.visibility), 
+                onPressed: () {  
+                  setState(() {
+                    hidePassword = !hidePassword;
+                  });
+                },
+              ),
               errorText: validate2? null : 'Pole nie może być puste'
               ),
             controller: _controller2,
             ),
             const SizedBox(height: 10),
             TextField(
+              obscureText: hidePassword,
               decoration: InputDecoration(
-              labelText: 'Email',
-              errorText: validate3? null : 'Pole nie może być puste'
+              labelText: 'Powtórz hasło',
+              errorText: validate3? null : 'Hasła muszą być takie same'
               ),
             controller: _controller3,
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              decoration: InputDecoration(
+              labelText: 'Email',
+              errorText: validate4? null : 'Pole nie może być puste'
+              ),
+            controller: _controller4,
             ),
             const SizedBox(height: 10),
             Container(
@@ -76,11 +95,13 @@ class _RegisterState extends State<Register> {
               onPressed: () {  
                 String username = _controller1.text;
                 String password = _controller2.text;
-                String email = _controller3.text;
+                String password2= _controller3.text;
+                String email = _controller4.text;
                 setState(() {
                   isNullOrEmpty(username) ? validate1 = false : validate1 = true;
                   isNullOrEmpty(password) ? validate2 = false : validate2 = true;
-                  isNullOrEmpty(email) ? validate3 = false : validate3 = true;
+                  isEven(password2, password) ? validate3 = false : validate3 = true;
+                  isNullOrEmpty(email) ? validate4 = false : validate4 = true;
                 });
               },
               child: const Text('Załóż konto')
