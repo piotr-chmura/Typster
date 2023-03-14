@@ -64,64 +64,69 @@ class _MainMenu extends State<MainMenu> {
                   ),
                 ),
             ),
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 50),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 5,
-                  color: const Color.fromRGBO(100, 100, 100, 1)
+            GestureDetector(
+              onTap: (){
+                print("xD");
+              },
+              child:Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 50),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 5,
+                    color: const Color.fromRGBO(100, 100, 100, 1)
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(10))
                 ),
-                borderRadius: const BorderRadius.all(Radius.circular(10))
-              ),
-              child: Column(
-                children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          child: const Text(
-                            "Bundesliga",
-                            style: TextStyle(
-                              color: Colors.green
-                            ),
-                            ),
-                        ),
-                        const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          child: const Text("Niedziela 24.02, 16:15"),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(5, 20, 5, 20),
-                          child: const Text("Miejsce na ikone 1"),
-                        ),
-                        const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(5, 20, 5, 20),
-                          child: const Text("Miejsce na ikone 2"),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 50),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
-                          child: const Text("Nazwa zespołu 1"),
-                        ),
-                        const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
-                          child: const Text("Nazwa zespolu 2"),
-                        )
-                      ],
-                    )
-                ],
+                child: Column(
+                  children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            child: const Text(
+                              "Bundesliga",
+                              style: TextStyle(
+                                color: Colors.green
+                              ),
+                              ),
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            child: const Text("Niedziela 24.02, 16:15"),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(5, 20, 5, 20),
+                            child: const Text("Miejsce na ikone 1"),
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(5, 20, 5, 20),
+                            child: const Text("Miejsce na ikone 2"),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 50),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
+                            child: const Text("Nazwa zespołu 1"),
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
+                            child: const Text("Nazwa zespolu 2"),
+                          )
+                        ],
+                      )
+                  ],
+                )
               )
             )
           ]
