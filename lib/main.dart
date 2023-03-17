@@ -15,10 +15,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Typster',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.green
-      ),
+      theme:
+          ThemeData(brightness: Brightness.dark, primarySwatch: Colors.green),
       home: const Login(),
     );
   }
@@ -45,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     });
   }
+
 /*
   void _Insert() {
     User user = User("user", "word", "whatever@gmail.com");
