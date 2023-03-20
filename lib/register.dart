@@ -36,9 +36,14 @@ class _RegisterState extends State<Register> {
     _controller4.dispose();
   }
 
-  void _Insert(String username, String password, String email) {
+  String _Insert(String username, String password, String email) {
     User user = User(username, password, email);
-    dao.insertUser(user);
+    dao.insertUser(user).then((result) {
+      return result;
+    }).catchError((error) {
+      return error;
+    });
+    return "";
   }
 
   @override
@@ -97,7 +102,7 @@ class _RegisterState extends State<Register> {
                 height: 50,
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       String username = _controller1.text;
                       String password = _controller2.text;
                       String password2 = _controller3.text;
@@ -114,7 +119,20 @@ class _RegisterState extends State<Register> {
                           isNullOrEmpty(validate2) &&
                           validate3 &&
                           isNullOrEmpty(validate4)) {
-                        _Insert(username, password, email);
+                        User user = User(username, password, email);
+                        String res = "";
+                        await dao.insertUser(user).then((result) {
+                          res = result;
+                        }).catchError((error) {
+                          res = error;
+                        });
+                        if (isNullOrEmpty(res)) {
+                          print(res);
+                        } else {
+                          print(res);
+                          //if (result.indexOf("") != -1) {}
+                        }
+                        print('xd');
                       }
                     },
                     child: const Text('Załóż konto')),

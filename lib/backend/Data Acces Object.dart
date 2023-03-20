@@ -22,24 +22,20 @@ class DAO {
     return result;
   }
 
-  Future<void> insertUser(User user) async {
+  Future<String> insertUser(User user) async {
+    String error = "";
     await db.getConn().then((conn) async {
       String sql = 'insert into t_users values (?, ?, ?, ?);';
       await conn.connect();
       var prepareStatment = await conn.prepare(sql);
       await prepareStatment
           .execute([null, user.username, user.password, user.email]).then(
-              (result) {
-        if (kDebugMode) {
-          print("Success");
-        }
-      }, onError: (details) {
-        if (kDebugMode) {
-          print("Failed");
-        }
+              (result) {}, onError: (details) {
+        error = details.toString();
       });
       await prepareStatment.deallocate();
       await conn.close();
     });
+    return (error);
   }
 }
