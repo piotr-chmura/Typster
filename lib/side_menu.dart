@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/groups.dart';
+import 'package:test_app/login.dart';
+import 'package:test_app/matches.dart';
+
+import 'mainMenu.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -22,9 +27,44 @@ class NavDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.input),
-            title: Text('Welcome'),
-            onTap: () => {},
+            leading: const Icon(Icons.home),
+            title: const Text('Strona główna'),
+            onTap: () => {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MainMenu()))
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.work),
+            title: const Text('Grupy'),
+            onTap: () => {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Groups()))
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.event),
+            title: const Text('Mecze'),
+            onTap: () => {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Matches()))
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Wyloguj'),
+            onTap: () => {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Login()))
+            },
           ),
         ],
       ),
