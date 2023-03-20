@@ -19,7 +19,7 @@ class _MainMenu extends State<MainMenu> {
     super.initState();
   }
 
-  Widget zwrot() {
+  Widget matches() {
     return Expanded(
       child: Column(
         children: <Widget>[
@@ -150,7 +150,7 @@ class _MainMenu extends State<MainMenu> {
                   ),
                 ),
             ),
-            zwrot()
+            matches()
           ]
         )
       )
