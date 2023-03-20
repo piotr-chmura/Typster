@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'backend/database.dart';
-import 'backend/Data Acces Object.dart';
-import 'package:test_app/backend/Buissnes%20Object.dart';
+import 'backend/registerBackend.dart';
+import 'backend/BuissnesObject.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -11,7 +11,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  var dao = DAO();
+  var dao = RegisterDAO();
   TextEditingController _controller1 = TextEditingController();
   TextEditingController _controller2 = TextEditingController();
   TextEditingController _controller3 = TextEditingController();
@@ -127,12 +127,37 @@ class _RegisterState extends State<Register> {
                           res = error;
                         });
                         if (isNullOrEmpty(res)) {
-                          print(res);
+                          print('GIT');
                         } else {
-                          print(res);
-                          //if (result.indexOf("") != -1) {}
+                          int error = res.indexOf("nickname");
+                          String errorElement = "";
+                          if (error != -1) {
+                            error = res.indexOf("e_mail");
+                            if (error != -1) {
+                              errorElement = "Błąd serwera.";
+                            } else {
+                              errorElement =
+                                  "Nazwa użytkownika jest już zajęta.";
+                            }
+                          } else {
+                            errorElement =
+                                "E-mail jest już przypisany do innego użytkownika.";
+                          }
+                          // ignore: use_build_context_synchronously
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Błąd'),
+                              content: Text(errorElement),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'OK'),
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
                         }
-                        print('xd');
                       }
                     },
                     child: const Text('Załóż konto')),
