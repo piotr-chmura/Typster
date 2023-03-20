@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:flutter/material.dart';
 import 'backend/database.dart';
 import 'backend/registerBackend.dart';
@@ -34,16 +36,6 @@ class _RegisterState extends State<Register> {
     _controller2.dispose();
     _controller3.dispose();
     _controller4.dispose();
-  }
-
-  String _Insert(String username, String password, String email) {
-    User user = User(username, password, email);
-    dao.insertUser(user).then((result) {
-      return result;
-    }).catchError((error) {
-      return error;
-    });
-    return "";
   }
 
   @override
@@ -127,7 +119,8 @@ class _RegisterState extends State<Register> {
                           res = error;
                         });
                         if (isNullOrEmpty(res)) {
-                          print('GIT');
+                          // ignore: use_build_context_synchronously
+                          Navigator.pop(context);
                         } else {
                           int error = res.indexOf("nickname");
                           String errorElement = "";

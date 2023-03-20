@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:typed_data';
 import 'package:encrypt/encrypt.dart';
 import 'database.dart';
@@ -13,20 +15,4 @@ class DAO {
     db = Mysql();
     encrypter = Encrypter(AES(key));
   }
-
-  // Future<List<User>> getUser() async {
-  //   List<User> result = [];
-  //   await db.getConn().then((conn) async {
-  //     String sql = 'select id_user, nickname, e_mail from t_users;';
-  //     await conn.connect();
-  //     await conn.execute(sql).then((results) {
-  //       for (var row in results.rows) {
-  //         // result.add(User(row.colAt(1), row.colAt(2), row.colAt(3),
-  //         //     id: row.typedColAt<int>(0)));
-  //       }
-  //     });
-  //     await conn.close();
-  //   });
-  //   return result;
-  // }
 }

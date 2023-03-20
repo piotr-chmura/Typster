@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/backend/dataAccesObject.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_app/backend/loginBackend.dart';
 import 'package:test_app/backend/database.dart';
+import 'backend/buissnesObject.dart';
 import 'package:test_app/register.dart';
 import 'package:test_app/mainMenu.dart';
 
@@ -12,9 +14,11 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  var dao = DAO();
+  var dao = LoginDAO();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool validate1 = true;
+  bool validate2 = true;
   bool hidePassword = true;
   late List<User> users;
   bool isChecked = false;
@@ -58,9 +62,11 @@ class _LoginState extends State<Login> {
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
                 child: TextField(
                   controller: usernameController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: "Nazwa użytkownika"),
+                      labelText: "Nazwa użytkownika",
+                      errorText:
+                          validate1 ? null : 'Nazwa użytkownika jest wymagana'),
                 )),
             Container(
                 alignment: Alignment.center,
@@ -80,7 +86,8 @@ class _LoginState extends State<Login> {
                             hidePassword = !hidePassword;
                           });
                         },
-                      )),
+                      ),
+                      errorText: validate2 ? null : 'Hasło jest wymagane'),
                 )),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
               const Text("Zapamiętaj dane logowania"),
@@ -100,11 +107,59 @@ class _LoginState extends State<Login> {
               height: 50,
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MainMenu()));
+                  onPressed: () async {
+                    String username = usernameController.text;
+                    String password = passwordController.text;
+                    setState(() {
+                      isNullOrEmpty(username)
+                          ? validate1 = false
+                          : validate1 = true;
+                      isNullOrEmpty(password)
+                          ? validate2 = false
+                          : validate2 = true;
+                    });
+                    if (validate1 && validate2) {
+                      User user = User(username, password, "");
+                      String res = "";
+                      await dao.loginUser(user).then((result) {
+                        res = result;
+                      }).catchError((error) {
+                        res = error;
+                      });
+                      if (isNullOrEmpty(res)) {
+                        if (isChecked) {
+                          DateTime now = DateTime.now();
+                          //DateTime(now.year, now.month, now.day);
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setString('username', username);
+                          await prefs.setStringList('date', [
+                            now.day.toString(),
+                            now.month.toString(),
+                            now.year.toString()
+                          ]);
+                        }
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MainMenu()));
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Błąd'),
+                            content: Text(res),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    }
                   },
                   child: const Text("Zaloguj")),
             ),
