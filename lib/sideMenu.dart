@@ -7,6 +7,10 @@ import 'package:test_app/matches.dart';
 import 'mainMenu.dart';
 
 class NavDrawer extends StatelessWidget {
+
+  const NavDrawer({super.key, required this.username});
+  final String username;
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -32,7 +36,9 @@ class NavDrawer extends StatelessWidget {
             title: const Text('Strona główna'),
             onTap: () => {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const MainMenu()))
+                  MaterialPageRoute(
+                    builder: (context) => const MainMenu(),
+                    settings: RouteSettings(arguments: username)))
             },
           ),
           ListTile(
@@ -40,7 +46,8 @@ class NavDrawer extends StatelessWidget {
             title: const Text('Grupy'),
             onTap: () => {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const Groups()))
+                  MaterialPageRoute(builder: (context) => const Groups(),
+                  settings: RouteSettings(arguments: username)))
             },
           ),
           ListTile(
@@ -48,7 +55,8 @@ class NavDrawer extends StatelessWidget {
             title: const Text('Mecze'),
             onTap: () => {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const Matches()))
+                  MaterialPageRoute(builder: (context) => const Matches(),
+                  settings: RouteSettings(arguments: username)))
             },
           ),
           ListTile(

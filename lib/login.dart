@@ -142,7 +142,8 @@ class _LoginState extends State<Login> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const MainMenu()));
+                                builder: (context) => const MainMenu(),
+                                settings: RouteSettings(arguments: username)));
                       } else {
                         // ignore: use_build_context_synchronously
                         showDialog<String>(

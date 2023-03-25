@@ -52,8 +52,9 @@ class _Groups extends State<Groups> {
 
   @override
   Widget build(BuildContext context) {
+    String username = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
-        drawer: NavDrawer(),
+        drawer: NavDrawer(username: username),
         appBar: AppBar(
             iconTheme: const IconThemeData(
               color: Colors.green,
