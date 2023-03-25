@@ -20,7 +20,7 @@ class LoginDAO extends DAO {
                   .toString();
               String dbPasswordValidate = dbPassword ?? "";
               String passwordValidate = user.password ?? "";
-              if (isEven(dbPasswordValidate, passwordValidate)) {
+              if (!isEven(dbPasswordValidate, passwordValidate)) {
                 error = "Nie poprawna nazwa użytkownika lub hasło";
               }
             }

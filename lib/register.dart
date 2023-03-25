@@ -103,8 +103,8 @@ class _RegisterState extends State<Register> {
                         validate1 = isValidUserName(username);
                         validate2 = isValidPassword(password);
                         isEven(password2, password)
-                            ? validate3 = false
-                            : validate3 = true;
+                            ? validate3 = true
+                            : validate3 = false;
                         validate4 = isValidEmail(email);
                       });
                       if (isNullOrEmpty(validate1) &&

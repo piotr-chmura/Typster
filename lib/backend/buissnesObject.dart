@@ -7,8 +7,8 @@ bool isNullOrEmpty(String str) {
 }
 
 bool isEven(String str1, String str2) {
-  if (str1 == str2) return false;
-  return true;
+  if (str1 == str2) return true;
+  return false;
 }
 
 String isValidUserName(String str) {
