@@ -38,32 +38,23 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> _navigateAndDisplaySelection(BuildContext context) async {
-
     final result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const Register()),
     );
 
     if (!mounted) return;
-    if(result == null) return;
+    if (result == null) return;
 
     ScaffoldMessenger.of(context)
       ..removeCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
+      ..showSnackBar(SnackBar(
           content: Center(
-            child:Text(
-              '$result',
-              style: const TextStyle(
-              color: Colors.green
-              )
-            ),
+            child: Text('$result', style: const TextStyle(color: Colors.green)),
           ),
           duration: const Duration(milliseconds: 3000),
           behavior: SnackBarBehavior.floating,
-          backgroundColor: const Color.fromARGB(255, 66, 66, 66)
-        )
-      );
+          backgroundColor: const Color.fromARGB(255, 66, 66, 66)));
   }
 
   @override
@@ -156,11 +147,11 @@ class _LoginState extends State<Login> {
                         res = error;
                       });
                       if (isNullOrEmpty(res)) {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setString('username', username);
                         if (isChecked) {
                           DateTime now = DateTime.now();
                           //DateTime(now.year, now.month, now.day);
-                          final prefs = await SharedPreferences.getInstance();
-                          await prefs.setString('username', username);
                           await prefs.setStringList('date', [
                             now.day.toString(),
                             now.month.toString(),
@@ -171,8 +162,7 @@ class _LoginState extends State<Login> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const MainMenu(),
-                                settings: RouteSettings(arguments: username)));
+                                builder: (context) => const MainMenu()));
                       } else {
                         // ignore: use_build_context_synchronously
                         showDialog<String>(
