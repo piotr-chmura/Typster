@@ -120,7 +120,7 @@ class _RegisterState extends State<Register> {
                         });
                         if (isNullOrEmpty(res)) {
                           // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
+                          Navigator.pop(context, "Zarejestrowano poprawnie");
                         } else {
                           int error = res.indexOf("nickname");
                           String errorElement = "";

@@ -147,7 +147,7 @@ class _MainMenu extends State<MainMenu> {
               alignment: Alignment.center,
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 150),
               child: Text(
-                username as String,
+                username,
                 style: const TextStyle(
                   color: Colors.green,
                   fontSize: 20

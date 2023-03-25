@@ -37,6 +37,35 @@ class _LoginState extends State<Login> {
     passwordController.dispose();
   }
 
+  Future<void> _navigateAndDisplaySelection(BuildContext context) async {
+
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const Register()),
+    );
+
+    if (!mounted) return;
+    if(result == null) return;
+
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Center(
+            child:Text(
+              '$result',
+              style: const TextStyle(
+              color: Colors.green
+              )
+            ),
+          ),
+          duration: const Duration(milliseconds: 3000),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: const Color.fromARGB(255, 66, 66, 66)
+        )
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,10 +199,7 @@ class _LoginState extends State<Login> {
               InkWell(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Register()));
+                    _navigateAndDisplaySelection(context);
                   },
                   child: const Text("Załóż konto"),
                 ),
