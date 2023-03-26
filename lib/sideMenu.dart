@@ -10,6 +10,7 @@ class NavDrawer extends StatelessWidget {
 
   const NavDrawer({super.key, required this.username});
   final String username;
+  
 
   @override
   Widget build(BuildContext context) {

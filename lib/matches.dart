@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/sideMenu.dart';
 
 class Matches extends StatefulWidget {
@@ -10,6 +11,18 @@ class Matches extends StatefulWidget {
 }
 
 class _Matches extends State<Matches> {
+
+
+  String username = "";
+
+  Future<void> getUsername() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userName = prefs.getString('username') ?? "";
+    setState(() {
+      username = userName;
+    });
+  }
+  
   @override
   void initState() {
     super.initState();
@@ -57,7 +70,6 @@ class _Matches extends State<Matches> {
 
   @override
   Widget build(BuildContext context) {
-    String username = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
         drawer: NavDrawer(username: username),
         appBar: AppBar(
