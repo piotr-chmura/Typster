@@ -27,12 +27,12 @@ class _MainMenu extends State<MainMenu> {
     getUsername();
   }
 
+
   Widget matches() {
     return Expanded(
         child: Column(children: <Widget>[
-      mecz("Bundesliga", "26.02.2023, 16:15", "Freiburg", "Bayern Leverkusen"),
-      mecz("Ekstraklasa", "27.02.2023, 20:10", "Legia Warszawa",
-          "Pogoń Szczecin")
+      mecz("Bundesliga", "26.02.2023, 16:15", "Borussia Dortmund", "Bayer Leverkusen"),
+      mecz("Seria A", "27.02.2023, 20:10", "Inter", "Juventus")
     ]));
   }
 
@@ -56,7 +56,7 @@ class _MainMenu extends State<MainMenu> {
                 Row(
                   children: <Widget>[
                     Container(
-                      padding: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.fromLTRB(20, 5, 0, 5),
                       child: Text(
                         "$groupName",
                         style: const TextStyle(color: Colors.green),
@@ -64,7 +64,7 @@ class _MainMenu extends State<MainMenu> {
                     ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.fromLTRB(0, 5, 20, 5),
                       child: Text("$data"),
                     )
                   ],
@@ -72,27 +72,27 @@ class _MainMenu extends State<MainMenu> {
                 Row(
                   children: <Widget>[
                     Container(
-                      padding: const EdgeInsets.fromLTRB(5, 20, 5, 20),
-                      child: const Text("Miejsce na ikone 1"),
+                      padding: const EdgeInsets.fromLTRB(10, 20, 5, 20),
+                      child: Image (image: AssetImage("lib/resources/Team logos/2/"+teamA+".png")),
                     ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.fromLTRB(5, 20, 5, 20),
-                      child: const Text("Miejsce na ikone 2"),
+                      padding: const EdgeInsets.fromLTRB(5, 20, 10, 20),
+                      child: Image (image: AssetImage("lib/resources/Team logos/2/"+teamB+".png")),
                     )
                   ],
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
                 Row(
                   children: <Widget>[
                     Container(
-                      padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
-                      child: Text("$teamA"),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 5, 0),
+                      child: Text("$teamA", style: TextStyle(fontWeight: FontWeight.w500)),
                     ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
-                      child: Text("$teamB"),
+                      padding: const EdgeInsets.fromLTRB(5, 20, 20, 0),
+                      child: Text("$teamB", style: TextStyle(fontWeight: FontWeight.w500),),
                     )
                   ],
                 )
