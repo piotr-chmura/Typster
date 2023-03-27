@@ -29,11 +29,10 @@ class _MainMenu extends State<MainMenu> {
 
 
   Widget matches() {
-    return Expanded(
-        child: Column(children: <Widget>[
+    return Column(children: <Widget>[
       mecz("Bundesliga", "26.02.2023, 16:15", "Borussia Dortmund", "Bayer Leverkusen"),
       mecz("Seria A", "27.02.2023, 20:10", "Inter", "Juventus")
-    ]));
+    ]);
   }
 
   GestureDetector mecz(groupName, data, teamA, teamB) {
