@@ -13,6 +13,7 @@ class Groups extends StatefulWidget {
 class _Groups extends State<Groups> {
 
   String username = "";
+  TextEditingController searchBarController= TextEditingController();
 
   Future<void> getUsername() async {
     final prefs = await SharedPreferences.getInstance();
@@ -27,9 +28,27 @@ class _Groups extends State<Groups> {
     super.initState();
   }
 
-  SingleChildScrollView tablica() {
+    @override
+  void dispose() {
+    super.dispose();
+    searchBarController.dispose();
+  }
+
+  DataRow row(groupName,ownerNickname){
+    return DataRow(
+      onSelectChanged: (bool? select) {
+        if (kDebugMode) {
+          print("$groupName");
+        }
+      },
+      cells: [
+        DataCell(Text(groupName)),
+        DataCell(Text(ownerNickname)),
+      ]);
+  }
+
+  SingleChildScrollView table() {
     //dane udające dane z bazy
-    int id = 1;
     String groupName = "Bundesliga";
     String ownerNickname = "System";
 
@@ -39,26 +58,15 @@ class _Groups extends State<Groups> {
             scrollDirection: Axis.horizontal,
             child: DataTable(showCheckboxColumn: false, columns: const [
               DataColumn(
-                label: Text('ID'),
-              ),
-              DataColumn(
                 label: Text('Nazwa'),
               ),
               DataColumn(
                 label: Text('Nickname właściciela'),
               ),
-            ], rows: [
-              DataRow(
-                  onSelectChanged: (bool? select) {
-                    if (kDebugMode) {
-                      print("$id");
-                    }
-                  },
-                  cells: [
-                    DataCell(Text("$id")),
-                    DataCell(Text(groupName)),
-                    DataCell(Text(ownerNickname)),
-                  ])
+            ], 
+            rows: [
+              row(groupName, ownerNickname),
+              row("Seria A", "Kulomiot")
             ])));
   }
 
@@ -77,7 +85,7 @@ class _Groups extends State<Groups> {
                 child: const Center(child: Text('Typster')))),
         body: Padding(
             padding: const EdgeInsets.all(10),
-            child: ListView(children: <Widget>[
+            child: ListView(children: <Widget>[     
               Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(30),
@@ -90,6 +98,22 @@ class _Groups extends State<Groups> {
                 ),
               ),
               Container(
+                child: TextField(
+                  controller: searchBarController,
+                  decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: "Wyszukaj grupę",
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.search), 
+                    onPressed: () {  
+                      //wyszukaj z bazy dancyh po wartości controlera
+                    },
+                    )
+                  )
+                )
+              ),
+              const SizedBox(height: 20),
+              Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 50),
                   decoration: BoxDecoration(
@@ -98,7 +122,8 @@ class _Groups extends State<Groups> {
                           color: const Color.fromRGBO(100, 100, 100, 1)),
                       borderRadius:
                           const BorderRadius.all(Radius.circular(10))),
-                  child: tablica())
+                  child: table()
+                  )
             ])));
   }
 }

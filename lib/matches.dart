@@ -28,44 +28,76 @@ class _Matches extends State<Matches> {
     super.initState();
   }
 
-  SingleChildScrollView tablica() {
-    //dane udające dane z bazy
-    String groupName = "Bundesliga";
-    String teamA = "Freiburg";
-    String teamB = "Bayern Leverkusen";
-    String data = "26.02.2023, 16:15";
+  Widget matches() {
+    return Expanded(
+        child: Column(children: <Widget>[
+      mecz("Bundesliga", "26.02.2023, 16:15", "Borussia Dortmund", "Bayer Leverkusen"),
+      mecz("Seria A", "27.02.2023, 20:10", "Inter", "Juventus")
+    ]));
+  }
 
-    return SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(showCheckboxColumn: false, columns: const [
-              DataColumn(
-                label: Text('Grupa'),
-              ),
-              DataColumn(
-                label: Text('Drużyna A'),
-              ),
-              DataColumn(
-                label: Text('Drużyna B'),
-              ),
-              DataColumn(
-                label: Text('Data'),
-              ),
-            ], rows: [
-              DataRow(
-                  onSelectChanged: (bool? select) {
-                    if (kDebugMode) {
-                      print("ok");
-                    }
-                  },
-                  cells: [
-                    DataCell(Text(groupName)),
-                    DataCell(Text(teamA)),
-                    DataCell(Text(teamB)),
-                    DataCell(Text(data)),
-                  ])
-            ])));
+  GestureDetector mecz(groupName, data, teamA, teamB) {
+    return GestureDetector(
+        onTap: () {
+          if (kDebugMode) {
+            print("Check");
+          }
+        },
+        child: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 50),
+            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            decoration: BoxDecoration(
+                border: Border.all(
+                    width: 5, color: const Color.fromRGBO(100, 100, 100, 1)),
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(20, 5, 0, 5),
+                      child: Text(
+                        "$groupName",
+                        style: const TextStyle(color: Colors.green),
+                      ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 5, 20, 5),
+                      child: Text("$data"),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(10, 20, 5, 20),
+                      child: Image (image: AssetImage("lib/resources/Team logos/2/"+teamA+".png")),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(5, 20, 10, 20),
+                      child: Image (image: AssetImage("lib/resources/Team logos/2/"+teamB+".png")),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 5, 0),
+                      child: Text("$teamA", style: TextStyle(fontWeight: FontWeight.w500)),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(5, 20, 20, 0),
+                      child: Text("$teamB", style: TextStyle(fontWeight: FontWeight.w500),),
+                    )
+                  ],
+                )
+              ],
+            )));
   }
 
   @override
@@ -94,16 +126,7 @@ class _Matches extends State<Matches> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 50),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 2,
-                          color: const Color.fromRGBO(100, 100, 100, 1)),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10))),
-                  child: tablica())
+              matches()
             ])));
   }
 }
