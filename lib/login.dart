@@ -83,7 +83,7 @@ class _LoginState extends State<Login> {
                 child: TextField(
                   controller: usernameController,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                       labelText: "Nazwa użytkownika",
                       errorText:
                           validate1 ? null : 'Nazwa użytkownika jest wymagana'),

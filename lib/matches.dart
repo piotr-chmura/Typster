@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/sideMenu.dart';
+import 'betMatch.dart';
 
 class Matches extends StatefulWidget {
   const Matches({super.key});
@@ -14,6 +15,27 @@ class _Matches extends State<Matches> {
 
 
   String username = "";
+
+  Future<void> _navigateAndDisplaySelection(BuildContext context, int match_id, String groupName, teamA, teamB, data) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BetMatch(match_id: match_id, groupName: groupName, teamA: teamA, teamB: teamB, data: data )),
+    );
+
+    if (!mounted) return;
+    if (result == null) return;
+
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+          content: Center(
+            child: Text('$result', style: const TextStyle(color: Colors.green)),
+          ),
+          duration: const Duration(milliseconds: 3000),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: const Color.fromARGB(255, 66, 66, 66)));
+  }
+
 
   Future<void> getUsername() async {
     final prefs = await SharedPreferences.getInstance();
@@ -31,17 +53,15 @@ class _Matches extends State<Matches> {
   Widget matches() {
     return Expanded(
         child: Column(children: <Widget>[
-      mecz("Bundesliga", "26.02.2023, 16:15", "Borussia Dortmund", "Bayer Leverkusen"),
-      mecz("Seria A", "27.02.2023, 20:10", "Inter", "Juventus")
+      mecz("Bundesliga", "26.02.2023, 16:15", "Borussia Dortmund", "Bayer Leverkusen", 1),
+      mecz("Seria A", "27.02.2023, 20:10", "Inter", "Juventus", 2)
     ]));
   }
 
-  GestureDetector mecz(groupName, data, teamA, teamB) {
+  GestureDetector mecz(groupName, data, teamA, teamB, match_id) {
     return GestureDetector(
         onTap: () {
-          if (kDebugMode) {
-            print("Check");
-          }
+          _navigateAndDisplaySelection(context, match_id, groupName, teamA, teamB, data);
         },
         child: Container(
             alignment: Alignment.center,
@@ -97,7 +117,9 @@ class _Matches extends State<Matches> {
                   ],
                 )
               ],
-            )));
+            )
+          )
+        );
   }
 
   @override

@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/sideMenu.dart';
-
 import 'joinGroup.dart';
 
 class Groups extends StatefulWidget {

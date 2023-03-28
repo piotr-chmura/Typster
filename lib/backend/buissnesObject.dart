@@ -11,6 +11,13 @@ bool isEven(String str1, String str2) {
   return false;
 }
 
+String isValidInt(String intiger){
+  if(intiger.isEmpty || intiger.length > 1){
+    return "Błędny wynik";
+  }
+  return "";
+}
+
 String isValidUserName(String str) {
   if (str.isEmpty || str.length < 4 || str.length > 20) {
     return "Nazwa użytkownika musi zawierać od 4 do 20 znaków";
