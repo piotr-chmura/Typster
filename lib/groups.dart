@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/sideMenu.dart';
 
+import 'joinGroup.dart';
+
 class Groups extends StatefulWidget {
   const Groups({super.key});
 
@@ -23,6 +25,26 @@ class _Groups extends State<Groups> {
     });
   }
 
+  Future<void> _navigateAndDisplaySelection(BuildContext context, String groupName) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => JoinGroup(groupname: groupName)),
+    );
+
+    if (!mounted) return;
+    if (result == null) return;
+
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+          content: Center(
+            child: Text('$result', style: const TextStyle(color: Colors.green)),
+          ),
+          duration: const Duration(milliseconds: 3000),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: const Color.fromARGB(255, 66, 66, 66)));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -37,9 +59,7 @@ class _Groups extends State<Groups> {
   DataRow row(groupName,ownerNickname){
     return DataRow(
       onSelectChanged: (bool? select) {
-        if (kDebugMode) {
-          print("$groupName");
-        }
+        _navigateAndDisplaySelection(context, groupName);
       },
       cells: [
         DataCell(Text(groupName)),
@@ -48,9 +68,6 @@ class _Groups extends State<Groups> {
   }
 
   SingleChildScrollView table() {
-    //dane udające dane z bazy
-    String groupName = "Bundesliga";
-    String ownerNickname = "System";
 
     return SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -65,7 +82,7 @@ class _Groups extends State<Groups> {
               ),
             ], 
             rows: [
-              row(groupName, ownerNickname),
+              row("Bundesliga", "System"),
               row("Seria A", "Kulomiot")
             ])));
   }
