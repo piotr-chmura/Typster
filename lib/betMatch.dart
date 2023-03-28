@@ -108,7 +108,7 @@ class _BetMatch extends State<BetMatch> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
-                    width: 200,
+                    width: 150,
                     height: 100,
                     padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: TextField(
@@ -121,7 +121,7 @@ class _BetMatch extends State<BetMatch> {
                     )
                   ),
                   Container(
-                    width: 200,
+                    width: 150,
                     height: 100,
                     padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: TextField(
@@ -141,7 +141,7 @@ class _BetMatch extends State<BetMatch> {
                 children: <Widget>[
                   Container(
                     height: 60,
-                    width: 200,
+                    width: 150,
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: ElevatedButton(
                       onPressed: (){
@@ -152,7 +152,7 @@ class _BetMatch extends State<BetMatch> {
                     ),
                   Container(
                     height: 60,
-                    width: 200,
+                    width: 150,
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(

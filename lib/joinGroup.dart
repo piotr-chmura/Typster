@@ -50,7 +50,7 @@ class _JoinGroup extends State<JoinGroup> {
                 children: <Widget>[
                   Container(
                     height: 60,
-                    width: 200,
+                    width: 150,
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: ElevatedButton(
                       onPressed: (){
@@ -61,7 +61,7 @@ class _JoinGroup extends State<JoinGroup> {
                     ),
                   Container(
                     height: 60,
-                    width: 200,
+                    width: 150,
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
