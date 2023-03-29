@@ -145,7 +145,17 @@ class _BetMatch extends State<BetMatch> {
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: ElevatedButton(
                       onPressed: (){
+                        var teamABet = teamA_bet.text;
+                        var teamBBet = teamB_bet.text;
+                        print(teamABet);
+                        setState(() {
+                          validate1 = isValidInt(teamABet);
+                          validate2 = isValidInt(teamBBet);
+                        });
+                        print(isNullOrEmpty(validate1) && isNullOrEmpty(validate2));
+                        if(isNullOrEmpty(validate1) && isNullOrEmpty(validate2)){
                         Navigator.pop(context, "Obstawiono mecz!");
+                        }
                       }, 
                       child: const Text("OBSTAW")
                       )
@@ -159,12 +169,6 @@ class _BetMatch extends State<BetMatch> {
                           backgroundColor: const Color.fromARGB(255, 255, 0, 0)
                         ),
                         onPressed: (){
-                          String teamABet = teamA_bet.text;
-                          String teamBBet = teamB_bet.text;
-                          setState(() {
-                            validate1 = isValidInt(teamABet);
-                            validate2 = isValidInt(teamBBet);
-                          });
                           Navigator.pop(context, "Wycofano obstawianie");
                         }, 
                         child: const Text("WYCOFAJ")

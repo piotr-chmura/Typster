@@ -11,11 +11,12 @@ bool isEven(String str1, String str2) {
   return false;
 }
 
-String isValidInt(String intiger){
-  if(intiger.isEmpty || intiger.length > 1){
-    return "Błędny wynik";
+String isValidInt(String INT){
+  final regex = RegExp(r'^[0-9]+$');
+  if(regex.hasMatch(INT)){
+    return "";
   }
-  return "";
+  return "Nie podano liczby";
 }
 
 String isValidUserName(String str) {
