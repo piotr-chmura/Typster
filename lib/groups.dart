@@ -15,7 +15,22 @@ class _Groups extends State<Groups> {
   var dao = GroupDAO();
   List<Group> groups = [];
   List<DataRow> rows = [];
-  SingleChildScrollView table = SingleChildScrollView();
+  SingleChildScrollView table = SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+              showCheckboxColumn: false,
+              columns: const [
+                DataColumn(
+                  label: Text('Nazwa'),
+                ),
+                DataColumn(
+                  label: Text('Właściciel'),
+                ),
+              ],
+              // ignore: prefer_const_literals_to_create_immutables
+              rows: [])));
   String username = "";
   TextEditingController searchBarController = TextEditingController();
 

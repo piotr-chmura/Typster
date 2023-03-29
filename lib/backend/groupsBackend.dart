@@ -30,7 +30,8 @@ class GroupDAO extends DAO {
                 row.colAt(2)));
           }
         } else {
-          throw Exception("Błąd bazy danych");
+          throw Exception(
+              "Błąd bazy danych: Użytkownik należy do wszystkich grup");
         }
       }, onError: (details) {
         throw Exception(details.toString());
