@@ -147,12 +147,10 @@ class _BetMatch extends State<BetMatch> {
                       onPressed: (){
                         var teamABet = teamA_bet.text;
                         var teamBBet = teamB_bet.text;
-                        print(teamABet);
                         setState(() {
                           validate1 = isValidInt(teamABet);
                           validate2 = isValidInt(teamBBet);
                         });
-                        print(isNullOrEmpty(validate1) && isNullOrEmpty(validate2));
                         if(isNullOrEmpty(validate1) && isNullOrEmpty(validate2)){
                         Navigator.pop(context, "Obstawiono mecz!");
                         }
