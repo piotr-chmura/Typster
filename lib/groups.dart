@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_app/backend/groupsBackend.dart';
+import 'package:test_app/backend/database.dart';
 import 'package:test_app/sideMenu.dart';
 import 'joinGroup.dart';
 
@@ -12,22 +12,29 @@ class Groups extends StatefulWidget {
 }
 
 class _Groups extends State<Groups> {
-
+  var dao = GroupDAO();
+  List<Group> groups = [];
+  List<DataRow> rows = [];
+  SingleChildScrollView table = SingleChildScrollView();
   String username = "";
-  TextEditingController searchBarController= TextEditingController();
+  TextEditingController searchBarController = TextEditingController();
 
-  Future<void> getUsername() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userName = prefs.getString('username') ?? "";
-    setState(() {
-      username = userName;
-    });
+  Future<void> getGroups() async {
+    try {
+      groups = await dao.groupList();
+      getRows();
+    } catch (e) {
+      print(e);
+    }
   }
 
-  Future<void> _navigateAndDisplaySelection(BuildContext context, String groupName) async {
+  Future<void> _navigateAndDisplaySelection(
+      BuildContext context, String groupName, int groupId) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => JoinGroup(groupname: groupName)),
+      MaterialPageRoute(
+          builder: (context) =>
+              JoinGroup(groupName: groupName, groupId: groupId)),
     );
 
     if (!mounted) return;
@@ -46,49 +53,59 @@ class _Groups extends State<Groups> {
 
   @override
   void initState() {
+    getGroups();
     super.initState();
   }
 
-    @override
+  @override
   void dispose() {
     super.dispose();
     searchBarController.dispose();
   }
 
-  DataRow row(groupName,ownerNickname){
+  DataRow row(groupName, ownerNickname, groupId) {
     return DataRow(
-      onSelectChanged: (bool? select) {
-        _navigateAndDisplaySelection(context, groupName);
-      },
-      cells: [
-        DataCell(Text(groupName)),
-        DataCell(Text(ownerNickname)),
-      ]);
+        onSelectChanged: (bool? select) {
+          _navigateAndDisplaySelection(context, groupName, groupId);
+        },
+        cells: [
+          DataCell(Text(groupName)),
+          DataCell(Text(ownerNickname)),
+        ]);
   }
 
-  SingleChildScrollView table() {
+  void getRows({String searchString = ""}) {
+    List<DataRow> rows = [];
+    for (var group in groups) {
+      if (group.name!.contains(searchString)) {
+        rows.add(row(group.name, group.admin, group.id));
+      }
+    }
+    this.rows = rows;
+    createTable();
+  }
 
-    return SingleChildScrollView(
+  void createTable() {
+    table = SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: DataTable(showCheckboxColumn: false, columns: const [
-              DataColumn(
-                label: Text('Nazwa'),
-              ),
-              DataColumn(
-                label: Text('Nickname właściciela'),
-              ),
-            ], 
-            rows: [
-              row("Bundesliga", "System"),
-              row("Seria A", "Kulomiot")
-            ])));
+            child: DataTable(
+                showCheckboxColumn: false,
+                columns: const [
+                  DataColumn(
+                    label: Text('Nazwa'),
+                  ),
+                  DataColumn(
+                    label: Text('Właściciel'),
+                  ),
+                ],
+                rows: rows)));
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
         drawer: NavDrawer(username: username),
         appBar: AppBar(
@@ -101,7 +118,7 @@ class _Groups extends State<Groups> {
                 child: const Center(child: Text('Typster')))),
         body: Padding(
             padding: const EdgeInsets.all(10),
-            child: ListView(children: <Widget>[     
+            child: ListView(children: <Widget>[
               Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(30),
@@ -113,21 +130,17 @@ class _Groups extends State<Groups> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              Container(
-                child: TextField(
+              TextField(
                   controller: searchBarController,
                   decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Wyszukaj grupę",
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.search), 
-                    onPressed: () {  
-                      //wyszukaj z bazy dancyh po wartości controlera
-                    },
-                    )
-                  )
-                )
-              ),
+                      border: const OutlineInputBorder(),
+                      labelText: "Wyszukaj grupę",
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: () {
+                          getRows(searchString: searchBarController.text);
+                        },
+                      ))),
               const SizedBox(height: 20),
               Container(
                   alignment: Alignment.center,
@@ -138,8 +151,7 @@ class _Groups extends State<Groups> {
                           color: const Color.fromRGBO(100, 100, 100, 1)),
                       borderRadius:
                           const BorderRadius.all(Radius.circular(10))),
-                  child: table()
-                  )
+                  child: table)
             ])));
   }
 }

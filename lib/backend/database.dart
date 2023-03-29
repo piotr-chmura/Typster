@@ -23,6 +23,14 @@ class Mysql {
 
 class User {
   String? username, password, email;
+  int id = 0;
 
-  User(this.username, this.password, this.email);
+  User(this.username, this.password, this.email, this.id);
+}
+
+class Group {
+  String? name, admin;
+  int id;
+
+  Group(this.id, this.name, this.admin);
 }
