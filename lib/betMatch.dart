@@ -121,7 +121,7 @@ class _BetMatch extends State<BetMatch> {
                     )
                   ),
                   Container(
-                    width: 130,
+                    width: 150,
                     height: 100,
                     padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: TextField(
