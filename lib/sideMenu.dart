@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/login.dart';
 import 'package:test_app/matches.dart';
 
+import 'leaderboards.dart';
 import 'mainMenu.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -57,6 +58,15 @@ class NavDrawer extends StatelessWidget {
             onTap: () => {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => const Matches(),
+                  settings: RouteSettings(arguments: username)))
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.leaderboard),
+            title: const Text('Tablice wyników'),
+            onTap: () => {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const Leaderboard(),
                   settings: RouteSettings(arguments: username)))
             },
           ),
