@@ -111,7 +111,7 @@ class _RegisterState extends State<Register> {
                           isNullOrEmpty(validate2) &&
                           validate3 &&
                           isNullOrEmpty(validate4)) {
-                        User user = User(username, password, email);
+                        User user = User(username, password, email, 0);
                         String res = "";
                         await dao.insertUser(user).then((result) {
                           res = result;

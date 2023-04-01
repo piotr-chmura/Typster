@@ -20,7 +20,6 @@ class _LoginState extends State<Login> {
   bool validate1 = true;
   bool validate2 = true;
   bool hidePassword = true;
-  late List<User> users;
   bool isChecked = false;
 
 //alert typu pop-up
@@ -139,16 +138,17 @@ class _LoginState extends State<Login> {
                           : validate2 = true;
                     });
                     if (validate1 && validate2) {
-                      User user = User(username, password, "");
+                      User user = User(username, password, "", 0);
                       String res = "";
                       await dao.loginUser(user).then((result) {
                         res = result;
                       }).catchError((error) {
                         res = error;
                       });
-                      if (isNullOrEmpty(res)) {
+                      if (int.tryParse(res) != null) {
                         final prefs = await SharedPreferences.getInstance();
                         await prefs.setString('username', username);
+                        await prefs.setString('id', res);
                         if (isChecked) {
                           DateTime now = DateTime.now();
                           //DateTime(now.year, now.month, now.day);
