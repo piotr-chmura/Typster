@@ -12,14 +12,19 @@ class Matches extends StatefulWidget {
 }
 
 class _Matches extends State<Matches> {
-
-
   String username = "";
 
-  Future<void> _navigateAndDisplaySelection(BuildContext context, int match_id, String groupName, teamA, teamB, data) async {
+  Future<void> _navigateAndDisplaySelection(BuildContext context, int match_id,
+      String groupName, teamA, teamB, data) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => BetMatch(match_id: match_id, groupName: groupName, teamA: teamA, teamB: teamB, data: data )),
+      MaterialPageRoute(
+          builder: (context) => BetMatch(
+              match_id: match_id,
+              groupName: groupName,
+              teamA: teamA,
+              teamB: teamB,
+              data: data)),
     );
 
     if (!mounted) return;
@@ -36,15 +41,6 @@ class _Matches extends State<Matches> {
           backgroundColor: const Color.fromARGB(255, 66, 66, 66)));
   }
 
-
-  Future<void> getUsername() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userName = prefs.getString('username') ?? "";
-    setState(() {
-      username = userName;
-    });
-  }
-  
   @override
   void initState() {
     super.initState();
@@ -53,7 +49,8 @@ class _Matches extends State<Matches> {
   Widget matches() {
     return Expanded(
         child: Column(children: <Widget>[
-      mecz("Bundesliga", "26.02.2023, 16:15", "Borussia Dortmund", "Bayer Leverkusen", 1),
+      mecz("Bundesliga", "26.02.2023, 16:15", "Borussia Dortmund",
+          "Bayer Leverkusen", 1),
       mecz("Seria A", "27.02.2023, 20:10", "Inter", "Juventus", 2)
     ]));
   }
@@ -61,7 +58,8 @@ class _Matches extends State<Matches> {
   GestureDetector mecz(groupName, data, teamA, teamB, match_id) {
     return GestureDetector(
         onTap: () {
-          _navigateAndDisplaySelection(context, match_id, groupName, teamA, teamB, data);
+          _navigateAndDisplaySelection(
+              context, match_id, groupName, teamA, teamB, data);
         },
         child: Container(
             alignment: Alignment.center,
@@ -93,12 +91,16 @@ class _Matches extends State<Matches> {
                   children: <Widget>[
                     Container(
                       padding: const EdgeInsets.fromLTRB(10, 20, 5, 20),
-                      child: Image (image: AssetImage("lib/resources/Team logos/2/"+teamA+".png")),
+                      child: Image(
+                          image: AssetImage(
+                              "lib/resources/Team logos/2/" + teamA + ".png")),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(5, 20, 10, 20),
-                      child: Image (image: AssetImage("lib/resources/Team logos/2/"+teamB+".png")),
+                      child: Image(
+                          image: AssetImage(
+                              "lib/resources/Team logos/2/" + teamB + ".png")),
                     )
                   ],
                 ),
@@ -107,19 +109,21 @@ class _Matches extends State<Matches> {
                   children: <Widget>[
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 20, 5, 0),
-                      child: Text("$teamA", style: TextStyle(fontWeight: FontWeight.w500)),
+                      child: Text("$teamA",
+                          style: TextStyle(fontWeight: FontWeight.w500)),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(5, 20, 20, 0),
-                      child: Text("$teamB", style: TextStyle(fontWeight: FontWeight.w500),),
+                      child: Text(
+                        "$teamB",
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
                     )
                   ],
                 )
               ],
-            )
-          )
-        );
+            )));
   }
 
   @override
