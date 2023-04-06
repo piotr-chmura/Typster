@@ -47,19 +47,37 @@ class _Matches extends State<Matches> {
   }
 
   Widget matches() {
-    return Expanded(
-        child: Column(children: <Widget>[
+      return Column(children: <Widget>[
       mecz("Bundesliga", "26.02.2023, 16:15", "Borussia Dortmund",
-          "Bayer Leverkusen", 1),
-      mecz("Seria A", "27.02.2023, 20:10", "Inter", "Juventus", 2)
-    ]));
+          "Bayer Leverkusen", 1,"Zakonczony"),
+      mecz("Seria A", "27.02.2023, 20:10", "Inter", "Juventus", 2,"Dostepny")
+    ]);
   }
 
-  GestureDetector mecz(groupName, data, teamA, teamB, match_id) {
+  GestureDetector mecz(groupName, data, teamA, teamB, match_id, status) {
+    Color T_color =  Color.fromRGBO(20, 150, 37, 1);
+    if(status == "Zakonczony"){
+      T_color = Color.fromRGBO(140, 15, 15, 1);
+    }else if(status == "W trakcie"){
+      T_color =Color.fromRGBO(100, 100, 100, 1);
+    }
     return GestureDetector(
         onTap: () {
+          if(status == "Dostepny"){
           _navigateAndDisplaySelection(
               context, match_id, groupName, teamA, teamB, data);
+          }
+          else{
+            ScaffoldMessenger.of(context)
+            ..removeCurrentSnackBar()
+            ..showSnackBar(const SnackBar(
+            content: Center(
+              child: Text("Brak możliwości typowania meczu w trakcie lub zakończonego", style: TextStyle(color: Colors.green)),
+            ),
+            duration: Duration(milliseconds: 3000),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Color.fromARGB(255, 66, 66, 66)));
+          }
         },
         child: Container(
             alignment: Alignment.center,
@@ -67,7 +85,7 @@ class _Matches extends State<Matches> {
             margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             decoration: BoxDecoration(
                 border: Border.all(
-                    width: 5, color: const Color.fromRGBO(100, 100, 100, 1)),
+                    width: 5, color: T_color),
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
             child: Column(
               children: <Widget>[
