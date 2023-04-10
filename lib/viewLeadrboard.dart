@@ -23,24 +23,29 @@ class _ViewLeaderboard extends State<ViewLeaderboard> {
     super.dispose();
   }
 
-  DataRow row(groupName,place,points){
+  DataRow row(nickName,place,points){
     String Crown = "lib/resources/Crowns/$place.png";
     if(place > 3){
-      Crown = "lib/resources/Crowns/${1}.png";
+      return DataRow(
+        cells: [
+          DataCell(Center(child: Text(place.toString()))),
+          DataCell(Text(nickName)),
+          DataCell(Text(points.toString())),
+        ]);
+    }else{
+      return DataRow(
+        cells: [
+          DataCell(Image 
+          (
+            image: AssetImage(Crown),
+            width: 50,
+            height: 50,
+            )
+          ),
+          DataCell(Text(nickName)),
+          DataCell(Text(points.toString())),
+        ]);
     }
-    return DataRow(
-      cells: [
-        DataCell(Image 
-        (
-          image: AssetImage(Crown),
-          width: 50,
-          height: 50,
-          )
-        ),
-        DataCell(Text(groupName)),
-        DataCell(Text(place.toString())),
-        DataCell(Text(points.toString())),
-      ]);
   }
 
   SingleChildScrollView table() {
@@ -53,13 +58,10 @@ class _ViewLeaderboard extends State<ViewLeaderboard> {
               child:DataTable(showCheckboxColumn: false, 
                 columns: const [
                   DataColumn(
-                    label: Text(''),
+                    label: Text('Miejsce'),
                   ),
                   DataColumn(
                     label: Text('Nickname'),
-                  ),
-                  DataColumn(
-                    label: Text('Miejsce'),
                   ),
                   DataColumn(
                     label: Text('Ilość punktów'),

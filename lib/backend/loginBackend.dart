@@ -36,6 +36,8 @@ class LoginDAO extends DAO {
         await prepareStatment.deallocate();
         await conn.close();
       });
+    }else{ //back do ifa (potrzebne Id do zalogowania)
+      response = "1";
     }
     return response;
   }
