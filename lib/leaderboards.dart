@@ -78,7 +78,7 @@ class _Leaderboard extends State<Leaderboard> {
   Widget build(BuildContext context) {
     
     return Scaffold(
-        drawer: NavDrawer(username: username),
+        drawer: NavDrawer(),
         appBar: AppBar(
             iconTheme: const IconThemeData(
               color: Colors.green,
