@@ -20,7 +20,9 @@ class GroupDAO extends DAO {
                           SELECT group_id_group
                           FROM t_groups_users
                           WHERE user_id_user = ?
-                          );'''; //ADMIN?
+                          )
+                      GROUP BY g.id_group, g.name, u.nickname, g.id_admin, u.id_user
+                      HAVING g.id_admin = u.id_user;'''; //ADMIN?
       await conn.connect();
       var prepareStatment = await conn.prepare(sql);
       await prepareStatment.execute([idUser]).then((result) {
@@ -43,6 +45,7 @@ class GroupDAO extends DAO {
   }
 
   Future<List<Group>> userGroupList() async {
+    //sprint 3
     List<Group> groups = [];
     final prefs = await SharedPreferences.getInstance();
     final idUser = prefs.getString('id');
