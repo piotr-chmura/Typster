@@ -14,7 +14,7 @@ class GroupDAO extends DAO {
                       INNER JOIN t_groups_users gu
                       ON g.id_group = gu.group_id_group
                       INNER JOIN t_users u
-                      ON gu.user_id_user = u.id_user 
+                      ON g.id_admin = u.id_user 
                       WHERE g.id_group NOT IN
                         (
                           SELECT group_id_group
