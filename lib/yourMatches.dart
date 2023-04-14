@@ -5,9 +5,10 @@ import 'package:test_app/sideMenu.dart';
 import 'betMatch.dart';
 
 class yourMatches extends StatefulWidget {
-  const yourMatches({super.key, required this.groupId});
+  const yourMatches({super.key, required this.groupId, required this.groupName});
 
   final int groupId;
+  final String groupName;
 
   @override
   _yourMatches createState() => _yourMatches();
@@ -15,6 +16,7 @@ class yourMatches extends StatefulWidget {
 
 class _yourMatches extends State<yourMatches> {
   String username = "";
+  
 
   Future<void> _navigateAndDisplaySelection(BuildContext context, int match_id,
       String groupName, teamA, teamB, data) async {
@@ -164,13 +166,11 @@ class _yourMatches extends State<yourMatches> {
               Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(30),
-                child: const Text(
-                  "Mecze",
-                  style: TextStyle(
-                      fontSize: 26,
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold),
-                ),
+                child: Row(children: <Widget>[
+                  Text(widget.groupName),
+                  Text("Liderzy grupy") //dodać ikonke korony i zrobić przekierowanie do nowego okna wyświtlającego to samo co leaderboard tylko że ograniczone do 10 miejsc
+                ],
+                )
               ),
               matches()
             ])));

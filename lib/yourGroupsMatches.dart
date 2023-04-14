@@ -43,13 +43,12 @@ class _yourGroupsMatches extends State<yourGroupsMatches> {
     }
   }
 
-  Future<void> _navigateAndDisplaySelection(
-      BuildContext context, String groupName, int groupId) async {
+  Future<void> _navigateAndDisplaySelection(BuildContext context, String groupName, int groupId) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) =>
-              yourMatches(groupId: groupId)),
+              yourMatches(groupId: groupId, groupName: groupName)),
     );
 
     if (!mounted) return;
