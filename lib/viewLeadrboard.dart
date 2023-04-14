@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 
 class ViewLeaderboard extends StatefulWidget {
-  const ViewLeaderboard({super.key, required this.groupname});
+  const ViewLeaderboard({super.key, required this.groupname, required this.isTop10});
 
   final String groupname;
+  final bool isTop10; // Jeżeli Top10 jest true to przeszliśmy z liderów, jeżeli nie do z tablicy wyników
+  //Jeżeli true to ograniczamy do 10 pierwszych miejsc, jeżeli false to wyświetlamy wszytsko
 
   @override
   _ViewLeaderboard createState() => _ViewLeaderboard();
@@ -97,9 +99,9 @@ class _ViewLeaderboard extends State<ViewLeaderboard> {
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(30),
-              child: const Text(
-                "Grupy",
-                style: TextStyle(
+              child: Text(
+                "Tablica wyników dla ${widget.groupname}",
+                style: const TextStyle(
                     fontSize: 26,
                     color: Colors.green,
                     fontWeight: FontWeight.bold),
