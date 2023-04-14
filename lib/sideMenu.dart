@@ -3,13 +3,14 @@ import 'package:test_app/groups.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/login.dart';
 import 'package:test_app/matches.dart';
+import 'package:test_app/yourGroupsMatches.dart';
 
+import 'leaderboards.dart';
 import 'mainMenu.dart';
 
 class NavDrawer extends StatelessWidget {
 
-  const NavDrawer({super.key, required this.username});
-  final String username;
+  const NavDrawer({super.key});
   
 
   @override
@@ -38,8 +39,7 @@ class NavDrawer extends StatelessWidget {
             onTap: () => {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(
-                    builder: (context) => const MainMenu(),
-                    settings: RouteSettings(arguments: username)))
+                    builder: (context) => const MainMenu()))
             },
           ),
           ListTile(
@@ -47,8 +47,7 @@ class NavDrawer extends StatelessWidget {
             title: const Text('Grupy'),
             onTap: () => {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const Groups(),
-                  settings: RouteSettings(arguments: username)))
+                  MaterialPageRoute(builder: (context) => const Groups()))
             },
           ),
           ListTile(
@@ -56,8 +55,23 @@ class NavDrawer extends StatelessWidget {
             title: const Text('Mecze'),
             onTap: () => {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const Matches(),
-                  settings: RouteSettings(arguments: username)))
+                  MaterialPageRoute(builder: (context) => const Matches()))
+            },
+          ),
+           ListTile(
+            leading: const Icon(Icons.work),
+            title: const Text('Twoje grupy'),
+            onTap: () => {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const yourGroupsMatches()))
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.leaderboard),
+            title: const Text('Tablice wyników'),
+            onTap: () => {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const Leaderboard()))
             },
           ),
           ListTile(

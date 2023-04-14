@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:test_app/backend/groupsBackend.dart';
 import 'package:test_app/backend/database.dart';
 import 'package:test_app/sideMenu.dart';
+import 'package:test_app/yourMatches.dart';
 import 'joinGroup.dart';
 
-class Groups extends StatefulWidget {
-  const Groups({super.key});
+class yourGroupsMatches extends StatefulWidget {
+  const yourGroupsMatches({super.key});
 
   @override
-  _Groups createState() => _Groups();
+  _yourGroupsMatches createState() => _yourGroupsMatches();
 }
 
-class _Groups extends State<Groups> {
+class _yourGroupsMatches extends State<yourGroupsMatches> {
   var dao = GroupDAO();
   List<Group> groups = [];
   List<DataRow> rows = [];
@@ -32,7 +33,6 @@ class _Groups extends State<Groups> {
               // ignore: prefer_const_literals_to_create_immutables
               rows: [])));
   String username = "";
-  TextEditingController searchBarController = TextEditingController();
 
   Future<void> getGroups() async {
     try {
@@ -43,13 +43,12 @@ class _Groups extends State<Groups> {
     }
   }
 
-  Future<void> _navigateAndDisplaySelection(
-      BuildContext context, String groupName, int groupId) async {
+  Future<void> _navigateAndDisplaySelection(BuildContext context, String groupName, int groupId) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) =>
-              JoinGroup(groupName: groupName, groupId: groupId)),
+              yourMatches(groupId: groupId, groupName: groupName)),
     );
 
     if (!mounted) return;
@@ -75,7 +74,6 @@ class _Groups extends State<Groups> {
   @override
   void dispose() {
     super.dispose();
-    searchBarController.dispose();
   }
 
   DataRow row(groupName, ownerNickname, groupId) {
@@ -138,25 +136,14 @@ class _Groups extends State<Groups> {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(30),
                 child: const Text(
-                  "Grupy",
+                  "Twoje grupy",
                   style: TextStyle(
                       fontSize: 26,
                       color: Colors.green,
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              TextField(
-                  controller: searchBarController,
-                  decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: "Wyszukaj grupę",
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.search),
-                        onPressed: () {
-                          getRows(searchString: searchBarController.text);
-                        },
-                      ))),
-              const SizedBox(height: 20),
+
               Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 50),

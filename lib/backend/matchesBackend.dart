@@ -3,8 +3,8 @@ import 'dataAccesObject.dart';
 import 'database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class GroupDAO extends DAO {
-  Future<List<Group>> groupList() async {
+class MatchesDAO extends DAO {
+  Future<List<Group>> groupMatchesList() async {
     List<Group> groups = [];
     final prefs = await SharedPreferences.getInstance();
     final idUser = prefs.getString('id');
@@ -14,13 +14,13 @@ class GroupDAO extends DAO {
                       INNER JOIN t_groups_users gu
                       ON g.id_group = gu.group_id_group
                       INNER JOIN t_users u
-                      ON gu.user_id_user = u.id_user 
+                      ON gu.user_id_user = u.id_user
                       WHERE g.id_group NOT IN
                         (
                           SELECT group_id_group
                           FROM t_groups_users
                           WHERE user_id_user = ?
-                          );'''; //ADMIN?
+                          );''';
       await conn.connect();
       var prepareStatment = await conn.prepare(sql);
       await prepareStatment.execute([idUser]).then((result) {
@@ -42,7 +42,7 @@ class GroupDAO extends DAO {
     return groups;
   }
 
-  Future<List<Group>> userGroupList() async {
+  Future<List<Group>> MatchesList() async {
     List<Group> groups = [];
     final prefs = await SharedPreferences.getInstance();
     final idUser = prefs.getString('id');
@@ -53,7 +53,7 @@ class GroupDAO extends DAO {
                       ON g.id_group = gu.group_id_group
                       INNER JOIN t_users u
                       ON gu.user_id_user = u.id_user
-                      WHERE g.id_group IN
+                      WHERE g.id_group NOT IN
                         (
                           SELECT group_id_group
                           FROM t_groups_users
@@ -69,7 +69,7 @@ class GroupDAO extends DAO {
           }
         } else {
           throw Exception(
-              "Błąd bazy danych: Użytkownik nie należy do żadnej grupy");
+              "Błąd bazy danych: Użytkownik należy do wszystkich grup");
         }
       }, onError: (details) {
         throw Exception(details.toString());
