@@ -64,6 +64,14 @@ flutter:
 
   assets:
   - lib/resources/Team logos/2/
+  - lib/resources/Team logos/3/
+  - lib/resources/Team logos/39/
+  - lib/resources/Team logos/61/
+  - lib/resources/Team logos/78/
+  - lib/resources/Team logos/106/
+  - lib/resources/Team logos/135/
+  - lib/resources/Team logos/140/
+  - lib/resources/Team logos/848/
   - lib/resources/Crowns/
 
   # An image asset can refer to one or more resolution-specific "variants", see

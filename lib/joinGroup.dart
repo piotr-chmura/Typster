@@ -53,8 +53,9 @@ class _JoinGroup extends State<JoinGroup> {
                         width: 150,
                         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         child: ElevatedButton(
-                            onPressed: () {
-                              dao.joinGroup(widget.groupId);
+                            onPressed: () async {
+                              await dao.joinGroup(widget.groupId);
+                              // ignore: use_build_context_synchronously
                               Navigator.pop(context, "Dołączono do grupy");
                             },
                             child: const Text("TAK"))),

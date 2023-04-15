@@ -64,6 +64,9 @@ class _Groups extends State<Groups> {
           duration: const Duration(milliseconds: 3000),
           behavior: SnackBarBehavior.floating,
           backgroundColor: const Color.fromARGB(255, 66, 66, 66)));
+    if (result[0] == "D") {
+      getGroups();
+    }
   }
 
   @override

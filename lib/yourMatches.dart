@@ -5,7 +5,8 @@ import 'package:test_app/sideMenu.dart';
 import 'betMatch.dart';
 
 class yourMatches extends StatefulWidget {
-  const yourMatches({super.key, required this.groupId, required this.groupName});
+  const yourMatches(
+      {super.key, required this.groupId, required this.groupName});
 
   final int groupId;
   final String groupName;
@@ -16,19 +17,19 @@ class yourMatches extends StatefulWidget {
 
 class _yourMatches extends State<yourMatches> {
   String username = "";
-  
 
-  Future<void> _navigateAndDisplaySelection(BuildContext context, int match_id,
-      String groupName, teamA, teamB, data) async {
+  Future<void> _navigateAndDisplaySelection(BuildContext context, int matchId,
+      String leagueName, teamA, teamB, date, leagueId) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => BetMatch(
-              match_id: match_id,
-              groupName: groupName,
+              matchId: matchId,
+              leagueName: leagueName,
               teamA: teamA,
               teamB: teamB,
-              data: data)),
+              date: date,
+              leagueId: leagueId)),
     );
 
     if (!mounted) return;
@@ -51,36 +52,39 @@ class _yourMatches extends State<yourMatches> {
   }
 
   Widget matches() {
-      return Column(children: <Widget>[
+    return Column(children: <Widget>[
       mecz("Bundesliga", "26.02.2023, 16:15", "Borussia Dortmund",
-          "Bayer Leverkusen", 1,"Zakonczony"),
-      mecz("Seria A", "27.02.2023, 20:10", "Inter", "Juventus", 2,"Dostepny")
+          "Bayer Leverkusen", 1, "Zakonczony", 1),
+      mecz(
+          "Seria A", "27.02.2023, 20:10", "Inter", "Juventus", 2, "Dostepny", 1)
     ]);
   }
 
-  GestureDetector mecz(groupName, data, teamA, teamB, match_id, status) {
-    Color T_color =  Color.fromRGBO(20, 150, 37, 1);
-    if(status == "Zakonczony"){
+  GestureDetector mecz(
+      leagueName, date, teamA, teamB, matchId, status, leagueId) {
+    Color T_color = Color.fromRGBO(20, 150, 37, 1);
+    if (status == "Zakonczony") {
       T_color = Color.fromRGBO(140, 15, 15, 1);
-    }else if(status == "W trakcie"){
-      T_color =Color.fromRGBO(100, 100, 100, 1);
+    } else if (status == "W trakcie") {
+      T_color = Color.fromRGBO(100, 100, 100, 1);
     }
     return GestureDetector(
         onTap: () {
-          if(status == "Dostepny"){
-          _navigateAndDisplaySelection(
-              context, match_id, groupName, teamA, teamB, data);
-          }
-          else{
+          if (status == "Dostepny") {
+            _navigateAndDisplaySelection(
+                context, matchId, leagueName, teamA, teamB, date, leagueId);
+          } else {
             ScaffoldMessenger.of(context)
-            ..removeCurrentSnackBar()
-            ..showSnackBar(const SnackBar(
-            content: Center(
-              child: Text("Brak możliwości typowania meczu w trakcie lub zakończonego", style: TextStyle(color: Colors.green)),
-            ),
-            duration: Duration(milliseconds: 3000),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Color.fromARGB(255, 66, 66, 66)));
+              ..removeCurrentSnackBar()
+              ..showSnackBar(const SnackBar(
+                  content: Center(
+                    child: Text(
+                        "Brak możliwości typowania meczu w trakcie lub zakończonego",
+                        style: TextStyle(color: Colors.green)),
+                  ),
+                  duration: Duration(milliseconds: 3000),
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Color.fromARGB(255, 66, 66, 66)));
           }
         },
         child: Container(
@@ -88,8 +92,7 @@ class _yourMatches extends State<yourMatches> {
             padding: const EdgeInsets.fromLTRB(0, 20, 0, 50),
             margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             decoration: BoxDecoration(
-                border: Border.all(
-                    width: 5, color: T_color),
+                border: Border.all(width: 5, color: T_color),
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
             child: Column(
               children: <Widget>[
@@ -98,14 +101,14 @@ class _yourMatches extends State<yourMatches> {
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 5, 0, 5),
                       child: Text(
-                        "$groupName",
+                        "$leagueName",
                         style: const TextStyle(color: Colors.green),
                       ),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(0, 5, 20, 5),
-                      child: Text("$data"),
+                      child: Text("$date"),
                     )
                   ],
                 ),
@@ -164,14 +167,15 @@ class _yourMatches extends State<yourMatches> {
             padding: const EdgeInsets.all(10),
             child: ListView(children: <Widget>[
               Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(30),
-                child: Row(children: <Widget>[
-                  Text(widget.groupName),
-                  Text("Liderzy grupy") //dodać ikonke korony i zrobić przekierowanie do nowego okna wyświtlającego to samo co leaderboard tylko że ograniczone do 10 miejsc
-                ],
-                )
-              ),
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(30),
+                  child: Row(
+                    children: <Widget>[
+                      Text(widget.groupName),
+                      Text(
+                          "Liderzy grupy") //dodać ikonke korony i zrobić przekierowanie do nowego okna wyświtlającego to samo co leaderboard tylko że ograniczone do 10 miejsc
+                    ],
+                  )),
               matches()
             ])));
   }
