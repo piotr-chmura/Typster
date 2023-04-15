@@ -41,7 +41,7 @@ class _Leaderboard extends State<Leaderboard> {
       onSelectChanged: (bool? select) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ViewLeaderboard(groupname: groupName)),
+          MaterialPageRoute(builder: (context) => ViewLeaderboard(groupname: groupName, isTop10: false)),
         );
       },
       cells: [
