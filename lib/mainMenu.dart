@@ -59,23 +59,23 @@ class _MainMenu extends State<MainMenu> {
   Widget matches() {
     return Column(children: <Widget>[
       mecz("Bundesliga", "26.02.2023, 16:15", "Borussia Dortmund",
-          "Bayer Leverkusen", 1, "Zakonczony", 1),
+          "Bayer Leverkusen",2, 0, 1, 3, 1),
       mecz(
-          "Seria A", "27.02.2023, 20:10", "Inter", "Juventus", 2, "Dostepny", 1)
+          "Seria A", "27.02.2023, 20:10", "Inter", "Juventus", 0, 0, 2, 1, 1)
     ]);
   }
 
   GestureDetector mecz(
-      leagueName, date, teamA, teamB, matchId, status, leagueId) {
+      leagueName, date, teamA, teamB, scorA, scorB, matchId, status, leagueId) {
     Color T_color = Color.fromRGBO(20, 150, 37, 1);
-    if (status == "Zakonczony") {
+    if (status == 3) {
       T_color = Color.fromRGBO(140, 15, 15, 1);
-    } else if (status == "W trakcie") {
+    } else if (status == 2) {
       T_color = Color.fromRGBO(100, 100, 100, 1);
     }
     return GestureDetector(
         onTap: () {
-          if (status == "Dostepny") {
+          if (status == 1) {
             _navigateAndDisplaySelection(
                 context, matchId, leagueName, teamA, teamB, date, leagueId);
           } else {
@@ -134,6 +134,42 @@ class _MainMenu extends State<MainMenu> {
                     )
                   ],
                 ),
+                Row(
+                  children: <Widget>[
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(40, 20, 0, 0),
+                      child: Text("$scorA",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 30
+                            )
+                          ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: const Text("-",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 30
+                            )
+                          ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 40, 0),
+                      child: Text(
+                        "$scorB",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 30
+                          ),
+                      ),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
                 const SizedBox(height: 20),
                 Row(
                   children: <Widget>[
@@ -149,7 +185,7 @@ class _MainMenu extends State<MainMenu> {
                         "$teamB",
                         style: TextStyle(fontWeight: FontWeight.w500),
                       ),
-                    )
+                    ),
                   ],
                 )
               ],
