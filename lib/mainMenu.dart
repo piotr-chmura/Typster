@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_app/backend/matchesBackend.dart';
+import 'package:test_app/backend/database.dart';
 import 'betMatch.dart';
 import 'sideMenu.dart';
 
@@ -13,6 +15,18 @@ class MainMenu extends StatefulWidget {
 
 class _MainMenu extends State<MainMenu> {
   String username = "";
+  Column matchListView = Column();
+  var dao = MatchesDAO();
+  List<Match> matches = [];
+
+  Future<void> getMatches() async {
+    try {
+      matches = await dao.matchesMainList(true);
+      matchesView();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Future<void> getUsername() async {
     final prefs = await SharedPreferences.getInstance();
@@ -24,8 +38,9 @@ class _MainMenu extends State<MainMenu> {
 
   @override
   void initState() {
-    super.initState();
     getUsername();
+    getMatches();
+    super.initState();
   }
 
   Future<void> _navigateAndDisplaySelection(BuildContext context, int matchId,
@@ -56,23 +71,35 @@ class _MainMenu extends State<MainMenu> {
           backgroundColor: const Color.fromARGB(255, 66, 66, 66)));
   }
 
-  Widget matches() {
-    return Column(children: <Widget>[
-      mecz("Bundesliga", "26.02.2023, 16:15", "Borussia Dortmund",
-          "Bayer Leverkusen",2, 0, 1, 3, 1),
-      mecz(
-          "Seria A", "27.02.2023, 20:10", "Inter", "Juventus", 0, 0, 2, 1, 1)
-    ]);
+  void matchesView() {
+    List<Widget> matchWidgets = [];
+    for (var match in matches) {
+      matchWidgets.add(matchWidget(
+          match.name,
+          match.dateString,
+          match.teamA,
+          match.teamB,
+          match.id,
+          match.status,
+          match.scoreA,
+          match.scoreB,
+          match.leagueId));
+    }
+
+    matchListView = Column(children: matchWidgets);
+    setState(() {});
   }
 
-  GestureDetector mecz(
-      leagueName, date, teamA, teamB, scoreA, scoreB, matchId, status, leagueId) {
-    Color T_color = Color.fromRGBO(20, 150, 37, 1);
+  GestureDetector matchWidget(leagueName, date, teamA, teamB, matchId, status,
+      scoreA, scoreB, leagueId) {
+    Color T_color = const Color.fromRGBO(20, 150, 37, 1);
     if (status == 3) {
-      T_color = Color.fromRGBO(140, 15, 15, 1);
+      T_color = const Color.fromRGBO(140, 15, 15, 1);
     } else if (status == 2) {
-      T_color = Color.fromRGBO(100, 100, 100, 1);
+      T_color = const Color.fromRGBO(100, 100, 100, 1);
     }
+    scoreA ??= 0;
+    scoreB ??= 0;
     return GestureDetector(
         onTap: () {
           if (status == 1) {
@@ -123,51 +150,15 @@ class _MainMenu extends State<MainMenu> {
                       padding: const EdgeInsets.fromLTRB(10, 20, 5, 20),
                       child: Image(
                           image: AssetImage(
-                              "lib/resources/Team logos/2/" + teamA + ".png")),
+                              "lib/resources/Team logos/$leagueId/$teamA.png")),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(5, 20, 10, 20),
                       child: Image(
                           image: AssetImage(
-                              "lib/resources/Team logos/2/" + teamB + ".png")),
+                              "lib/resources/Team logos/$leagueId/$teamB.png")),
                     )
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(40, 20, 0, 0),
-                      child: Text("$scoreA",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 30
-                            )
-                          ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: const Text("-",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 30
-                            )
-                          ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 40, 0),
-                      child: Text(
-                        "$scoreB",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 30
-                          ),
-                      ),
-                    ),
-                    const Spacer(),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -176,16 +167,16 @@ class _MainMenu extends State<MainMenu> {
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 20, 5, 0),
                       child: Text("$teamA",
-                          style: TextStyle(fontWeight: FontWeight.w500)),
+                          style: const TextStyle(fontWeight: FontWeight.w500)),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(5, 20, 20, 0),
                       child: Text(
                         "$teamB",
-                        style: TextStyle(fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontWeight: FontWeight.w500),
                       ),
-                    ),
+                    )
                   ],
                 )
               ],
@@ -231,7 +222,7 @@ class _MainMenu extends State<MainMenu> {
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              matches()
+              matchListView
             ])));
   }
 }

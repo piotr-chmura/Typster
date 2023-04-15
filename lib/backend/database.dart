@@ -48,8 +48,10 @@ class Match {
 
   //1 do obstawienia, 2 w trakcie, 3 zakończony
   int _getStatus(int? score, DateTime date) {
+    DateTime dateTimeNow = DateTime.now().toUtc().add(const Duration(hours: 2));
+    DateTime dateTimeMatch = date.toUtc().add(const Duration(hours: 2));
     if (score == null) {
-      if (date.isBefore(DateTime.now())) {
+      if (dateTimeMatch.isBefore(dateTimeNow)) {
         return 2;
       } else {
         return 1;

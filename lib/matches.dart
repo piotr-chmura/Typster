@@ -3,7 +3,6 @@ import 'package:test_app/sideMenu.dart';
 import 'package:test_app/backend/matchesBackend.dart';
 import 'package:test_app/backend/database.dart';
 import 'betMatch.dart';
-import 'package:flutter/foundation.dart';
 
 class Matches extends StatefulWidget {
   const Matches({super.key});
@@ -13,7 +12,6 @@ class Matches extends StatefulWidget {
 }
 
 class _Matches extends State<Matches> {
-  String username = "";
   Column matchListView = Column();
   var dao = MatchesDAO();
   List<Match> matches = [];
@@ -23,7 +21,6 @@ class _Matches extends State<Matches> {
       matches = await dao.matchesList(true);
       matchesView();
     } catch (e) {
-      print("xd");
       print(e);
     }
   }
@@ -141,56 +138,47 @@ class _Matches extends State<Matches> {
                       padding: const EdgeInsets.fromLTRB(10, 20, 5, 20),
                       child: Image(
                           image: AssetImage(
-                              "lib/resources/Team logos/$leagueId/$teamA.png")
-                              ),
+                              "lib/resources/Team logos/$leagueId/$teamA.png")),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(5, 20, 10, 20),
                       child: Image(
                           image: AssetImage(
-                              "lib/resources/Team logos/$leagueId/$teamB.png")
-                              ),
+                              "lib/resources/Team logos/$leagueId/$teamB.png")),
                     )
                   ],
                 ),
-                Row(
-                  children: <Widget>[
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(40, 20, 0, 0),
-                      child: Text("$scoreA",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 30
-                            )
+                status == 3
+                    ? Row(
+                        children: <Widget>[
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(40, 20, 0, 0),
+                            child: Text("$scoreA",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 30)),
                           ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: const Text("-",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 30
-                            )
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: const Text("-",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 30)),
                           ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 40, 0),
-                      child: Text(
-                        "$scoreB",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 30
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 40, 0),
+                            child: Text(
+                              "$scoreB",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 30),
+                            ),
                           ),
-                      ),
-                    ),
-                    const Spacer(),
-                  ],
-                ),
-                const SizedBox(height: 20),
+                          const Spacer(),
+                        ],
+                      )
+                    : Row(),
                 const SizedBox(height: 20),
                 Row(
                   children: <Widget>[

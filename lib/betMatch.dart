@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_final_fields
+// ignore_for_file: prefer_final_fields, prefer_interpolation_to_compose_strings
 
 import 'package:flutter/material.dart';
 import 'backend/buissnesObject.dart';
