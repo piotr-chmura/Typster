@@ -182,6 +182,7 @@ class _BetMatch extends State<BetMatch> {
                             onPressed: () async {
                               var teamABet = teamA_bet.text;
                               var teamBBet = teamB_bet.text;
+                              String result = "Obstawiono mecz!";
                               setState(() {
                                 validate1 = isValidInt(teamABet);
                                 validate2 = isValidInt(teamBBet);
@@ -192,10 +193,10 @@ class _BetMatch extends State<BetMatch> {
                                   await dao.placeBet(widget.matchId.toString(),
                                       teamABet, teamBBet);
                                 } catch (e) {
-                                  Navigator.pop(context, e.toString());
+                                  result = e.toString();
                                 }
                                 // ignore: use_build_context_synchronously
-                                Navigator.pop(context, "Obstawiono mecz!");
+                                Navigator.pop(context, result);
                               }
                             },
                             child: const Text("OBSTAW"))),

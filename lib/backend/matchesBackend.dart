@@ -172,7 +172,6 @@ class MatchesDAO extends DAO {
       });
       await prepareStatment1.deallocate();
 
-      if (flag == false) return;
       String sql2 =
           '''INSERT INTO t_matches_users (user_id_user, match_id_match, score_a, score_b) 
                       VALUES (?, ?, ?, ?) AS newdata
