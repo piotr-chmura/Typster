@@ -1,8 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/sideMenu.dart';
+import 'package:test_app/backend/matchesBackend.dart';
+import 'package:test_app/backend/database.dart';
 import 'betMatch.dart';
+import 'package:flutter/foundation.dart';
 
 class Matches extends StatefulWidget {
   const Matches({super.key});
@@ -13,18 +14,32 @@ class Matches extends StatefulWidget {
 
 class _Matches extends State<Matches> {
   String username = "";
+  Column matchListView = Column();
+  var dao = MatchesDAO();
+  List<Match> matches = [];
 
-  Future<void> _navigateAndDisplaySelection(BuildContext context, int match_id,
-      String groupName, teamA, teamB, data) async {
+  Future<void> getMatches() async {
+    try {
+      matches = await dao.matchesList(true);
+      matchesView();
+    } catch (e) {
+      print("xd");
+      print(e);
+    }
+  }
+
+  Future<void> _navigateAndDisplaySelection(BuildContext context, int matchId,
+      String leagueName, teamA, teamB, date, leagueId) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => BetMatch(
-              match_id: match_id,
-              groupName: groupName,
+              matchId: matchId,
+              leagueName: leagueName,
               teamA: teamA,
               teamB: teamB,
-              data: data)),
+              date: date,
+              leagueId: leagueId)),
     );
 
     if (!mounted) return;
@@ -43,40 +58,54 @@ class _Matches extends State<Matches> {
 
   @override
   void initState() {
+    getMatches();
     super.initState();
   }
 
-  Widget matches() {
-      return Column(children: <Widget>[
-      mecz("Bundesliga", "26.02.2023, 16:15", "Borussia Dortmund",
-          "Bayer Leverkusen", 1,"Zakonczony"),
-      mecz("Seria A", "27.02.2023, 20:10", "Inter", "Juventus", 2,"Dostepny")
-    ]);
+  void matchesView() {
+    List<Widget> matchWidgets = [];
+    for (var match in matches) {
+      matchWidgets.add(matchWidget(
+          match.name,
+          match.dateString,
+          match.teamA,
+          match.teamB,
+          match.id,
+          match.status,
+          match.scoreA,
+          match.scoreB,
+          match.leagueId));
+    }
+
+    matchListView = Column(children: matchWidgets);
+    setState(() {});
   }
 
-  GestureDetector mecz(groupName, data, teamA, teamB, match_id, status) {
-    Color T_color =  Color.fromRGBO(20, 150, 37, 1);
-    if(status == "Zakonczony"){
-      T_color = Color.fromRGBO(140, 15, 15, 1);
-    }else if(status == "W trakcie"){
-      T_color =Color.fromRGBO(100, 100, 100, 1);
+  GestureDetector matchWidget(leagueName, date, teamA, teamB, matchId, status,
+      scoreA, scoreB, leagueId) {
+    Color T_color = const Color.fromRGBO(20, 150, 37, 1);
+    if (status == 3) {
+      T_color = const Color.fromRGBO(140, 15, 15, 1);
+    } else if (status == 2) {
+      T_color = const Color.fromRGBO(100, 100, 100, 1);
     }
     return GestureDetector(
         onTap: () {
-          if(status == "Dostepny"){
-          _navigateAndDisplaySelection(
-              context, match_id, groupName, teamA, teamB, data);
-          }
-          else{
+          if (status == 1) {
+            _navigateAndDisplaySelection(
+                context, matchId, leagueName, teamA, teamB, date, leagueId);
+          } else {
             ScaffoldMessenger.of(context)
-            ..removeCurrentSnackBar()
-            ..showSnackBar(const SnackBar(
-            content: Center(
-              child: Text("Brak możliwości typowania meczu w trakcie lub zakończonego", style: TextStyle(color: Colors.green)),
-            ),
-            duration: Duration(milliseconds: 3000),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Color.fromARGB(255, 66, 66, 66)));
+              ..removeCurrentSnackBar()
+              ..showSnackBar(const SnackBar(
+                  content: Center(
+                    child: Text(
+                        "Brak możliwości typowania meczu w trakcie lub zakończonego",
+                        style: TextStyle(color: Colors.green)),
+                  ),
+                  duration: Duration(milliseconds: 3000),
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Color.fromARGB(255, 66, 66, 66)));
           }
         },
         child: Container(
@@ -84,8 +113,7 @@ class _Matches extends State<Matches> {
             padding: const EdgeInsets.fromLTRB(0, 20, 0, 50),
             margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             decoration: BoxDecoration(
-                border: Border.all(
-                    width: 5, color: T_color),
+                border: Border.all(width: 5, color: T_color),
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
             child: Column(
               children: <Widget>[
@@ -94,14 +122,14 @@ class _Matches extends State<Matches> {
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 5, 0, 5),
                       child: Text(
-                        "$groupName",
+                        "$leagueName",
                         style: const TextStyle(color: Colors.green),
                       ),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(0, 5, 20, 5),
-                      child: Text("$data"),
+                      child: Text("$date"),
                     )
                   ],
                 ),
@@ -111,14 +139,14 @@ class _Matches extends State<Matches> {
                       padding: const EdgeInsets.fromLTRB(10, 20, 5, 20),
                       child: Image(
                           image: AssetImage(
-                              "lib/resources/Team logos/2/" + teamA + ".png")),
+                              "lib/resources/Team logos/$leagueId/$teamA.png")),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(5, 20, 10, 20),
                       child: Image(
                           image: AssetImage(
-                              "lib/resources/Team logos/2/" + teamB + ".png")),
+                              "lib/resources/Team logos/$leagueId/$teamB.png")),
                     )
                   ],
                 ),
@@ -128,14 +156,14 @@ class _Matches extends State<Matches> {
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 20, 5, 0),
                       child: Text("$teamA",
-                          style: TextStyle(fontWeight: FontWeight.w500)),
+                          style: const TextStyle(fontWeight: FontWeight.w500)),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(5, 20, 20, 0),
                       child: Text(
                         "$teamB",
-                        style: TextStyle(fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontWeight: FontWeight.w500),
                       ),
                     )
                   ],
@@ -170,7 +198,7 @@ class _Matches extends State<Matches> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              matches()
+              matchListView
             ])));
   }
 }

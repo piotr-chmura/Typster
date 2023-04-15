@@ -22,7 +22,7 @@ class GroupDAO extends DAO {
                           WHERE user_id_user = ?
                           )
                       GROUP BY g.id_group, g.name, u.nickname, g.id_admin, u.id_user
-                      HAVING g.id_admin = u.id_user;'''; //ADMIN?
+                      HAVING g.id_admin = u.id_user;''';
       await conn.connect();
       var prepareStatment = await conn.prepare(sql);
       await prepareStatment.execute([idUser]).then((result) {

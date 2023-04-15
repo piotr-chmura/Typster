@@ -53,6 +53,7 @@ class _Groups extends State<Groups> {
     );
 
     if (!mounted) return;
+    if (result == null) return;
 
     ScaffoldMessenger.of(context)
       ..removeCurrentSnackBar()

@@ -34,3 +34,28 @@ class Group {
 
   Group(this.id, this.name, this.admin);
 }
+
+class Match {
+  String? name, teamA, teamB, dateString, leagueId;
+  DateTime date;
+  int id;
+  int? scoreA, scoreB, status;
+
+  Match(this.name, this.date, this.teamA, this.teamB, this.id, this.scoreA,
+      this.scoreB, this.dateString, this.leagueId) {
+    status = _getStatus(scoreA, date);
+  }
+
+  //1 do obstawienia, 2 w trakcie, 3 zakończony
+  int _getStatus(int? score, DateTime date) {
+    if (score == null) {
+      if (date.isBefore(DateTime.now())) {
+        return 2;
+      } else {
+        return 1;
+      }
+    } else {
+      return 3;
+    }
+  }
+}
