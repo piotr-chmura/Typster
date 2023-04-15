@@ -89,6 +89,8 @@ class _Matches extends State<Matches> {
     } else if (status == 2) {
       T_color = const Color.fromRGBO(100, 100, 100, 1);
     }
+    scoreA ??= 0;
+    scoreB ??= 0;
     return GestureDetector(
         onTap: () {
           if (status == 1) {
@@ -139,17 +141,56 @@ class _Matches extends State<Matches> {
                       padding: const EdgeInsets.fromLTRB(10, 20, 5, 20),
                       child: Image(
                           image: AssetImage(
-                              "lib/resources/Team logos/$leagueId/$teamA.png")),
+                              "lib/resources/Team logos/$leagueId/$teamA.png")
+                              ),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(5, 20, 10, 20),
                       child: Image(
                           image: AssetImage(
-                              "lib/resources/Team logos/$leagueId/$teamB.png")),
+                              "lib/resources/Team logos/$leagueId/$teamB.png")
+                              ),
                     )
                   ],
                 ),
+                Row(
+                  children: <Widget>[
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(40, 20, 0, 0),
+                      child: Text("$scoreA",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 30
+                            )
+                          ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: const Text("-",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 30
+                            )
+                          ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 40, 0),
+                      child: Text(
+                        "$scoreB",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 30
+                          ),
+                      ),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+                const SizedBox(height: 20),
                 const SizedBox(height: 20),
                 Row(
                   children: <Widget>[

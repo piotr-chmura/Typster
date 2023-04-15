@@ -66,7 +66,7 @@ class _MainMenu extends State<MainMenu> {
   }
 
   GestureDetector mecz(
-      leagueName, date, teamA, teamB, scorA, scorB, matchId, status, leagueId) {
+      leagueName, date, teamA, teamB, scoreA, scoreB, matchId, status, leagueId) {
     Color T_color = Color.fromRGBO(20, 150, 37, 1);
     if (status == 3) {
       T_color = Color.fromRGBO(140, 15, 15, 1);
@@ -139,7 +139,7 @@ class _MainMenu extends State<MainMenu> {
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(40, 20, 0, 0),
-                      child: Text("$scorA",
+                      child: Text("$scoreA",
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 30
@@ -160,7 +160,7 @@ class _MainMenu extends State<MainMenu> {
                     Container(
                       padding: const EdgeInsets.fromLTRB(0, 20, 40, 0),
                       child: Text(
-                        "$scorB",
+                        "$scoreB",
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 30
