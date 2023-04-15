@@ -59,7 +59,7 @@ class NavDrawer extends StatelessWidget {
             },
           ),
            ListTile(
-            leading: const Icon(Icons.work),
+            leading: const Icon(Icons.home_work),
             title: const Text('Twoje grupy'),
             onTap: () => {
               Navigator.pushReplacement(context,
