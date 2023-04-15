@@ -13,8 +13,8 @@ class BetMatch extends StatefulWidget {
       required this.date,
       required this.leagueId});
 
-  final int matchId, leagueId;
-  final String leagueName, teamA, teamB, date;
+  final int matchId;
+  final String leagueName, teamA, teamB, date, leagueId;
 
   @override
   _BetMatch createState() => _BetMatch();
@@ -88,7 +88,9 @@ class _BetMatch extends State<BetMatch> {
                               padding: const EdgeInsets.fromLTRB(10, 20, 5, 20),
                               child: Image(
                                   image: AssetImage(
-                                      "lib/resources/Team logos/2/" +
+                                      "lib/resources/Team logos/" +
+                                          widget.leagueId +
+                                          "/" +
                                           widget.teamA +
                                           ".png")),
                             ),
@@ -97,7 +99,9 @@ class _BetMatch extends State<BetMatch> {
                               padding: const EdgeInsets.fromLTRB(5, 20, 10, 20),
                               child: Image(
                                   image: AssetImage(
-                                      "lib/resources/Team logos/2/" +
+                                      "lib/resources/Team logos/" +
+                                          widget.leagueId +
+                                          "/" +
                                           widget.teamB +
                                           ".png")),
                             )

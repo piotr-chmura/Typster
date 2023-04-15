@@ -50,19 +50,21 @@ class MatchesDAO extends DAO {
     await db!.getConn().then((conn) async {
       String sql =
           '''SELECT l.name, m.data, m.team_a, m.team_b, m.id_match, m.score_a, m.score_b, DATE_FORMAT(m.data, '%d.%m %H-%i'), l.id_league
-                      FROM t_matches m 
-                      INNER JOIN t_leagues l ON m.league_id_league = l.id_league
-                      WHERE m.data BETWEEN DATE(NOW() - INTERVAL 2 DAY) AND DATE(NOW() + INTERVAL 7 DAY) 
-                      AND m.id_match IN
-                        (
-                          SELECT DISTINCT gm.match_id_match
-                          FROM t_groups_matches gm
-                          WHERE gm.group_id_group IN (
-                            SELECT gu.group_id_group
-                            FROM t_groups_users gu
-                            WHERE gu.user_id_user = ?
-                          )
-                        );''';
+              FROM t_matches m 
+              INNER JOIN t_leagues l ON m.league_id_league = l.id_league
+              WHERE m.data BETWEEN DATE(NOW() - INTERVAL 2 DAY) AND DATE(NOW() + INTERVAL 7 DAY) 
+              AND m.id_match IN
+                (
+                  SELECT DISTINCT gm.match_id_match
+                  FROM t_groups_matches gm
+                  WHERE gm.group_id_group IN (
+                    SELECT gu.group_id_group
+                    FROM t_groups_users gu
+                    WHERE gu.user_id_user = ?
+                  )
+                )
+              ORDER BY m.data
+              ;''';
       await conn.connect();
       var prepareStatment = await conn.prepare(sql);
       await prepareStatment.execute([idUser]).then((result) {
