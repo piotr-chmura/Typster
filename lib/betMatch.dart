@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'backend/buissnesObject.dart';
+import 'package:test_app/backend/matchesBackend.dart';
+import 'package:test_app/backend/database.dart';
 
 class BetMatch extends StatefulWidget {
   const BetMatch(
@@ -25,9 +27,21 @@ class _BetMatch extends State<BetMatch> {
   TextEditingController teamB_bet = TextEditingController();
   String validate1 = "";
   String validate2 = "";
+  var dao = MatchesDAO();
+
+  Future<void> getBet() async {
+    try {
+      List<String> score = await dao.getBet(widget.matchId.toString());
+      teamA_bet.text = score[0];
+      teamB_bet.text = score[1];
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   void initState() {
+    getBet();
     super.initState();
   }
 
@@ -56,7 +70,7 @@ class _BetMatch extends State<BetMatch> {
                 const Padding(padding: EdgeInsets.fromLTRB(10, 30, 10, 20)),
                 Container(
                     alignment: Alignment.center,
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 50),
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     decoration: BoxDecoration(
                         border: Border.all(
@@ -107,18 +121,18 @@ class _BetMatch extends State<BetMatch> {
                             )
                           ],
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         Row(
                           children: <Widget>[
                             Container(
-                              padding: const EdgeInsets.fromLTRB(20, 20, 5, 0),
+                              padding: const EdgeInsets.fromLTRB(20, 10, 5, 0),
                               child: Text(widget.teamA,
                                   style:
                                       TextStyle(fontWeight: FontWeight.w500)),
                             ),
                             const Spacer(),
                             Container(
-                              padding: const EdgeInsets.fromLTRB(5, 20, 20, 0),
+                              padding: const EdgeInsets.fromLTRB(5, 10, 20, 0),
                               child: Text(
                                 widget.teamB,
                                 style: TextStyle(fontWeight: FontWeight.w500),
@@ -156,16 +170,16 @@ class _BetMatch extends State<BetMatch> {
                                       ? null
                                       : validate2)))
                     ]),
-                const Padding(padding: EdgeInsets.fromLTRB(10, 30, 10, 20)),
+                const Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Container(
                         height: 60,
                         width: 150,
-                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                         child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               var teamABet = teamA_bet.text;
                               var teamBBet = teamB_bet.text;
                               setState(() {
@@ -174,6 +188,13 @@ class _BetMatch extends State<BetMatch> {
                               });
                               if (isNullOrEmpty(validate1) &&
                                   isNullOrEmpty(validate2)) {
+                                try {
+                                  await dao.placeBet(widget.matchId.toString(),
+                                      teamABet, teamBBet);
+                                } catch (e) {
+                                  Navigator.pop(context, e.toString());
+                                }
+                                // ignore: use_build_context_synchronously
                                 Navigator.pop(context, "Obstawiono mecz!");
                               }
                             },
@@ -181,7 +202,7 @@ class _BetMatch extends State<BetMatch> {
                     Container(
                         height: 60,
                         width: 150,
-                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 backgroundColor:

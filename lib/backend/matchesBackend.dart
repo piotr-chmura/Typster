@@ -142,4 +142,74 @@ class MatchesDAO extends DAO {
     });
     return matches;
   }
+
+  Future<void> placeBet(String idMatch, String scoreA, String scoreB) async {
+    bool flag = true;
+    final prefs = await SharedPreferences.getInstance();
+    final idUser = prefs.getString('id');
+    await db!.getConn().then((conn) async {
+      //Czy mecz się rozpoczął
+      String sql1 =
+          '''SELECT IF((SELECT m.data FROM t_matches m WHERE id_match = ?) > NOW(), 'true', 'false') AS result;''';
+      await conn.connect();
+      var prepareStatment1 = await conn.prepare(sql1);
+      await prepareStatment1.execute([idMatch]).then((result) {
+        if (result.numOfRows > 0) {
+          for (var row in result.rows) {
+            if (row.colAt(0) == "false") {
+              flag = false;
+              throw Exception(
+                  "Błąd: Mecz już się rozpoczął, nie możesz obstawić");
+            }
+          }
+        } else {
+          flag = false;
+          throw Exception("Błąd bazy danych");
+        }
+      }, onError: (details) {
+        flag = false;
+        throw Exception(details.toString());
+      });
+      await prepareStatment1.deallocate();
+
+      if (flag == false) return;
+      String sql2 =
+          '''INSERT INTO t_matches_users (user_id_user, match_id_match, score_a, score_b) 
+                      VALUES (?, ?, ?, ?) AS newdata
+                      ON DUPLICATE KEY UPDATE
+                        score_a = newdata.score_a,
+                        score_b = newdata.score_b;''';
+      var prepareStatment2 = await conn.prepare(sql2);
+      await prepareStatment2.execute([idUser, idMatch, scoreA, scoreB]).then(
+          (result) {}, onError: (details) {
+        throw Exception(details.toString());
+      });
+      await prepareStatment2.deallocate();
+      await conn.close();
+    });
+  }
+
+  Future<List<String>> getBet(String idMatch) async {
+    List<String> bets = ["", ""];
+    final prefs = await SharedPreferences.getInstance();
+    final idUser = prefs.getString('id');
+    await db!.getConn().then((conn) async {
+      String sql =
+          '''SELECT score_a, score_b FROM t_matches_users WHERE user_id_user = ? AND match_id_match = ?;''';
+      await conn.connect();
+      var prepareStatment = await conn.prepare(sql);
+      await prepareStatment.execute([idUser, idMatch]).then((result) {
+        if (result.numOfRows > 0) {
+          for (var row in result.rows) {
+            bets = [row.colAt(0)!, row.colAt(1)!];
+          }
+        }
+      }, onError: (details) {
+        throw Exception(details.toString());
+      });
+      await prepareStatment.deallocate();
+      await conn.close();
+    });
+    return bets;
+  }
 }
