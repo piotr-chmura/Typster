@@ -49,7 +49,7 @@ class MatchesDAO extends DAO {
     final idUser = prefs.getString('id');
     await db!.getConn().then((conn) async {
       String sql =
-          '''SELECT l.name, m.data, m.team_a, m.team_b, m.id_match, m.score_a, m.score_b, DATE_FORMAT(m.data, '%d.%m %H-%i'), l.id_league
+          '''SELECT l.name, m.data, m.team_a, m.team_b, m.id_match, m.score_a, m.score_b, DATE_FORMAT(m.data, '%d.%m %H:%i'), l.id_league
               FROM t_matches m 
               INNER JOIN t_leagues l ON m.league_id_league = l.id_league
               WHERE m.data BETWEEN DATE(NOW() - INTERVAL 1 DAY) AND DATE(NOW() + INTERVAL 7 DAY) 
@@ -99,7 +99,7 @@ class MatchesDAO extends DAO {
     final idUser = prefs.getString('id');
     await db!.getConn().then((conn) async {
       String sql =
-          '''SELECT l.name, m.data, m.team_a, m.team_b, m.id_match, m.score_a, m.score_b, DATE_FORMAT(m.data, '%d.%m %H-%i'), l.id_league
+          '''SELECT l.name, m.data, m.team_a, m.team_b, m.id_match, m.score_a, m.score_b, DATE_FORMAT(m.data, '%d.%m %H:%i'), l.id_league
               FROM t_matches m 
               INNER JOIN t_leagues l ON m.league_id_league = l.id_league
               WHERE m.data BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 24 DAY) 
