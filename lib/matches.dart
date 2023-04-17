@@ -21,7 +21,18 @@ class _Matches extends State<Matches> {
       matches = await dao.matchesList(true);
       matchesView();
     } catch (e) {
-      print(e);
+       List<Widget> matchWidgetError = [
+        const Text(
+          "Brak meczy do wyświetlenia",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+            color: Colors.green
+          ),
+          )
+        ];
+      matchListView = Column(children: matchWidgetError);
+      setState(() {});
     }
   }
 

@@ -24,7 +24,18 @@ class _MainMenu extends State<MainMenu> {
       matches = await dao.matchesMainList(true);
       matchesView();
     } catch (e) {
-      print(e);
+       List<Widget> matchWidgetError = [
+        const Text(
+          "Brak meczy do wyświetlenia",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+            color: Colors.green
+          ),
+          )
+        ];
+      matchListView = Column(children: matchWidgetError);
+      setState(() {});
     }
   }
 
@@ -85,7 +96,6 @@ class _MainMenu extends State<MainMenu> {
           match.scoreB,
           match.leagueId));
     }
-
     matchListView = Column(children: matchWidgets);
     setState(() {});
   }
