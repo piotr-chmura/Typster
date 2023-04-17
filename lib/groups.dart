@@ -139,17 +139,29 @@ class _Groups extends State<Groups> {
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(children: <Widget>[
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(30),
-                child: const Text(
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const SizedBox(height: 10, width: 30),
+                  const Text(
                   "Grupy",
                   style: TextStyle(
                       fontSize: 26,
                       color: Colors.green,
                       fontWeight: FontWeight.bold),
-                ),
+                  ),
+                  IconButton(
+                    onPressed: (){}, 
+                    icon: const Icon(
+                      Icons.group_add, 
+                      size: 30,
+                      color: Colors.green,
+                    )
+                  )
+              ]
               ),
+              const SizedBox(height: 30),
               TextField(
                   controller: searchBarController,
                   decoration: InputDecoration(

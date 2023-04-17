@@ -240,6 +240,38 @@ class _Matches extends State<Matches> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children:<Widget> [
+                SizedBox(
+                  width: 120,
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: (){}, 
+                    style: ElevatedButton.styleFrom( backgroundColor: Colors.grey), 
+                    child: const Text("Wszystko"),
+                  ),
+                ),
+                SizedBox(
+                  width: 120,
+                  height: 40,
+                  child:ElevatedButton(
+                    onPressed: (){}, 
+                    child: const Text("Dostępne")
+                  )
+                ),
+                SizedBox(
+                  width: 120,
+                  height: 40,
+                  child:ElevatedButton(
+                    onPressed: (){}, 
+                    style: ElevatedButton.styleFrom( backgroundColor: Colors.red), 
+                    child: const Text("Zakończone")
+                  )
+                )
+              ]
+              ),
+              const SizedBox( height: 20),
               matchListView
             ])));
   }
