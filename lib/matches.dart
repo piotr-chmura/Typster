@@ -222,8 +222,10 @@ class _Matches extends State<Matches> {
               size: 30,
             ),
             title: Container(
-                margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-                child: const Center(child: Text('Typster')))),
+              margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+              child: const Center(child: Text('Typster'))
+            )
+        ),
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(children: <Widget>[
