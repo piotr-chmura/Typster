@@ -86,7 +86,9 @@ class _Leaderboard extends State<Leaderboard> {
             ),
             title: Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-                child: const Center(child: Text('Typster')))),
+                child: const Center(child: Text('Typster'))
+              )
+          ),
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(children: <Widget>[     
