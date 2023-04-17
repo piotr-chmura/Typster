@@ -21,16 +21,13 @@ class _Matches extends State<Matches> {
       matches = await dao.matchesList(true);
       matchesView();
     } catch (e) {
-       List<Widget> matchWidgetError = [
+      List<Widget> matchWidgetError = [
         const Text(
           "Brak meczy do wyświetlenia",
           style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-            color: Colors.green
-          ),
-          )
-        ];
+              fontSize: 20, fontWeight: FontWeight.w500, color: Colors.green),
+        )
+      ];
       matchListView = Column(children: matchWidgetError);
       setState(() {});
     }
@@ -83,6 +80,48 @@ class _Matches extends State<Matches> {
           match.scoreA,
           match.scoreB,
           match.leagueId));
+    }
+
+    matchListView = Column(children: matchWidgets);
+    setState(() {});
+  }
+
+  void matchesViewAvailable() {
+    List<Widget> matchWidgets = [];
+    for (var match in matches) {
+      if (match.status == 1) {
+        matchWidgets.add(matchWidget(
+            match.name,
+            match.dateString,
+            match.teamA,
+            match.teamB,
+            match.id,
+            match.status,
+            match.scoreA,
+            match.scoreB,
+            match.leagueId));
+      }
+    }
+
+    matchListView = Column(children: matchWidgets);
+    setState(() {});
+  }
+
+  void matchesViewEnded() {
+    List<Widget> matchWidgets = [];
+    for (var match in matches) {
+      if (match.status == 3) {
+        matchWidgets.add(matchWidget(
+            match.name,
+            match.dateString,
+            match.teamA,
+            match.teamB,
+            match.id,
+            match.status,
+            match.scoreA,
+            match.scoreB,
+            match.leagueId));
+      }
     }
 
     matchListView = Column(children: matchWidgets);
@@ -222,10 +261,8 @@ class _Matches extends State<Matches> {
               size: 30,
             ),
             title: Container(
-              margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-              child: const Center(child: Text('Typster'))
-            )
-        ),
+                margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+                child: const Center(child: Text('Typster')))),
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(children: <Widget>[
@@ -241,37 +278,34 @@ class _Matches extends State<Matches> {
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children:<Widget> [
-                SizedBox(
-                  width: 120,
-                  height: 40,
-                  child: ElevatedButton(
-                    onPressed: (){}, 
-                    style: ElevatedButton.styleFrom( backgroundColor: Colors.grey), 
-                    child: const Text("Wszystko"),
-                  ),
-                ),
-                SizedBox(
-                  width: 120,
-                  height: 40,
-                  child:ElevatedButton(
-                    onPressed: (){}, 
-                    child: const Text("Dostępne")
-                  )
-                ),
-                SizedBox(
-                  width: 120,
-                  height: 40,
-                  child:ElevatedButton(
-                    onPressed: (){}, 
-                    style: ElevatedButton.styleFrom( backgroundColor: Colors.red), 
-                    child: const Text("Zakończone")
-                  )
-                )
-              ]
-              ),
-              const SizedBox( height: 20),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    SizedBox(
+                      width: 120,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: () => matchesView(),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey),
+                        child: const Text("Wszystko"),
+                      ),
+                    ),
+                    SizedBox(
+                        width: 120,
+                        height: 40,
+                        child: ElevatedButton(
+                            onPressed: () => matchesViewAvailable(),
+                            child: const Text("Dostępne"))),
+                    SizedBox(
+                        width: 120,
+                        height: 40,
+                        child: ElevatedButton(
+                            onPressed: () => matchesViewEnded(),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red),
+                            child: const Text("Zakończone")))
+                  ]),
+              const SizedBox(height: 20),
               matchListView
             ])));
   }
