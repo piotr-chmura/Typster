@@ -39,6 +39,7 @@ dependencies:
   email_validator: ^2.1.17
   encrypt: ^5.0.1
   shared_preferences: ^2.0.18
+  awesome_select: ^6.0.0
 
 dev_dependencies:
   flutter_test:

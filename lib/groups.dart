@@ -75,7 +75,7 @@ class _Groups extends State<Groups> {
       context,
       MaterialPageRoute(
           builder: (context) =>
-              const CreateGroup()),
+              CreateGroup()),
     );
 
     if (!mounted) return;
