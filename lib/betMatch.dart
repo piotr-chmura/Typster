@@ -56,7 +56,12 @@ class _BetMatch extends State<BetMatch> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar:
-            AppBar(title: const Center(child: Text('Obstaw mecz          '))),
+          AppBar(
+            title: Container(
+              margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+              child: const Center(child: Text('Typster'))
+          )
+        ),
         body: Padding(
             padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
             child: Center(
