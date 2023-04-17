@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test_app/backend/groupsBackend.dart';
 import 'package:test_app/backend/database.dart';
 import 'package:test_app/sideMenu.dart';
+import 'createGroup.dart';
 import 'joinGroup.dart';
 
 class Groups extends StatefulWidget {
@@ -67,6 +68,28 @@ class _Groups extends State<Groups> {
     if (result[0] == "D") {
       getGroups();
     }
+  }
+
+   Future<void> _navigateAndDisplaySelection2(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              const CreateGroup()),
+    );
+
+    if (!mounted) return;
+    if (result == null) return;
+
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+          content: Center(
+            child: Text('$result', style: const TextStyle(color: Colors.green)),
+          ),
+          duration: const Duration(milliseconds: 3000),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: const Color.fromARGB(255, 66, 66, 66)));
   }
 
   @override
@@ -152,7 +175,9 @@ class _Groups extends State<Groups> {
                       fontWeight: FontWeight.bold),
                   ),
                   IconButton(
-                    onPressed: (){}, 
+                    onPressed: (){
+                      _navigateAndDisplaySelection2(context);
+                    }, 
                     icon: const Icon(
                       Icons.group_add, 
                       size: 30,
