@@ -35,6 +35,13 @@ class Group {
   Group(this.id, this.name, this.admin);
 }
 
+class League {
+  String? name;
+  int id;
+
+  League(this.id, this.name);
+}
+
 class Match {
   String? name, teamA, teamB, dateString, leagueId;
   DateTime date;

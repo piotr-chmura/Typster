@@ -52,16 +52,11 @@ class GroupDAO extends DAO {
     await db!.getConn().then((conn) async {
       String sql = '''SELECT g.id_group, g.name, u.nickname
                       FROM t_groups g
-                      INNER JOIN t_groups_users gu
-                      ON g.id_group = gu.group_id_group
-                      INNER JOIN t_users u
-                      ON gu.user_id_user = u.id_user
-                      WHERE g.id_group IN
-                        (
-                          SELECT group_id_group
-                          FROM t_groups_users
-                          WHERE user_id_user = ?
-                          );''';
+                      INNER JOIN t_users u ON g.id_admin =u.id_user
+                      WHERE g.id_group IN (
+                        SELECT gu.group_id_group
+                          FROM t_groups_users gu
+                          WHERE gu.user_id_user = ?);''';
       await conn.connect();
       var prepareStatment = await conn.prepare(sql);
       await prepareStatment.execute([idUser]).then((result) {
