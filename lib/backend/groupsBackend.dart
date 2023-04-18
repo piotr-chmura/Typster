@@ -77,4 +77,39 @@ class GroupDAO extends DAO {
     });
     return groups;
   }
+
+  Future<List<Group>> userGroupLeaderboardList() async {
+    //sprint 3
+    List<Group> groups = [];
+    final prefs = await SharedPreferences.getInstance();
+    final idUser = prefs.getString('id');
+    await db!.getConn().then((conn) async {
+      String sql = '''SELECT g.id_group, g.name, gu.user_id_user, gu.points
+                      FROM t_groups g
+                      INNER JOIN t_groups_users gu ON g.id_group = gu.group_id_group
+                      WHERE g.id_group IN (
+                        SELECT gu.group_id_group
+                          FROM t_groups_users gu
+                          WHERE gu.user_id_user = ?)
+                    ORDER BY g.id_group ASC, gu.points DESC;''';
+      await conn.connect();
+      var prepareStatment = await conn.prepare(sql);
+      await prepareStatment.execute([idUser]).then((result) {
+        if (result.numOfRows > 0) {
+          var it = result.rows.iterator;
+          while (it.moveNext()) {
+            print(it.current.colAt(0));
+          }
+        } else {
+          throw Exception(
+              "Błąd bazy danych: Użytkownik nie należy do żadnej grupy");
+        }
+      }, onError: (details) {
+        throw Exception(details.toString());
+      });
+      await prepareStatment.deallocate();
+      await conn.close();
+    });
+    return groups;
+  }
 }

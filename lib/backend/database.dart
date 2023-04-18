@@ -42,6 +42,12 @@ class League {
   League(this.id, this.name);
 }
 
+class UserPlacement {
+  String? username, id, points;
+
+  UserPlacement(this.id, this.username, this.points);
+}
+
 class Match {
   String? name, teamA, teamB, dateString, leagueId;
   DateTime date;
