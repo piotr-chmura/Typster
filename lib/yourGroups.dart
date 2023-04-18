@@ -31,7 +31,6 @@ class _yourGroupsMatches extends State<yourGroupsMatches> {
               ],
               // ignore: prefer_const_literals_to_create_immutables
               rows: [])));
-  String username = "";
 
   Future<void> getGroups() async {
     try {

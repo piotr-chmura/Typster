@@ -14,9 +14,21 @@ class Leaderboard extends StatefulWidget {
 
 class _Leaderboard extends State<Leaderboard> {
   TextEditingController searchBarController = TextEditingController();
+  var dao = GroupDAO();
+  List<Group> groups = [];
+  List<DataRow> rows = [];
+
+  Future<void> getGroups() async {
+    try {
+      groups = await dao.userGroupLeaderboardList();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   void initState() {
+    getGroups();
     super.initState();
   }
 
