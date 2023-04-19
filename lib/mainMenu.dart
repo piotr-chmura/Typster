@@ -21,19 +21,16 @@ class _MainMenu extends State<MainMenu> {
 
   Future<void> getMatches() async {
     try {
-      matches = await dao.matchesMainList(true);
+      matches = await dao.matchesMainList();
       matchesView();
     } catch (e) {
-       List<Widget> matchWidgetError = [
+      List<Widget> matchWidgetError = [
         const Text(
           "Brak meczy do wyświetlenia",
           style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-            color: Colors.green
-          ),
-          )
-        ];
+              fontSize: 20, fontWeight: FontWeight.w500, color: Colors.green),
+        )
+      ];
       matchListView = Column(children: matchWidgetError);
       setState(() {});
     }
@@ -203,10 +200,8 @@ class _MainMenu extends State<MainMenu> {
               size: 30,
             ),
             title: Container(
-              margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-              child: const Center(child: Text('Typster'))
-          )
-        ),
+                margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+                child: const Center(child: Text('Typster')))),
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(children: <Widget>[

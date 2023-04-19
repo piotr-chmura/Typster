@@ -18,7 +18,7 @@ class _Matches extends State<Matches> {
 
   Future<void> getMatches() async {
     try {
-      matches = await dao.matchesList(true);
+      matches = await dao.matchesList();
       matchesView();
     } catch (e) {
       List<Widget> matchWidgetError = [

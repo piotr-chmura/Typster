@@ -3,15 +3,13 @@ import 'package:test_app/groups.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/login.dart';
 import 'package:test_app/matches.dart';
-import 'package:test_app/yourGroupsMatches.dart';
+import 'package:test_app/yourGroups.dart';
 
 import 'leaderboards.dart';
 import 'mainMenu.dart';
 
 class NavDrawer extends StatelessWidget {
-
   const NavDrawer({super.key});
-  
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +36,7 @@ class NavDrawer extends StatelessWidget {
             title: const Text('Strona główna'),
             onTap: () => {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(
-                    builder: (context) => const MainMenu()))
+                  MaterialPageRoute(builder: (context) => const MainMenu()))
             },
           ),
           ListTile(
@@ -58,12 +55,14 @@ class NavDrawer extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const Matches()))
             },
           ),
-           ListTile(
+          ListTile(
             leading: const Icon(Icons.home_work),
             title: const Text('Twoje grupy'),
             onTap: () => {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const yourGroupsMatches()))
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const yourGroupsMatches()))
             },
           ),
           ListTile(

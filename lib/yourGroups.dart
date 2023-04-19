@@ -3,7 +3,6 @@ import 'package:test_app/backend/groupsBackend.dart';
 import 'package:test_app/backend/database.dart';
 import 'package:test_app/sideMenu.dart';
 import 'package:test_app/yourMatches.dart';
-import 'joinGroup.dart';
 
 class yourGroupsMatches extends StatefulWidget {
   const yourGroupsMatches({super.key});
@@ -32,18 +31,18 @@ class _yourGroupsMatches extends State<yourGroupsMatches> {
               ],
               // ignore: prefer_const_literals_to_create_immutables
               rows: [])));
-  String username = "";
 
   Future<void> getGroups() async {
     try {
-      groups = await dao.groupList();
+      groups = await dao.userGroupList();
       getRows();
     } catch (e) {
       print(e);
     }
   }
 
-  Future<void> _navigateAndDisplaySelection(BuildContext context, String groupName, int groupId) async {
+  Future<void> _navigateAndDisplaySelection(
+      BuildContext context, String groupName, int groupId) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -128,9 +127,7 @@ class _yourGroupsMatches extends State<yourGroupsMatches> {
             ),
             title: Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-                child: const Center(child: Text('Typster'))
-            )
-        ),
+                child: const Center(child: Text('Typster')))),
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(children: <Widget>[
@@ -145,7 +142,6 @@ class _yourGroupsMatches extends State<yourGroupsMatches> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-
               Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 50),

@@ -52,16 +52,11 @@ class GroupDAO extends DAO {
     await db!.getConn().then((conn) async {
       String sql = '''SELECT g.id_group, g.name, u.nickname
                       FROM t_groups g
-                      INNER JOIN t_groups_users gu
-                      ON g.id_group = gu.group_id_group
-                      INNER JOIN t_users u
-                      ON gu.user_id_user = u.id_user
-                      WHERE g.id_group IN
-                        (
-                          SELECT group_id_group
-                          FROM t_groups_users
-                          WHERE user_id_user = ?
-                          );''';
+                      INNER JOIN t_users u ON g.id_admin =u.id_user
+                      WHERE g.id_group IN (
+                        SELECT gu.group_id_group
+                          FROM t_groups_users gu
+                          WHERE gu.user_id_user = ?);''';
       await conn.connect();
       var prepareStatment = await conn.prepare(sql);
       await prepareStatment.execute([idUser]).then((result) {
@@ -69,6 +64,41 @@ class GroupDAO extends DAO {
           for (var row in result.rows) {
             groups.add(Group(int.parse(row.colAt(0) ?? "error"), row.colAt(1),
                 row.colAt(2)));
+          }
+        } else {
+          throw Exception(
+              "Błąd bazy danych: Użytkownik nie należy do żadnej grupy");
+        }
+      }, onError: (details) {
+        throw Exception(details.toString());
+      });
+      await prepareStatment.deallocate();
+      await conn.close();
+    });
+    return groups;
+  }
+
+  Future<List<Group>> userGroupLeaderboardList() async {
+    //sprint 3
+    List<Group> groups = [];
+    final prefs = await SharedPreferences.getInstance();
+    final idUser = prefs.getString('id');
+    await db!.getConn().then((conn) async {
+      String sql = '''SELECT g.id_group, g.name, gu.user_id_user, gu.points
+                      FROM t_groups g
+                      INNER JOIN t_groups_users gu ON g.id_group = gu.group_id_group
+                      WHERE g.id_group IN (
+                        SELECT gu.group_id_group
+                          FROM t_groups_users gu
+                          WHERE gu.user_id_user = ?)
+                    ORDER BY g.id_group ASC, gu.points DESC;''';
+      await conn.connect();
+      var prepareStatment = await conn.prepare(sql);
+      await prepareStatment.execute([idUser]).then((result) {
+        if (result.numOfRows > 0) {
+          var it = result.rows.iterator;
+          while (it.moveNext()) {
+            print(it.current.colAt(0));
           }
         } else {
           throw Exception(

@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/sideMenu.dart';
+import 'package:test_app/backend/matchesBackend.dart';
+import 'package:test_app/backend/database.dart';
 import 'betMatch.dart';
 
 class yourMatches extends StatefulWidget {
@@ -16,7 +17,26 @@ class yourMatches extends StatefulWidget {
 }
 
 class _yourMatches extends State<yourMatches> {
-  String username = "";
+  Column matchListView = Column();
+  var dao = MatchesDAO();
+  List<Match> matches = [];
+
+  Future<void> getMatches() async {
+    try {
+      matches = await dao.groupMatchesList(widget.groupId.toString());
+      matchesView();
+    } catch (e) {
+      List<Widget> matchWidgetError = [
+        const Text(
+          "Brak meczy do wyświetlenia",
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w500, color: Colors.green),
+        )
+      ];
+      matchListView = Column(children: matchWidgetError);
+      setState(() {});
+    }
+  }
 
   Future<void> _navigateAndDisplaySelection(BuildContext context, int matchId,
       String leagueName, teamA, teamB, date, leagueId) async {
@@ -48,29 +68,42 @@ class _yourMatches extends State<yourMatches> {
 
   @override
   void initState() {
+    getMatches();
     super.initState();
   }
 
-  Widget matches() {
-    return Column(children: <Widget>[
-      mecz("Bundesliga", "26.02.2023, 16:15", "Borussia Dortmund",
-          "Bayer Leverkusen", 1, "Zakonczony", 1),
-      mecz(
-          "Seria A", "27.02.2023, 20:10", "Inter", "Juventus", 2, "Dostepny", 1)
-    ]);
+  void matchesView() {
+    List<Widget> matchWidgets = [];
+    for (var match in matches) {
+      matchWidgets.add(matchWidget(
+          match.name,
+          match.dateString,
+          match.teamA,
+          match.teamB,
+          match.id,
+          match.status,
+          match.scoreA,
+          match.scoreB,
+          match.leagueId));
+    }
+
+    matchListView = Column(children: matchWidgets);
+    setState(() {});
   }
 
-  GestureDetector mecz(
-      leagueName, date, teamA, teamB, matchId, status, leagueId) {
-    Color T_color = Color.fromRGBO(20, 150, 37, 1);
-    if (status == "Zakonczony") {
-      T_color = Color.fromRGBO(140, 15, 15, 1);
-    } else if (status == "W trakcie") {
-      T_color = Color.fromRGBO(100, 100, 100, 1);
+  GestureDetector matchWidget(leagueName, date, teamA, teamB, matchId, status,
+      scoreA, scoreB, leagueId) {
+    Color T_color = const Color.fromRGBO(20, 150, 37, 1);
+    if (status == 3) {
+      T_color = const Color.fromRGBO(140, 15, 15, 1);
+    } else if (status == 2) {
+      T_color = const Color.fromRGBO(100, 100, 100, 1);
     }
+    scoreA ??= 0;
+    scoreB ??= 0;
     return GestureDetector(
         onTap: () {
-          if (status == "Dostepny") {
+          if (status == 1) {
             _navigateAndDisplaySelection(
                 context, matchId, leagueName, teamA, teamB, date, leagueId);
           } else {
@@ -118,31 +151,61 @@ class _yourMatches extends State<yourMatches> {
                       padding: const EdgeInsets.fromLTRB(10, 20, 5, 20),
                       child: Image(
                           image: AssetImage(
-                              "lib/resources/Team logos/2/" + teamA + ".png")),
+                              "lib/resources/Team logos/$leagueId/$teamA.png")),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(5, 20, 10, 20),
                       child: Image(
                           image: AssetImage(
-                              "lib/resources/Team logos/2/" + teamB + ".png")),
+                              "lib/resources/Team logos/$leagueId/$teamB.png")),
                     )
                   ],
                 ),
+                status == 3
+                    ? Row(
+                        children: <Widget>[
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(40, 20, 0, 0),
+                            child: Text("$scoreA",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 30)),
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: const Text("-",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 30)),
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 40, 0),
+                            child: Text(
+                              "$scoreB",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 30),
+                            ),
+                          ),
+                          const Spacer(),
+                        ],
+                      )
+                    : Row(),
                 const SizedBox(height: 20),
                 Row(
                   children: <Widget>[
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 20, 5, 0),
                       child: Text("$teamA",
-                          style: TextStyle(fontWeight: FontWeight.w500)),
+                          style: const TextStyle(fontWeight: FontWeight.w500)),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(5, 20, 20, 0),
                       child: Text(
                         "$teamB",
-                        style: TextStyle(fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontWeight: FontWeight.w500),
                       ),
                     )
                   ],
@@ -162,9 +225,7 @@ class _yourMatches extends State<yourMatches> {
             ),
             title: Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-                child: const Center(child: Text('Typster'))
-            )
-        ),
+                child: const Center(child: Text('Typster')))),
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(children: <Widget>[
@@ -178,7 +239,7 @@ class _yourMatches extends State<yourMatches> {
                           "Liderzy grupy") //dodać ikonke korony i zrobić przekierowanie do nowego okna wyświtlającego to samo co leaderboard tylko że ograniczone do 10 miejsc
                     ],
                   )),
-              matches()
+              matchListView
             ])));
   }
 }
