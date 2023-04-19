@@ -15,12 +15,29 @@ class Leaderboard extends StatefulWidget {
 class _Leaderboard extends State<Leaderboard> {
   TextEditingController searchBarController = TextEditingController();
   var dao = GroupDAO();
-  List<Group> groups = [];
+  List<GroupUserPlacement> groups = [];
   List<DataRow> rows = [];
+  SingleChildScrollView table = SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(showCheckboxColumn: false, columns: const [
+            DataColumn(
+              label: Text('Nazwa'),
+            ),
+            DataColumn(
+              label: Text('Miejsce'),
+            ),
+            DataColumn(
+              label: Text('Ilość punktów'),
+            ),
+            // ignore: prefer_const_literals_to_create_immutables
+          ], rows: [])));
 
   Future<void> getGroups() async {
     try {
       groups = await dao.userGroupLeaderboardList();
+      getRows();
     } catch (e) {
       print(e);
     }
@@ -38,42 +55,54 @@ class _Leaderboard extends State<Leaderboard> {
     searchBarController.dispose();
   }
 
-  DataRow row(groupName, place, points) {
+  DataRow row(groupName, place, points, groupId) {
     return DataRow(
         onSelectChanged: (bool? select) {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    ViewLeaderboard(groupname: groupName, isTop10: false)),
+                builder: (context) => ViewLeaderboard(
+                    groupName: groupName, groupId: groupId, isTop10: false)),
           );
         },
         cells: [
           DataCell(Text(groupName)),
-          DataCell(Text(place.toString())),
-          DataCell(Text(points.toString())),
+          DataCell(Text(place)),
+          DataCell(Text(points)),
         ]);
   }
 
-  SingleChildScrollView table() {
-    return SingleChildScrollView(
+  void getRows({String searchString = ""}) {
+    List<DataRow> rows = [];
+    for (var group in groups) {
+      if (group.name!.contains(searchString)) {
+        rows.add(row(group.name, group.place, group.points, group.id));
+      }
+    }
+    this.rows = rows;
+    createTable();
+  }
+
+  void createTable() {
+    table = SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: DataTable(showCheckboxColumn: false, columns: const [
-              DataColumn(
-                label: Text('Nazwa'),
-              ),
-              DataColumn(
-                label: Text('Miejsce'),
-              ),
-              DataColumn(
-                label: Text('Ilość punktów'),
-              ),
-            ], rows: [
-              row("Bundesliga", 12, 213),
-              row("Seria A", 1, 1000)
-            ])));
+            child: DataTable(
+                showCheckboxColumn: false,
+                columns: const [
+                  DataColumn(
+                    label: Text('Nazwa'),
+                  ),
+                  DataColumn(
+                    label: Text('Miejsce'),
+                  ),
+                  DataColumn(
+                    label: Text('Ilość punktów'),
+                  ),
+                ],
+                rows: rows)));
+    setState(() {});
   }
 
   @override
@@ -124,7 +153,7 @@ class _Leaderboard extends State<Leaderboard> {
                           color: const Color.fromRGBO(100, 100, 100, 1)),
                       borderRadius:
                           const BorderRadius.all(Radius.circular(10))),
-                  child: table())
+                  child: table)
             ])));
   }
 }

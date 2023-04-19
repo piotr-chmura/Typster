@@ -48,6 +48,12 @@ class UserPlacement {
   UserPlacement(this.id, this.username, this.points);
 }
 
+class GroupUserPlacement {
+  String? name, place, points, id;
+
+  GroupUserPlacement(this.id, this.name, this.place, this.points);
+}
+
 class Match {
   String? name, teamA, teamB, dateString, leagueId;
   DateTime date;

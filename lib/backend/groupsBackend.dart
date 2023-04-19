@@ -78,9 +78,9 @@ class GroupDAO extends DAO {
     return groups;
   }
 
-  Future<List<Group>> userGroupLeaderboardList() async {
+  Future<List<GroupUserPlacement>> userGroupLeaderboardList() async {
     //sprint 3
-    List<Group> groups = [];
+    List<GroupUserPlacement> groups = [];
     final prefs = await SharedPreferences.getInstance();
     final idUser = prefs.getString('id');
     await db!.getConn().then((conn) async {
@@ -97,8 +97,39 @@ class GroupDAO extends DAO {
       await prepareStatment.execute([idUser]).then((result) {
         if (result.numOfRows > 0) {
           var it = result.rows.iterator;
+          bool flag = true; //czy jeszcze nie znaleziono usera w grupie
+          it.moveNext();
+          String idGroup = it.current.colAt(0)!;
+          int i = 1;
+          if (it.current.colAt(2) == idUser) {
+            groups.add(GroupUserPlacement(it.current.colAt(0),
+                it.current.colAt(1), "1", it.current.colAt(3)));
+            flag = false;
+          } else {
+            i += 1;
+          }
           while (it.moveNext()) {
-            print(it.current.colAt(0));
+            if (flag == false) {
+              if (it.current.colAt(0) != idGroup) {
+                if (it.current.colAt(2) == idUser) {
+                  groups.add(GroupUserPlacement(it.current.colAt(0),
+                      it.current.colAt(1), "1", it.current.colAt(3)));
+                } else {
+                  i += 1;
+                  flag = true;
+                }
+                idGroup = it.current.colAt(0)!;
+              }
+            } else {
+              if (it.current.colAt(2) == idUser) {
+                groups.add(GroupUserPlacement(it.current.colAt(0),
+                    it.current.colAt(1), i.toString(), it.current.colAt(3)));
+                flag = false;
+                i = 1;
+              } else {
+                i += 1;
+              }
+            }
           }
         } else {
           throw Exception(
