@@ -2,7 +2,7 @@ import 'package:mysql_client/mysql_client.dart';
 import 'dart:async';
 
 class Mysql {
-  static String host = "217.96.199.27",
+  static String host = "217.96.200.1",
       userName = "Host_PCH_API_UPDATE",
       password = "h>k96{U9M8#2Qr8_",
       databaseName = "typster";
