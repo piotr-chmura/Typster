@@ -4,7 +4,7 @@ import 'database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LeaderboardDAO extends DAO {
-  Future<List<UserPlacement>> groupList() async {
+  Future<List<UserPlacement>> leaderboard(bool top10) async {
     List<UserPlacement> leaderBoard = [];
     final prefs = await SharedPreferences.getInstance();
     final idUser = prefs.getString('id');
