@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_final_fields
-
+import 'package:test_app/backend/leaderboardBackend.dart';
+import 'package:test_app/backend/database.dart';
 import 'package:flutter/material.dart';
 
 class ViewLeaderboard extends StatefulWidget {
@@ -19,8 +20,41 @@ class ViewLeaderboard extends StatefulWidget {
 }
 
 class _ViewLeaderboard extends State<ViewLeaderboard> {
+  var dao = LeaderboardDAO();
+  List<UserPlacement> users = [];
+  List<DataRow> rows = [];
+  SingleChildScrollView table = SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+              showCheckboxColumn: false,
+              columns: const [
+                DataColumn(
+                  label: Text('Miejsce'),
+                ),
+                DataColumn(
+                  label: Text('Nickname'),
+                ),
+                DataColumn(
+                  label: Text('Ilość punktów'),
+                ),
+              ],
+              // ignore: prefer_const_literals_to_create_immutables
+              rows: [])));
+
+  Future<void> getUsers() async {
+    try {
+      users = await dao.leaderboard(widget.groupId, widget.isTop10);
+      getRows();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
+    getUsers();
     super.initState();
   }
 
@@ -30,50 +64,66 @@ class _ViewLeaderboard extends State<ViewLeaderboard> {
   }
 
   DataRow row(nickName, place, points) {
-    String Crown = "lib/resources/Crowns/$place.png";
-    if (place > 3) {
+    if (int.parse(place) > 3) {
       return DataRow(cells: [
-        DataCell(Center(child: Text(place.toString()))),
-        DataCell(Text(nickName)),
-        DataCell(Text(points.toString())),
+        DataCell(Center(child: Text(place))),
+        DataCell(Center(
+          child: Text(nickName),
+        )),
+        DataCell(Center(
+          child: Text(points),
+        )),
       ]);
     } else {
+      String crown = "lib/resources/Crowns/$place.png";
       return DataRow(cells: [
         DataCell(Image(
-          image: AssetImage(Crown),
+          image: AssetImage(crown),
           width: 50,
           height: 50,
         )),
-        DataCell(Text(nickName)),
-        DataCell(Text(points.toString())),
+        DataCell(Center(
+          child: Text(nickName),
+        )),
+        DataCell(Center(
+          child: Text(points),
+        )),
       ]);
     }
   }
 
-  SingleChildScrollView table() {
-    return SingleChildScrollView(
+  void getRows() {
+    List<DataRow> rows = [];
+    for (var user in users) {
+      rows.add(row(user.username, user.id, user.points));
+    }
+    this.rows = rows;
+    createTable();
+  }
+
+  void createTable() {
+    table = SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Theme(
                 data: Theme.of(context)
                     .copyWith(dividerColor: Colors.transparent),
-                child: DataTable(showCheckboxColumn: false, columns: const [
-                  DataColumn(
-                    label: Text('Miejsce'),
-                  ),
-                  DataColumn(
-                    label: Text('Nickname'),
-                  ),
-                  DataColumn(
-                    label: Text('Ilość punktów'),
-                  ),
-                ], rows: [
-                  row("Adam12", 1, 2132),
-                  row("Wuja4", 2, 1000),
-                  row("Piter3", 3, 800),
-                  row("Przegryw8", 4, 2),
-                ]))));
+                child: DataTable(
+                    showCheckboxColumn: false,
+                    columns: const [
+                      DataColumn(
+                        label: Text('Miejsce'),
+                      ),
+                      DataColumn(
+                        label: Text('Nickname'),
+                      ),
+                      DataColumn(
+                        label: Text('Ilość punktów'),
+                      ),
+                    ],
+                    rows: rows))));
+    setState(() {});
   }
 
   @override
@@ -102,7 +152,7 @@ class _ViewLeaderboard extends State<ViewLeaderboard> {
                 ),
               ),
               const SizedBox(height: 20),
-              Center(child: table())
+              Center(child: table)
             ])));
   }
 }

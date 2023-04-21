@@ -27,7 +27,6 @@ class _CreateGroup extends State<CreateGroup> {
   Future<void> getLeagues() async {
     try {
       leagues = await dao.getLeagues();
-      print(leagues.length);
       for (var league in leagues) {
         leaguesList.add(S2Choice<int>(value: league.id, title: league.name));
       }

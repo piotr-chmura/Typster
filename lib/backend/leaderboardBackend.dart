@@ -1,39 +1,33 @@
 // ignore_for_file: file_names
 import 'dataAccesObject.dart';
 import 'database.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LeaderboardDAO extends DAO {
-  Future<List<UserPlacement>> leaderboard(bool top10) async {
+  Future<List<UserPlacement>> leaderboard(String groupId, bool top10) async {
     List<UserPlacement> leaderBoard = [];
-    final prefs = await SharedPreferences.getInstance();
-    final idUser = prefs.getString('id');
     await db!.getConn().then((conn) async {
-      String sql = '''SELECT g.id_group, g.name, u.nickname
-                      FROM t_groups g
-                      INNER JOIN t_groups_users gu
-                      ON g.id_group = gu.group_id_group
-                      INNER JOIN t_users u
-                      ON g.id_admin = u.id_user 
-                      WHERE g.id_group NOT IN
-                        (
-                          SELECT group_id_group
-                          FROM t_groups_users
-                          WHERE user_id_user = ?
-                          )
-                      GROUP BY g.id_group, g.name, u.nickname, g.id_admin, u.id_user
-                      HAVING g.id_admin = u.id_user;''';
+      String sql = '''SELECT u.nickname, gu.points
+                      FROM t_users u
+                      INNER JOIN t_groups_users gu ON u.id_user = gu.user_id_user
+                      WHERE gu.group_id_group = ?
+                      ORDER BY gu.points DESC''';
+      if (top10) {
+        sql += " LIMIT 10;";
+      } else {
+        sql += ";";
+      }
       await conn.connect();
       var prepareStatment = await conn.prepare(sql);
-      await prepareStatment.execute([idUser]).then((result) {
+      await prepareStatment.execute([groupId]).then((result) {
         if (result.numOfRows > 0) {
+          int i = 1;
           for (var row in result.rows) {
             leaderBoard
-                .add(UserPlacement(row.colAt(0), row.colAt(1), row.colAt(2)));
+                .add(UserPlacement(i.toString(), row.colAt(0), row.colAt(1)));
+            i += 1;
           }
         } else {
-          throw Exception(
-              "Błąd bazy danych: Użytkownik należy do wszystkich grup");
+          throw Exception("Błąd bazy danych (leaderboard)");
         }
       }, onError: (details) {
         throw Exception(details.toString());
