@@ -35,6 +35,13 @@ class Group {
   Group(this.id, this.name, this.admin);
 }
 
+class GroupCreate {
+  String? name, description;
+  List<int> leagues = [];
+
+  GroupCreate(this.name, this.description, this.leagues);
+}
+
 class League {
   String? name;
   int id;

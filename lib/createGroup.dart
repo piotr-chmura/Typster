@@ -126,7 +126,7 @@ class _CreateGroup extends State<CreateGroup> {
                     width: 300,
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           String groupName = groupNameController.text;
                           String groupDescription =
                               groupDescriptionController.text;
@@ -139,7 +139,17 @@ class _CreateGroup extends State<CreateGroup> {
                                 : validate2 = true;
                           });
                           if (validate1 && validate2 && value.isNotEmpty) {
-                            Navigator.pop(context, "Stwórz grupę");
+                            GroupCreate group =
+                                GroupCreate(groupName, groupDescription, value);
+                            String result = "Uworzono grupę";
+                            try {
+                              await dao.insertGroup(group);
+                            } catch (e) {
+                              result = "Błąd bazy: $e";
+                              print(result);
+                            }
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context, result);
                           } else {
                             showDialog<String>(
                               context: context,
