@@ -1,9 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:test_app/exitGroup.dart';
+import 'package:test_app/leaderboards.dart';
 import 'package:test_app/sideMenu.dart';
 import 'package:test_app/backend/matchesBackend.dart';
 import 'package:test_app/backend/database.dart';
+import 'package:test_app/viewLeadrboard.dart';
 import 'betMatch.dart';
+import 'editGroup.dart';
 
 class yourMatches extends StatefulWidget {
   const yourMatches(
@@ -20,6 +24,7 @@ class _yourMatches extends State<yourMatches> {
   Column matchListView = Column();
   var dao = MatchesDAO();
   List<Match> matches = [];
+  bool isOwner = true;
 
   Future<void> getMatches() async {
     try {
@@ -89,6 +94,37 @@ class _yourMatches extends State<yourMatches> {
 
     matchListView = Column(children: matchWidgets);
     setState(() {});
+  }
+
+  ElevatedButton isUserOrOwner(type){
+    if(type){
+      return ElevatedButton(
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EditGroup(groupId: widget.groupId, groupName: widget.groupName))
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.orange
+        ), 
+        child: const Text("Edytuj grupę")
+        );
+    }
+    else{
+      return ElevatedButton(
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ExitGroup(groupName: widget.groupName, groupId: widget.groupId))
+          );
+        }, 
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red
+        ),
+        child: const Text("Wyjdz z grupy")
+        );
+    }
   }
 
   GestureDetector matchWidget(leagueName, date, teamA, teamB, matchId, status,
@@ -232,11 +268,40 @@ class _yourMatches extends State<yourMatches> {
               Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(30),
-                  child: Row(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      Text(widget.groupName),
                       Text(
-                          "Liderzy grupy") //dodać ikonke korony i zrobić przekierowanie do nowego okna wyświtlającego to samo co leaderboard tylko że ograniczone do 10 miejsc
+                        widget.groupName,
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w500
+                        ),
+                        ),
+                      const Padding(padding:EdgeInsets.fromLTRB(0, 10, 0, 10)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 40,
+                            width: 120,
+                            child: ElevatedButton(
+                              onPressed: (){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ViewLeaderboard(groupName: widget.groupName, groupId: widget.groupId.toString(), isTop10: true))
+                              );
+                            }, 
+                            child: const Text("Liderzy grupy")
+                            ),
+                          ),
+                          SizedBox(
+                            height: 40,
+                            width: 120,
+                            child: isUserOrOwner(isOwner)
+                          )
+                        ],)        
                     ],
                   )),
               matchListView

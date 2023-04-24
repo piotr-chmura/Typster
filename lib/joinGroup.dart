@@ -46,7 +46,28 @@ class _JoinGroup extends State<JoinGroup> {
                 const Padding(padding: EdgeInsets.fromLTRB(10, 30, 10, 20)),
                 Text(
                   widget.groupName,
-                  style: const TextStyle(color: Colors.green, fontSize: 18),
+                  style: const TextStyle(color: Colors.green, fontSize: 20),
+                ),
+                const Padding(padding: EdgeInsets.fromLTRB(10, 30, 10, 20)),
+                Container(
+                  height: 200,
+                  width: 300,
+                  padding: const EdgeInsets.all(5),
+                  child:InputDecorator(
+                    decoration: InputDecoration(
+                    labelText: 'Opis grupy',
+                    labelStyle: const TextStyle(color: Colors.green),
+                    border: OutlineInputBorder(              
+                      borderRadius: BorderRadius.circular(10),
+                    )),                  
+                  child: ListView (
+                    children: const <Widget>[
+                      Text(
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eget neque a purus gravida condimentum. Sed pellentesque erat a metus dapibus, id maximus metus sollicitudin. Etiam vel odio ut eros malesuada tincidunt sed ut ligula. Nulla ut mauris at metus pellentesque gravida. Nullam mollis neque sed luctus condimentum. Donec dictum lectus sed mi mattis tempor. Morbi nibh urna, finibus non risus in, condimentum posuere nisl. Praesent malesuada, metus a bibendum congue, sapien tellus facilisis erat, vitae finibus leo ligula ac urna. Etiam sit amet gravida turpis, sed cursus arcu. Donec at tristique tortor, non semper risus. Sed maximus eros quis aliquam viverra. ",
+                      ),
+                    ]
+                    )
+                  )
                 ),
                 const Padding(padding: EdgeInsets.fromLTRB(10, 30, 10, 20)),
                 Row(

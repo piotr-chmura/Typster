@@ -144,7 +144,7 @@ class _ViewLeaderboard extends State<ViewLeaderboard> {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(30),
                 child: Text(
-                  "Tablica wyników dla ${widget.groupName}",
+                  "Wyniki dla ${widget.groupName}",
                   style: const TextStyle(
                       fontSize: 26,
                       color: Colors.green,
