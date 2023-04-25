@@ -11,10 +11,14 @@ import 'editGroup.dart';
 
 class yourMatches extends StatefulWidget {
   const yourMatches(
-      {super.key, required this.groupId, required this.groupName});
+      {super.key,
+      required this.groupId,
+      required this.groupName,
+      required this.isOwner});
 
   final int groupId;
   final String groupName;
+  final bool isOwner;
 
   @override
   _yourMatches createState() => _yourMatches();
@@ -24,7 +28,6 @@ class _yourMatches extends State<yourMatches> {
   Column matchListView = Column();
   var dao = MatchesDAO();
   List<Match> matches = [];
-  bool isOwner = true;
 
   Future<void> getMatches() async {
     try {
@@ -96,34 +99,29 @@ class _yourMatches extends State<yourMatches> {
     setState(() {});
   }
 
-  ElevatedButton isUserOrOwner(type){
-    if(type){
+  ElevatedButton isUserOrOwner() {
+    if (widget.isOwner) {
       return ElevatedButton(
-        onPressed: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => EditGroup(groupId: widget.groupId, groupName: widget.groupName))
-          );
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.orange
-        ), 
-        child: const Text("Edytuj grupę")
-        );
-    }
-    else{
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EditGroup(
+                        groupId: widget.groupId, groupName: widget.groupName)));
+          },
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+          child: const Text("Edytuj grupę"));
+    } else {
       return ElevatedButton(
-        onPressed: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ExitGroup(groupName: widget.groupName, groupId: widget.groupId))
-          );
-        }, 
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red
-        ),
-        child: const Text("Wyjdz z grupy")
-        );
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ExitGroup(
+                        groupName: widget.groupName, groupId: widget.groupId)));
+          },
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+          child: const Text("Opuść grupę"));
     }
   }
 
@@ -274,12 +272,11 @@ class _yourMatches extends State<yourMatches> {
                       Text(
                         widget.groupName,
                         style: const TextStyle(
-                          color: Colors.green,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w500
-                        ),
-                        ),
-                      const Padding(padding:EdgeInsets.fromLTRB(0, 10, 0, 10)),
+                            color: Colors.green,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
@@ -287,21 +284,22 @@ class _yourMatches extends State<yourMatches> {
                             height: 40,
                             width: 120,
                             child: ElevatedButton(
-                              onPressed: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => ViewLeaderboard(groupName: widget.groupName, groupId: widget.groupId.toString(), isTop10: true))
-                              );
-                            }, 
-                            child: const Text("Liderzy grupy")
-                            ),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ViewLeaderboard(
+                                              groupName: widget.groupName,
+                                              groupId:
+                                                  widget.groupId.toString(),
+                                              isTop10: true)));
+                                },
+                                child: const Text("Liderzy grupy")),
                           ),
                           SizedBox(
-                            height: 40,
-                            width: 120,
-                            child: isUserOrOwner(isOwner)
-                          )
-                        ],)        
+                              height: 40, width: 120, child: isUserOrOwner())
+                        ],
+                      )
                     ],
                   )),
               matchListView

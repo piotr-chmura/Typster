@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/backend/groupsBackend.dart';
 import 'package:test_app/backend/database.dart';
 import 'package:test_app/sideMenu.dart';
@@ -42,12 +43,15 @@ class _yourGroupsMatches extends State<yourGroupsMatches> {
   }
 
   Future<void> _navigateAndDisplaySelection(
-      BuildContext context, String groupName, int groupId) async {
+      BuildContext context, String groupName, int groupId, String owner) async {
+    final prefs = await SharedPreferences.getInstance();
+    bool isOwner = prefs.getString('username') == owner ? true : false;
+    // ignore: use_build_context_synchronously
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              yourMatches(groupId: groupId, groupName: groupName)),
+          builder: (context) => yourMatches(
+              groupId: groupId, groupName: groupName, isOwner: isOwner)),
     );
 
     if (!mounted) return;
@@ -78,7 +82,8 @@ class _yourGroupsMatches extends State<yourGroupsMatches> {
   DataRow row(groupName, ownerNickname, groupId) {
     return DataRow(
         onSelectChanged: (bool? select) {
-          _navigateAndDisplaySelection(context, groupName, groupId);
+          _navigateAndDisplaySelection(
+              context, groupName, groupId, ownerNickname);
         },
         cells: [
           DataCell(Text(groupName)),

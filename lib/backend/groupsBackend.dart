@@ -143,4 +143,22 @@ class GroupDAO extends DAO {
     });
     return groups;
   }
+
+//check
+  Future<void> leaveGroup(int idGroup) async {
+    final prefs = await SharedPreferences.getInstance();
+    final idUser = prefs.getString('id');
+    await db!.getConn().then((conn) async {
+      String sql =
+          '''DELETE FROM t_groups WHERE group_id_group = ? AND user_id_user = ?;''';
+      await conn.connect();
+      var prepareStatment = await conn.prepare(sql);
+      await prepareStatment.execute([idGroup, idUser]).then((result) {},
+          onError: (details) {
+        throw Exception(details.toString());
+      });
+      await prepareStatment.deallocate();
+      await conn.close();
+    });
+  }
 }

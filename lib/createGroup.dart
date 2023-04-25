@@ -18,6 +18,7 @@ class _CreateGroup extends State<CreateGroup> {
   TextEditingController groupDescriptionController = TextEditingController();
   bool validate1 = true;
   bool validate2 = true;
+  bool _buttonEnabled = true;
   var dao = CreateGroupDAO();
   List<League> leagues = [];
 
@@ -47,6 +48,18 @@ class _CreateGroup extends State<CreateGroup> {
     super.dispose();
     groupNameController.dispose();
     groupDescriptionController.dispose();
+  }
+
+  void _switchButton() {
+    if (_buttonEnabled) {
+      setState(() {
+        _buttonEnabled = false;
+      });
+    } else {
+      setState(() {
+        _buttonEnabled = true;
+      });
+    }
   }
 
   @override
@@ -108,7 +121,7 @@ class _CreateGroup extends State<CreateGroup> {
                           width: 100,
                           height: 30,
                           child: const Center(
-                              child: Text("Potwierdz",
+                              child: Text("Potwierdź",
                                   style: TextStyle(color: Colors.white))))),
                   modalHeaderStyle: const S2ModalHeaderStyle(
                       textStyle: TextStyle(color: Colors.white),
@@ -126,47 +139,87 @@ class _CreateGroup extends State<CreateGroup> {
                     width: 300,
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: ElevatedButton(
-                        onPressed: () async {
-                          String groupName = groupNameController.text;
-                          String groupDescription =
-                              groupDescriptionController.text;
-                          setState(() {
-                            isNullOrEmpty(groupName)
-                                ? validate1 = false
-                                : validate1 = true;
-                            isNullOrEmpty(groupDescription)
-                                ? validate2 = false
-                                : validate2 = true;
-                          });
-                          if (validate1 && validate2 && value.isNotEmpty) {
-                            GroupCreate group =
-                                GroupCreate(groupName, groupDescription, value);
-                            String result = "Uworzono grupę";
-                            try {
-                              await dao.insertGroup(group);
-                            } catch (e) {
-                              result = "Błąd bazy: $e";
-                              print(result);
-                            }
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context, result);
-                          } else {
-                            showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: const Text('Błąd brak danych'),
-                                content: const Text("Nie wybrano żadnej z lig"),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, 'OK'),
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
+                        onPressed: _buttonEnabled
+                            ? () async {
+                                _switchButton();
+                                String groupName = groupNameController.text;
+                                String groupDescription =
+                                    groupDescriptionController.text;
+                                setState(() {
+                                  isNullOrEmpty(groupName)
+                                      ? validate1 = false
+                                      : validate1 = true;
+                                  isNullOrEmpty(groupDescription)
+                                      ? validate2 = false
+                                      : validate2 = true;
+                                });
+                                if (validate1 &&
+                                    validate2 &&
+                                    value.isNotEmpty) {
+                                  GroupCreate group = GroupCreate(
+                                      groupName, groupDescription, value);
+                                  String result = "Uworzono grupę";
+                                  try {
+                                    await dao.insertGroup(group);
+                                  } catch (e) {
+                                    if (e
+                                        .toString()
+                                        .contains("Duplicate entry")) {
+                                      result =
+                                          "Istnieje już grupa o takiej nazwie";
+                                    } else {
+                                      result = "Błąd bazy: $e";
+                                    }
+                                  }
+                                  if (result == "Uworzono grupę") {
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context, result);
+                                  } else {
+                                    // ignore: use_build_context_synchronously
+                                    showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        title: const Text('Błąd'),
+                                        content: Text(result),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, 'OK'),
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  String error = "";
+                                  if (!validate1) {
+                                    error = "Wybierz nazwę grupy";
+                                  } else if (!validate2) {
+                                    error = "Dodaj opis";
+                                  } else {
+                                    error = "Nie wybrano żadnej ligi";
+                                  }
+                                  showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Text('Błąd brak danych'),
+                                      content: Text(error),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'OK'),
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                                _switchButton();
+                              }
+                            : null,
                         child: const Text("Stwórz grupę")))
               ],
             )

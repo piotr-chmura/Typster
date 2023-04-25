@@ -14,9 +14,20 @@ class JoinGroup extends StatefulWidget {
 
 class _JoinGroup extends State<JoinGroup> {
   var dao = JoinGroupDAO();
+  String _description = "";
+
+  Future<void> getDescription() async {
+    try {
+      _description = await dao.getDescription(widget.groupId);
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   void initState() {
+    getDescription();
     super.initState();
   }
 
@@ -29,11 +40,9 @@ class _JoinGroup extends State<JoinGroup> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Container(
-            margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-            child: const Center(child: Text('Typster'))
-          )
-        ),
+            title: Container(
+                margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+                child: const Center(child: Text('Typster')))),
         body: Padding(
             padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
             child: Center(
@@ -50,25 +59,21 @@ class _JoinGroup extends State<JoinGroup> {
                 ),
                 const Padding(padding: EdgeInsets.fromLTRB(10, 30, 10, 20)),
                 Container(
-                  height: 200,
-                  width: 300,
-                  padding: const EdgeInsets.all(5),
-                  child:InputDecorator(
-                    decoration: InputDecoration(
-                    labelText: 'Opis grupy',
-                    labelStyle: const TextStyle(color: Colors.green),
-                    border: OutlineInputBorder(              
-                      borderRadius: BorderRadius.circular(10),
-                    )),                  
-                  child: ListView (
-                    children: const <Widget>[
-                      Text(
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eget neque a purus gravida condimentum. Sed pellentesque erat a metus dapibus, id maximus metus sollicitudin. Etiam vel odio ut eros malesuada tincidunt sed ut ligula. Nulla ut mauris at metus pellentesque gravida. Nullam mollis neque sed luctus condimentum. Donec dictum lectus sed mi mattis tempor. Morbi nibh urna, finibus non risus in, condimentum posuere nisl. Praesent malesuada, metus a bibendum congue, sapien tellus facilisis erat, vitae finibus leo ligula ac urna. Etiam sit amet gravida turpis, sed cursus arcu. Donec at tristique tortor, non semper risus. Sed maximus eros quis aliquam viverra. ",
-                      ),
-                    ]
-                    )
-                  )
-                ),
+                    height: 200,
+                    width: 300,
+                    padding: const EdgeInsets.all(5),
+                    child: InputDecorator(
+                        decoration: InputDecoration(
+                            labelText: 'Opis grupy',
+                            labelStyle: const TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            )),
+                        child: ListView(children: <Widget>[
+                          Text(
+                            _description,
+                          ),
+                        ]))),
                 const Padding(padding: EdgeInsets.fromLTRB(10, 30, 10, 20)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
