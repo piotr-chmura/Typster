@@ -79,7 +79,6 @@ class GroupDAO extends DAO {
   }
 
   Future<List<GroupUserPlacement>> userGroupLeaderboardList() async {
-    //sprint 3
     List<GroupUserPlacement> groups = [];
     final prefs = await SharedPreferences.getInstance();
     final idUser = prefs.getString('id');

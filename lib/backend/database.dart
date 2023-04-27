@@ -49,6 +49,14 @@ class League {
   League(this.id, this.name);
 }
 
+class DescLeagueList {
+  String? description;
+  List<League> leaguesAll = [];
+  List<int> leagues = [];
+
+  DescLeagueList(this.description, this.leagues, this.leaguesAll);
+}
+
 class UserPlacement {
   String? username, id, points;
 

@@ -59,7 +59,7 @@ class _ExitGroup extends State<ExitGroup> {
                         child: ElevatedButton(
                             onPressed: () async {
                               try {
-                                dao.leaveGroup(widget.groupId);
+                                await dao.leaveGroup(widget.groupId);
                               } catch (e) {
                                 print(e);
                               }
