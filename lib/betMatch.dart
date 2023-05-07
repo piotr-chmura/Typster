@@ -106,23 +106,25 @@ class _BetMatch extends State<BetMatch> {
                             Container(
                               padding: const EdgeInsets.fromLTRB(10, 20, 5, 20),
                               child: Image(
-                                  image: AssetImage(
-                                      "lib/resources/Team logos/" +
-                                          widget.leagueId +
-                                          "/" +
-                                          widget.teamA +
-                                          ".png")),
+                                width: 150,
+                                image: AssetImage(
+                                    "lib/resources/Team logos/" +
+                                        widget.leagueId +
+                                        "/" +
+                                        widget.teamA +
+                                        ".png")),
                             ),
                             const Spacer(),
                             Container(
                               padding: const EdgeInsets.fromLTRB(5, 20, 10, 20),
                               child: Image(
-                                  image: AssetImage(
-                                      "lib/resources/Team logos/" +
-                                          widget.leagueId +
-                                          "/" +
-                                          widget.teamB +
-                                          ".png")),
+                                width: 150,
+                                image: AssetImage(
+                                    "lib/resources/Team logos/" +
+                                        widget.leagueId +
+                                        "/" +
+                                        widget.teamB +
+                                        ".png")),
                             )
                           ],
                         ),
