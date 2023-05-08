@@ -187,15 +187,17 @@ class _Matches extends State<Matches> {
                     Container(
                       padding: const EdgeInsets.fromLTRB(10, 20, 5, 20),
                       child: Image(
-                          image: AssetImage(
-                              "lib/resources/Team logos/$leagueId/$teamA.png")),
+                        width: 150,
+                        image: AssetImage(
+                            "lib/resources/Team logos/$leagueId/$teamA.png")),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(5, 20, 10, 20),
                       child: Image(
-                          image: AssetImage(
-                              "lib/resources/Team logos/$leagueId/$teamB.png")),
+                        width: 150,
+                        image: AssetImage(
+                            "lib/resources/Team logos/$leagueId/$teamB.png")),
                     )
                   ],
                 ),
