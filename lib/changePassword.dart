@@ -5,14 +5,14 @@ import 'package:test_app/login.dart';
 import 'backend/database.dart';
 import 'backend/BuissnesObject.dart';
 
-class ChangePasswordByEmail extends StatefulWidget {
-  const ChangePasswordByEmail({super.key});
+class ChangePassword extends StatefulWidget {
+  const ChangePassword({super.key});
 
   @override
-  _ChangePasswordByEmail createState() => _ChangePasswordByEmail();
+  _ChangePassword createState() => _ChangePassword();
 }
 
-class _ChangePasswordByEmail extends State<ChangePasswordByEmail> {
+class _ChangePassword extends State<ChangePassword> {
 
   TextEditingController _controller1 = TextEditingController();
   TextEditingController _controller2 = TextEditingController();

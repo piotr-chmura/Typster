@@ -111,7 +111,7 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
                     if (validate[0] && validate[1] && validate[2] && validate[3] && validate[4]) {
                       print(fullCode);
                       Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const ChangePassowrdByEmail())
+                      MaterialPageRoute(builder: (context) => const ChangePasswordByEmail())
                       );
                     }
                   },

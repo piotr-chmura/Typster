@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/backend/matchesBackend.dart';
 import 'package:test_app/backend/database.dart';
+import 'account.dart';
 import 'betMatch.dart';
 import 'sideMenu.dart';
 
@@ -197,13 +198,26 @@ class _MainMenu extends State<MainMenu> {
     return Scaffold(
         drawer: NavDrawer(),
         appBar: AppBar(
-            iconTheme: const IconThemeData(
-              color: Colors.green,
-              size: 30,
-            ),
-            title: Container(
-                margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-                child: const Center(child: Text('Typster')))),
+          iconTheme: const IconThemeData(
+            color: Colors.green,
+            size: 30,
+          ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              const Expanded(
+                child: Center(child: Text('Typster'))),
+              IconButton(
+                iconSize: 30,
+                icon: const Icon(Icons.account_circle),
+                onPressed: () {
+                  Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Account(userName: username))
+                  );
+                },
+              ), 
+          ])
+        ),
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(children: <Widget>[
