@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/backend/loginBackend.dart';
 import 'package:test_app/backend/database.dart';
+import 'package:test_app/passwordRecovery.dart';
+import 'package:test_app/passwordRecoveryCode.dart';
 import 'backend/buissnesObject.dart';
 import 'package:test_app/register.dart';
 import 'package:test_app/mainMenu.dart';
@@ -60,10 +62,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-          child: const Center(child: Text('Typster'))
-        ),
+        title: const Center(child: Text('Typster')),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -193,6 +192,19 @@ class _LoginState extends State<Login> {
                     _navigateAndDisplaySelection(context);
                   },
                   child: const Text("Załóż konto"),
+                ),
+              )
+            ]),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+              const Text("Zapomniałeś hasła?"),
+              InkWell(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const PasswordRecovery())
+                    );
+                  },
+                  child: const Text("Odzyskaj hasło"),
                 ),
               )
             ])
