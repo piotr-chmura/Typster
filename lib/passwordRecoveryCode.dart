@@ -37,6 +37,7 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
                   maxLength: 1,
                   controller: code,
                   textAlign: TextAlign.center,
+                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     counterText: '',
                     border: const OutlineInputBorder(),
