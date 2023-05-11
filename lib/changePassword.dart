@@ -16,8 +16,10 @@ class _ChangePassword extends State<ChangePassword> {
 
   TextEditingController _controller1 = TextEditingController();
   TextEditingController _controller2 = TextEditingController();
+  TextEditingController _controller3 = TextEditingController();
   String validate1 = "";
-  bool validate2 = true;
+  String validate2 = "";
+  bool validate3 = true;
   bool hidePassword = true;
 
   @override
@@ -53,14 +55,14 @@ class _ChangePassword extends State<ChangePassword> {
               alignment: Alignment.center,
               padding: const EdgeInsets.all(30),
               child: const Text(
-                "Podaj nowe hasło",
+                "Zmień swoje hasło",
                 style: TextStyle(fontSize: 20, color: Colors.green),
                 ),
               ),
               TextField(
                 obscureText: hidePassword,
                 decoration: InputDecoration(
-                    labelText: 'Hasło',
+                    labelText: 'Stare hasło',
                     suffixIcon: IconButton(
                       icon: Icon(hidePassword
                           ? Icons.visibility_off
@@ -74,13 +76,20 @@ class _ChangePassword extends State<ChangePassword> {
                     errorText: isNullOrEmpty(validate1) ? null : validate1),
                 controller: _controller1,
               ),
+              TextField(
+                obscureText: hidePassword,
+                decoration: InputDecoration(
+                    labelText: 'Nowe hasło',
+                    errorText: isNullOrEmpty(validate2) ? null : validate1),
+                controller: _controller2,
+              ),
               const SizedBox(height: 10),
               TextField(
                 obscureText: hidePassword,
                 decoration: InputDecoration(
                     labelText: 'Powtórz hasło',
-                    errorText: validate2 ? null : 'Hasła muszą być takie same'),
-                controller: _controller2,
+                    errorText: validate3 ? null : 'Hasła muszą być takie same'),
+                controller: _controller3,
               ),
               const SizedBox(height: 20),
               Container(
@@ -88,19 +97,18 @@ class _ChangePassword extends State<ChangePassword> {
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: ElevatedButton(
                     onPressed: () async {
-                      String password = _controller1.text;
-                      String password2 = _controller2.text;
+                      String oldPassword = _controller1.text;
+                      String newPassword = _controller2.text;
+                      String newPassword2 = _controller3.text;
                       setState(() {
-                        validate1 = isValidPassword(password);
-                        isEven(password2, password)
-                            ? validate2 = true
-                            : validate2 = false;
+                        validate1 = isValidPassword(oldPassword);
+                        validate2 = isValidPassword(oldPassword);
+                        isEven(newPassword, newPassword2)
+                            ? validate3 = true
+                            : validate3 = false;
                       });
-                      if(isNullOrEmpty(validate1) && validate2){
-                        Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => const Login()
-                          )
-                        );
+                      if(isNullOrEmpty(validate1) && isNullOrEmpty(validate2) && validate3){
+                        Navigator.pop(context, "Poprawnie zmieniono hasło!");
                       }
                     },
                     child: const Text('Załóż konto')),

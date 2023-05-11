@@ -72,7 +72,7 @@ class _Account extends State<Account> {
           child: const Center(child: Text('Typster'))
           )
         ),
-      body: Column(
+      body: ListView(
         children: <Widget>[
           Container(
           alignment: Alignment.center,
