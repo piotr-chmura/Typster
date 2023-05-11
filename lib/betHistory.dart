@@ -3,18 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/backend/matchesBackend.dart';
 import 'package:test_app/backend/database.dart';
-import 'account.dart';
 import 'betMatch.dart';
 import 'sideMenu.dart';
 
-class MainMenu extends StatefulWidget {
-  const MainMenu({super.key});
+class BetHistory extends StatefulWidget {
+  const BetHistory({super.key});
 
   @override
-  _MainMenu createState() => _MainMenu();
+  _BetHistory createState() => _BetHistory();
 }
 
-class _MainMenu extends State<MainMenu> {
+class _BetHistory extends State<BetHistory> {
   String username = "";
   Column matchListView = Column();
   var dao = MatchesDAO();
@@ -22,7 +21,7 @@ class _MainMenu extends State<MainMenu> {
 
   Future<void> getMatches() async {
     try {
-      matches = await dao.matchesMainList();
+      matches = await dao.matchesList();
       matchesView();
     } catch (e) {
       List<Widget> matchWidgetError = [
@@ -52,34 +51,6 @@ class _MainMenu extends State<MainMenu> {
     super.initState();
   }
 
-  Future<void> _navigateAndDisplaySelection(BuildContext context, int matchId,
-      String leagueName, teamA, teamB, date, leagueId) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => BetMatch(
-              matchId: matchId,
-              leagueName: leagueName,
-              teamA: teamA,
-              teamB: teamB,
-              date: date,
-              leagueId: leagueId)),
-    );
-
-    if (!mounted) return;
-    if (result == null) return;
-
-    ScaffoldMessenger.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-          content: Center(
-            child: Text('$result', style: const TextStyle(color: Colors.green)),
-          ),
-          duration: const Duration(milliseconds: 3000),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: const Color.fromARGB(255, 66, 66, 66)));
-  }
-
   void matchesView() {
     List<Widget> matchWidgets = [];
     for (var match in matches) {
@@ -98,41 +69,14 @@ class _MainMenu extends State<MainMenu> {
     setState(() {});
   }
 
-  GestureDetector matchWidget(leagueName, date, teamA, teamB, matchId, status,
+  Container matchWidget(leagueName, date, teamA, teamB, matchId, status,
       scoreA, scoreB, leagueId) {
-    Color T_color = const Color.fromRGBO(20, 150, 37, 1);
-    if (status == 3) {
-      T_color = const Color.fromRGBO(140, 15, 15, 1);
-    } else if (status == 2) {
-      T_color = const Color.fromRGBO(100, 100, 100, 1);
-    }
-    scoreA ??= 0;
-    scoreB ??= 0;
-    return GestureDetector(
-        onTap: () {
-          if (status == 1) {
-            _navigateAndDisplaySelection(
-                context, matchId, leagueName, teamA, teamB, date, leagueId);
-          } else {
-            ScaffoldMessenger.of(context)
-              ..removeCurrentSnackBar()
-              ..showSnackBar(const SnackBar(
-                  content: Center(
-                    child: Text(
-                        "Brak możliwości typowania meczu w trakcie lub zakończonego",
-                        style: TextStyle(color: Colors.green)),
-                  ),
-                  duration: Duration(milliseconds: 3000),
-                  behavior: SnackBarBehavior.floating,
-                  backgroundColor: Color.fromARGB(255, 66, 66, 66)));
-          }
-        },
-        child: Container(
+    return Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.fromLTRB(0, 20, 0, 50),
             margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             decoration: BoxDecoration(
-                border: Border.all(width: 5, color: T_color),
+                border: Border.all(width: 5, color: const Color.fromRGBO(140, 15, 15, 1)),
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
             child: Column(
               children: <Widget>[
@@ -171,6 +115,68 @@ class _MainMenu extends State<MainMenu> {
                     )
                   ],
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Text("Wynik faktyczny",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 10)),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(00, 10, 0, 0),
+                      child: Text("Wynik obstawiony",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 10)),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(40, 20, 0, 0),
+                      child: Text("$scoreA",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 30)),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: const Text("-",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 30)),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 40, 0),
+                      child: Text(
+                        "$scoreB",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 30),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(40, 20, 0, 0),
+                      child: Text("21",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 30)),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: const Text("-",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 30)),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 40, 0),
+                      child: Text(
+                        "37",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 30),
+                      ),
+                    ),
+                  ],
+                ),               
                 const SizedBox(height: 20),
                 Row(
                   children: <Widget>[
@@ -190,7 +196,7 @@ class _MainMenu extends State<MainMenu> {
                   ],
                 )
               ],
-            )));
+            ));
   }
 
   @override
@@ -198,26 +204,13 @@ class _MainMenu extends State<MainMenu> {
     return Scaffold(
         drawer: NavDrawer(),
         appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.green,
-            size: 30,
-          ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              const Expanded(
-                child: Center(child: Text('Typster'))),
-              IconButton(
-                iconSize: 30,
-                icon: const Icon(Icons.account_circle),
-                onPressed: () {
-                  Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Account(userName: username))
-                  );
-                },
-              ), 
-          ])
-        ),
+            iconTheme: const IconThemeData(
+              color: Colors.green,
+              size: 30,
+            ),
+            title: Container(
+                margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+                child: const Center(child: Text('Typster')))),
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(children: <Widget>[

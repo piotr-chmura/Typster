@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/betHistory.dart';
 import 'package:test_app/groups.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/login.dart';
@@ -71,6 +72,14 @@ class NavDrawer extends StatelessWidget {
             onTap: () => {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => const Leaderboard()))
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.leaderboard),
+            title: const Text('Historia typowań'),
+            onTap: () => {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const BetHistory()))
             },
           ),
           ListTile(
