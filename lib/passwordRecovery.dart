@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/passwordRecoveryCode.dart';
 import 'backend/buissnesObject.dart';
+import 'backend/passwordRecoveryBackend.dart';
 
 class PasswordRecovery extends StatefulWidget {
   const PasswordRecovery({super.key});
@@ -10,9 +11,9 @@ class PasswordRecovery extends StatefulWidget {
 }
 
 class _PasswordRecoveryState extends State<PasswordRecovery> {
-
   TextEditingController emailController = TextEditingController();
   String validate1 = "";
+  var dao = PasswordRecDAO();
 
 //alert typu pop-up
 
@@ -32,9 +33,8 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
     return Scaffold(
       appBar: AppBar(
         title: Container(
-          margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-          child: const Center(child: Text('Typster'))
-        ),
+            margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+            child: const Center(child: Text('Typster'))),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -63,8 +63,7 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
                   decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       labelText: "E-mail",
-                      errorText:
-                          isNullOrEmpty(validate1) ? null : validate1),
+                      errorText: isNullOrEmpty(validate1) ? null : validate1),
                 )),
             const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
             Container(
@@ -77,9 +76,42 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
                       validate1 = isValidEmail(email);
                     });
                     if (isNullOrEmpty(validate1)) {
-                      Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const PasswordRecoveryCode())
-                      );
+                      String result = "";
+                      List<String> nameCode = [];
+                      try {
+                        nameCode = await dao.sendCode(email);
+                      } catch (e) {
+                        if (e.toString() == 'Brak konta z takim emailem') {
+                          result = e.toString();
+                        } else {
+                          result = "Błąd bazy: $e";
+                        }
+                      }
+                      if (result == "") {
+                        // ignore: use_build_context_synchronously
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PasswordRecoveryCode(
+                                    email: email,
+                                    name: nameCode[0],
+                                    code: nameCode[1])));
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Błąd'),
+                            content: Text(result),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                   },
                   child: const Text("Odzyskaj hasło")),

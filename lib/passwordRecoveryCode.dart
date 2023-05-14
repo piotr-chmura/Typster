@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/changePasswordByEmail.dart';
 import 'backend/buissnesObject.dart';
+import 'backend/passwordRecoveryBackend.dart';
 
 class PasswordRecoveryCode extends StatefulWidget {
-  const PasswordRecoveryCode({super.key});
+  PasswordRecoveryCode(
+      {super.key, required this.email, required this.name, required this.code});
 
+  final String email;
+  String code;
+  final String name;
   @override
   _PasswordRecoveryCode createState() => _PasswordRecoveryCode();
 }
 
 class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
-
-  List<TextEditingController> code = List.generate(5, (_) => TextEditingController());
+  List<TextEditingController> code =
+      List.generate(5, (_) => TextEditingController());
   List<bool> validate = List.generate(5, (_) => true);
+  var dao = PasswordRecDAO();
 
   @override
   void initState() {
@@ -29,25 +35,23 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
     code[4].dispose();
   }
 
-  Expanded CodeGen(TextEditingController code, validate){
-    return Expanded(child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(10, 20, 10, 30),
-                  child:TextField(
-                  maxLength: 1,
-                  controller: code,
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    FocusScope.of(context).nextFocus();
-                  },
-                  decoration: InputDecoration(
-                    counterText: '',
-                    border: const OutlineInputBorder(),
-                    errorText:
-                        validate ? null : ''),
-                  )
-                )
-              );
+  Expanded CodeGen(TextEditingController code, validate) {
+    return Expanded(
+        child: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.fromLTRB(10, 20, 10, 30),
+            child: TextField(
+              maxLength: 1,
+              controller: code,
+              textAlign: TextAlign.center,
+              onChanged: (value) {
+                FocusScope.of(context).nextFocus();
+              },
+              decoration: InputDecoration(
+                  counterText: '',
+                  border: const OutlineInputBorder(),
+                  errorText: validate ? null : ''),
+            )));
   }
 
   @override
@@ -55,9 +59,8 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
     return Scaffold(
       appBar: AppBar(
         title: Container(
-          margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-          child: const Center(child: Text('Typster'))
-        ),
+            margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+            child: const Center(child: Text('Typster'))),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -92,7 +95,11 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: ElevatedButton(
                   onPressed: () async {
-                    String fullCode = code[0].text + code[1].text + code[2].text + code[3].text + code[4].text;
+                    String fullCode = code[0].text +
+                        code[1].text +
+                        code[2].text +
+                        code[3].text +
+                        code[4].text;
                     setState(() {
                       isNullOrEmpty(code[0].text)
                           ? validate[0] = false
@@ -110,11 +117,34 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
                           ? validate[4] = false
                           : validate[4] = true;
                     });
-                    if (validate[0] && validate[1] && validate[2] && validate[3] && validate[4]) {
-                      print(fullCode);
-                      Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const ChangePasswordByEmail())
-                      );
+                    if (validate[0] &&
+                        validate[1] &&
+                        validate[2] &&
+                        validate[3] &&
+                        validate[4]) {
+                      if (fullCode == widget.code) {
+                        print(fullCode);
+                        print(widget.code);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ChangePasswordByEmail()));
+                      } else {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Błąd'),
+                            content: const Text('Błędny kod'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                   },
                   child: const Text("Odzyskaj hasło")),
@@ -124,8 +154,13 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
               const Text("Kod nie przyszedł?"),
               InkWell(
                 child: TextButton(
-                  onPressed: () {
-                    print("send again");
+                  onPressed: () async {
+                    try {
+                      widget.code =
+                          await dao.sendCode2(widget.email, widget.name);
+                    } catch (e) {
+                      print(e.toString());
+                    }
                   },
                   child: const Text("Wyślij ponownie"),
                 ),
