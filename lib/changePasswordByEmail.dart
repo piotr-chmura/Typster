@@ -109,7 +109,7 @@ class _ChangePasswordByEmail extends State<ChangePasswordByEmail> {
                                 builder: (context) => const Login()));
                       }
                     },
-                    child: const Text('Załóż konto')),
+                    child: const Text('Zmień hasło')),
               )
             ],
           ),
