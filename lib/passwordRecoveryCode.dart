@@ -126,8 +126,8 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const ChangePasswordByEmail()));
+                                builder: (context) => ChangePasswordByEmail(
+                                    email: widget.email)));
                       } else {
                         showDialog<String>(
                           context: context,

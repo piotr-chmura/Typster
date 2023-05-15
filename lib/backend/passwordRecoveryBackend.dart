@@ -57,4 +57,23 @@ class PasswordRecDAO extends DAO {
     sender.sendEmail(name: name, email: email, message: message);
     return code;
   }
+
+  Future<void> changePassword(String email, String password) async {
+    final encryptedPass =
+        encrypter?.encrypt(password.toString(), iv: iv).base64.toString();
+    String error = "";
+    await db!.getConn().then((conn) async {
+      String sql = '''UPDATE t_users
+                      SET password = ?
+                      WHERE e_mail = ?; ''';
+      await conn.connect();
+      var prepareStatment = await conn.prepare(sql);
+      await prepareStatment.execute([encryptedPass, email]).then((result) {},
+          onError: (details) {
+        throw Exception(details.toString());
+      });
+      await prepareStatment.deallocate();
+      await conn.close();
+    });
+  }
 }

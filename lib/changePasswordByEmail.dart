@@ -4,21 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:test_app/login.dart';
 import 'backend/database.dart';
 import 'backend/BuissnesObject.dart';
+import 'backend/passwordRecoveryBackend.dart';
 
 class ChangePasswordByEmail extends StatefulWidget {
-  const ChangePasswordByEmail({super.key});
+  const ChangePasswordByEmail({super.key, required this.email});
 
+  final String email;
   @override
   _ChangePasswordByEmail createState() => _ChangePasswordByEmail();
 }
 
 class _ChangePasswordByEmail extends State<ChangePasswordByEmail> {
-
   TextEditingController _controller1 = TextEditingController();
   TextEditingController _controller2 = TextEditingController();
   String validate1 = "";
   bool validate2 = true;
   bool hidePassword = true;
+  var dao = PasswordRecDAO();
 
   @override
   void initState() {
@@ -36,11 +38,9 @@ class _ChangePasswordByEmail extends State<ChangePasswordByEmail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-          child: const Center(child: Text('Typster'))
-          )
-        ),
+          title: Container(
+              margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+              child: const Center(child: Text('Typster')))),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -50,11 +50,11 @@ class _ChangePasswordByEmail extends State<ChangePasswordByEmail> {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(30),
-              child: const Text(
-                "Podaj nowe hasło",
-                style: TextStyle(fontSize: 20, color: Colors.green),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(30),
+                child: const Text(
+                  "Podaj nowe hasło",
+                  style: TextStyle(fontSize: 20, color: Colors.green),
                 ),
               ),
               TextField(
@@ -96,11 +96,17 @@ class _ChangePasswordByEmail extends State<ChangePasswordByEmail> {
                             ? validate2 = true
                             : validate2 = false;
                       });
-                      if(isNullOrEmpty(validate1) && validate2){
-                        Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => const Login()
-                          )
-                        );
+                      if (isNullOrEmpty(validate1) && validate2) {
+                        try {
+                          await dao.changePassword(widget.email, password);
+                        } catch (e) {
+                          print(e.toString());
+                        }
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Login()));
                       }
                     },
                     child: const Text('Załóż konto')),
