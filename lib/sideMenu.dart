@@ -75,7 +75,7 @@ class NavDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.leaderboard),
+            leading: const Icon(Icons.assignment_ind),
             title: const Text('Historia typowań'),
             onTap: () => {
               Navigator.pushReplacement(context,
