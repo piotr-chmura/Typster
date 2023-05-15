@@ -45,7 +45,11 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
               controller: code,
               textAlign: TextAlign.center,
               onChanged: (value) {
+                if(code.value.text.isNotEmpty){
                 FocusScope.of(context).nextFocus();
+                }else{
+                FocusScope.of(context).previousFocus();
+                }
               },
               decoration: InputDecoration(
                   counterText: '',
