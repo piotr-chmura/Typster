@@ -141,6 +141,12 @@ class _BetHistory extends State<BetHistory> {
                       style:
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 10)),
                 ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(00, 10, 0, 0),
+                  child: const Text("Punkty",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 10, color: Colors.green)),
+                ),
               ],
             ),
             Row(
@@ -157,6 +163,12 @@ class _BetHistory extends State<BetHistory> {
                   child: Text("21 - 37",
                       style: const TextStyle(
                           fontWeight: FontWeight.w500, fontSize: 30)),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: Text("3",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 30, color: Colors.green)),
                 ),
               ],
             )
