@@ -95,3 +95,25 @@ class Match {
     }
   }
 }
+
+class MatchBetHistory {
+  String? name, teamA, teamB, dateString, leagueId;
+  int scoreA, scoreB, uScoreA, uScoreB, points = 0;
+  MatchBetHistory(this.name, this.teamA, this.teamB, this.scoreA, this.scoreB,
+      this.dateString, this.leagueId, this.uScoreA, this.uScoreB) {
+    points = _getPoints(scoreA, scoreB, uScoreA, uScoreB);
+  }
+
+  int _getPoints(int? scoreA, int? scoreB, int? uScoreA, int? uScoreB) {
+    if ((scoreA == uScoreA) && (scoreB == uScoreB)) {
+      return 3;
+    } else if (scoreA! - scoreB! == uScoreA! - uScoreB!) {
+      return 2;
+    } else if (((scoreA > scoreB) && (uScoreA > uScoreB)) ||
+        ((scoreA < scoreB) && (uScoreA < uScoreB))) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+}

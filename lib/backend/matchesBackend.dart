@@ -218,8 +218,8 @@ class MatchesDAO extends DAO {
     return bets;
   }
 
-  Future<List<Match>> matchesUserList() async {
-    List<Match> matches = [];
+  Future<List<MatchBetHistory>> matchesUserList() async {
+    List<MatchBetHistory> matches = [];
     final prefs = await SharedPreferences.getInstance();
     final idUser = prefs.getString('id');
     await db!.getConn().then((conn) async {
@@ -228,7 +228,7 @@ class MatchesDAO extends DAO {
               FROM t_matches m 
               INNER JOIN t_leagues l ON m.league_id_league = l.id_league
               INNER JOIN t_matches_users mu ON m.id_match = mu.match_id_match
-              WHERE (m.score_a IS NOT NULL) AND (mu.user_id_user = 22)
+              WHERE (m.score_a IS NOT NULL) AND (mu.user_id_user = ?)
               ORDER BY m.data
               ;''';
       //dokończ
@@ -237,16 +237,14 @@ class MatchesDAO extends DAO {
       await prepareStatment.execute([idUser]).then((result) {
         if (result.numOfRows > 0) {
           for (var row in result.rows) {
-            matches.add(Match(
-                row.colAt(0),
-                DateTime.parse(row.colAt(1) ?? ""),
-                row.colAt(2),
-                row.colAt(3),
-                int.parse(row.colAt(4)!),
-                row.colAt(5)?.isEmpty ?? true ? null : int.parse(row.colAt(5)!),
-                row.colAt(6)?.isEmpty ?? true ? null : int.parse(row.colAt(6)!),
-                row.colAt(7),
-                row.colAt(8)));
+            //matches.add(MatchBetHistory(
+            // row.colAt(0),
+            // row.colAt(2),
+            // row.colAt(3),
+            // row.colAt(5)?.isEmpty ?? true ? null : int.parse(row.colAt(5)!),
+            // row.colAt(6)?.isEmpty ?? true ? null : int.parse(row.colAt(6)!),
+            // row.colAt(7),
+            // row.colAt(8)));
           }
         } else {
           throw Exception("Błąd bazy danych: Brak meczy do wyświetlenia");
