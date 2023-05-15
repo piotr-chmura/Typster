@@ -123,8 +123,6 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
                         validate[3] &&
                         validate[4]) {
                       if (fullCode == widget.code) {
-                        print(fullCode);
-                        print(widget.code);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
