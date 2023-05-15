@@ -73,7 +73,7 @@ class _BetHistory extends State<BetHistory> {
       scoreA, scoreB, leagueId) {
     return Container(
             alignment: Alignment.center,
-            padding: const EdgeInsets.fromLTRB(0, 20, 0, 50),
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
             margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             decoration: BoxDecoration(
                 border: Border.all(width: 5, color: const Color.fromRGBO(140, 15, 15, 1)),
@@ -116,18 +116,36 @@ class _BetHistory extends State<BetHistory> {
                   ],
                 ),
                 Row(
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(30, 20, 0, 0),
+                      child: Text("$teamA",
+                          style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.green)),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 30, 0),
+                      child: Text(
+                        "$teamB",
+                        style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.green),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 40),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Container(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Text("Wynik faktyczny",
-                          style: const TextStyle(
+                      child: const Text("Wynik faktyczny",
+                          style: TextStyle(
                               fontWeight: FontWeight.w500, fontSize: 10)),
                     ),
                     Container(
                       padding: const EdgeInsets.fromLTRB(00, 10, 0, 0),
-                      child: Text("Wynik obstawiony",
-                          style: const TextStyle(
+                      child: const Text("Wynik obstawiony",
+                          style: TextStyle(
                               fontWeight: FontWeight.w500, fontSize: 10)),
                     ),
                   ],
@@ -136,63 +154,17 @@ class _BetHistory extends State<BetHistory> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Container(
-                      padding: const EdgeInsets.fromLTRB(40, 20, 0, 0),
-                      child: Text("$scoreA",
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: Text("$scoreA"" - ""$scoreB",
                           style: const TextStyle(
                               fontWeight: FontWeight.w500, fontSize: 30)),
                     ),
                     Container(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: const Text("-",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 30)),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 40, 0),
-                      child: Text(
-                        "$scoreB",
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 30),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(40, 20, 0, 0),
-                      child: Text("21",
+                      child: Text("21 - 37",
                           style: const TextStyle(
                               fontWeight: FontWeight.w500, fontSize: 30)),
                     ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: const Text("-",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 30)),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 40, 0),
-                      child: Text(
-                        "37",
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 30),
-                      ),
-                    ),
-                  ],
-                ),               
-                const SizedBox(height: 20),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 5, 0),
-                      child: Text("$teamA",
-                          style: const TextStyle(fontWeight: FontWeight.w500)),
-                    ),
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5, 20, 20, 0),
-                      child: Text(
-                        "$teamB",
-                        style: const TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                    )
                   ],
                 )
               ],
