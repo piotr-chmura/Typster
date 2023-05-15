@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_final_fields
 
 import 'package:flutter/material.dart';
-import 'package:test_app/login.dart';
 import 'backend/database.dart';
 import 'backend/BuissnesObject.dart';
+import 'backend/passwordRecoveryBackend.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -13,7 +13,6 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePassword extends State<ChangePassword> {
-
   TextEditingController _controller1 = TextEditingController();
   TextEditingController _controller2 = TextEditingController();
   TextEditingController _controller3 = TextEditingController();
@@ -21,6 +20,7 @@ class _ChangePassword extends State<ChangePassword> {
   String validate2 = "";
   bool validate3 = true;
   bool hidePassword = true;
+  var dao = PasswordRecDAO();
 
   @override
   void initState() {
@@ -38,11 +38,9 @@ class _ChangePassword extends State<ChangePassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-          child: const Center(child: Text('Typster'))
-          )
-        ),
+          title: Container(
+              margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+              child: const Center(child: Text('Typster')))),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -52,11 +50,11 @@ class _ChangePassword extends State<ChangePassword> {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(30),
-              child: const Text(
-                "Zmień swoje hasło",
-                style: TextStyle(fontSize: 20, color: Colors.green),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(30),
+                child: const Text(
+                  "Zmień swoje hasło",
+                  style: TextStyle(fontSize: 20, color: Colors.green),
                 ),
               ),
               TextField(
@@ -80,7 +78,7 @@ class _ChangePassword extends State<ChangePassword> {
                 obscureText: hidePassword,
                 decoration: InputDecoration(
                     labelText: 'Nowe hasło',
-                    errorText: isNullOrEmpty(validate2) ? null : validate1),
+                    errorText: isNullOrEmpty(validate2) ? null : validate2),
                 controller: _controller2,
               ),
               const SizedBox(height: 10),
@@ -102,16 +100,42 @@ class _ChangePassword extends State<ChangePassword> {
                       String newPassword2 = _controller3.text;
                       setState(() {
                         validate1 = isValidPassword(oldPassword);
-                        validate2 = isValidPassword(oldPassword);
+                        validate2 = isValidPassword(newPassword);
                         isEven(newPassword, newPassword2)
                             ? validate3 = true
                             : validate3 = false;
                       });
-                      if(isNullOrEmpty(validate1) && isNullOrEmpty(validate2) && validate3){
-                        Navigator.pop(context, "Poprawnie zmieniono hasło!");
+                      if (isNullOrEmpty(validate1) &&
+                          isNullOrEmpty(validate2) &&
+                          validate3) {
+                        String res = "Poprawnie zmieniono hasło!";
+                        try {
+                          await dao.changePassword2(newPassword, oldPassword);
+                        } catch (e) {
+                          res = e.toString();
+                        }
+                        if (res == "Poprawnie zmieniono hasło!") {
+                          // ignore: use_build_context_synchronously
+                          Navigator.pop(context, res);
+                        } else {
+                          // ignore: use_build_context_synchronously
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Błąd'),
+                              content: Text(res.substring(11)),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'OK'),
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
                       }
                     },
-                    child: const Text('Załóż konto')),
+                    child: const Text('Zmień hasło')),
               )
             ],
           ),

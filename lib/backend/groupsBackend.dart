@@ -160,4 +160,62 @@ class GroupDAO extends DAO {
       await conn.close();
     });
   }
+
+  Future<List<String>> userGroupListProfile() async {
+    List<String> groups = [];
+    final prefs = await SharedPreferences.getInstance();
+    final idUser = prefs.getString('id');
+    await db!.getConn().then((conn) async {
+      String sql = '''SELECT g.name
+                      FROM t_groups g
+                      INNER JOIN t_users u ON g.id_admin =u.id_user
+                      WHERE g.id_group IN (
+                        SELECT gu.group_id_group
+                          FROM t_groups_users gu
+                          WHERE gu.user_id_user = ?);''';
+      await conn.connect();
+      var prepareStatment = await conn.prepare(sql);
+      await prepareStatment.execute([idUser]).then((result) {
+        if (result.numOfRows > 0) {
+          for (var row in result.rows) {
+            groups.add(row.colAt(0).toString());
+          }
+        } else {
+          throw Exception("Użytkownik nie należy do żadnej grupy");
+        }
+      }, onError: (details) {
+        throw Exception(details.toString());
+      });
+      await prepareStatment.deallocate();
+      await conn.close();
+    });
+    return groups;
+  }
+
+  Future<List<String>> userOwnedGroupListProfile() async {
+    List<String> groups = [];
+    final prefs = await SharedPreferences.getInstance();
+    final idUser = prefs.getString('id');
+    await db!.getConn().then((conn) async {
+      String sql = '''SELECT g.name
+                      FROM t_groups g
+                      WHERE g.id_admin = ?;''';
+      await conn.connect();
+      var prepareStatment = await conn.prepare(sql);
+      await prepareStatment.execute([idUser]).then((result) {
+        if (result.numOfRows > 0) {
+          for (var row in result.rows) {
+            groups.add(row.colAt(0).toString());
+          }
+        } else {
+          throw Exception("Użytkownik nie jest właścicielem żadnej grupy");
+        }
+      }, onError: (details) {
+        throw Exception(details.toString());
+      });
+      await prepareStatment.deallocate();
+      await conn.close();
+    });
+    return groups;
+  }
 }

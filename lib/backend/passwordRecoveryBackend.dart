@@ -1,8 +1,10 @@
 // ignore_for_file: file_names
+import 'buissnesObject.dart';
 import 'dataAccesObject.dart';
 import 'database.dart';
 import 'emailBackend.dart';
 import 'dart:math' show Random;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PasswordRecDAO extends DAO {
   Future<List<String>> sendCode(String email) async {
@@ -73,6 +75,45 @@ class PasswordRecDAO extends DAO {
         throw Exception(details.toString());
       });
       await prepareStatment.deallocate();
+      await conn.close();
+    });
+  }
+
+  Future<void> changePassword2(String newPassword, String oldPassword) async {
+    final prefs = await SharedPreferences.getInstance();
+    final idUser = prefs.getString('id');
+    final encryptedPass =
+        encrypter?.encrypt(newPassword.toString(), iv: iv).base64.toString();
+    final encryptedPass2 =
+        encrypter?.encrypt(oldPassword.toString(), iv: iv).base64.toString();
+    await db!.getConn().then((conn) async {
+      String sql = 'select password from t_users where id_user = ? limit 1;';
+      await conn.connect();
+      var prepareStatment = await conn.prepare(sql);
+      await prepareStatment.execute([idUser]).then((result) {
+        if (result.numOfRows == 1) {
+          for (var row in result.rows) {
+            if (!isEven(encryptedPass2!, row.colAt(0).toString())) {
+              throw Exception("Stare hasło jest niepoprawne");
+            }
+          }
+        } else {
+          throw Exception("Błąd bazy danych");
+        }
+      }, onError: (details) {
+        throw Exception(details.toString());
+      });
+      await prepareStatment.deallocate();
+
+      String sql2 = '''UPDATE t_users
+                      SET password = ?
+                      WHERE id_user = ?;''';
+      var prepareStatment2 = await conn.prepare(sql2);
+      await prepareStatment2.execute([encryptedPass, idUser]).then((result) {},
+          onError: (details) {
+        throw Exception(details.toString());
+      });
+      await prepareStatment2.deallocate();
       await conn.close();
     });
   }
