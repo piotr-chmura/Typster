@@ -237,14 +237,16 @@ class MatchesDAO extends DAO {
       await prepareStatment.execute([idUser]).then((result) {
         if (result.numOfRows > 0) {
           for (var row in result.rows) {
-            //matches.add(MatchBetHistory(
-            // row.colAt(0),
-            // row.colAt(2),
-            // row.colAt(3),
-            // row.colAt(5)?.isEmpty ?? true ? null : int.parse(row.colAt(5)!),
-            // row.colAt(6)?.isEmpty ?? true ? null : int.parse(row.colAt(6)!),
-            // row.colAt(7),
-            // row.colAt(8)));
+            matches.add(MatchBetHistory(
+                row.colAt(0),
+                row.colAt(2),
+                row.colAt(3),
+                int.parse(row.colAt(4)!),
+                int.parse(row.colAt(5)!),
+                row.colAt(6),
+                row.colAt(7),
+                int.parse(row.colAt(8)!),
+                int.parse(row.colAt(9)!)));
           }
         } else {
           throw Exception("Błąd bazy danych: Brak meczy do wyświetlenia");
