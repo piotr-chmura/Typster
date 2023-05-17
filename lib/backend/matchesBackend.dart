@@ -229,9 +229,8 @@ class MatchesDAO extends DAO {
               INNER JOIN t_leagues l ON m.league_id_league = l.id_league
               INNER JOIN t_matches_users mu ON m.id_match = mu.match_id_match
               WHERE (m.score_a IS NOT NULL) AND (mu.user_id_user = ?)
-              ORDER BY m.data
+              ORDER BY m.data DESC
               ;''';
-      //dokończ
       await conn.connect();
       var prepareStatment = await conn.prepare(sql);
       await prepareStatment.execute([idUser]).then((result) {
@@ -241,12 +240,14 @@ class MatchesDAO extends DAO {
                 row.colAt(0),
                 row.colAt(2),
                 row.colAt(3),
-                int.parse(row.colAt(4)!),
-                int.parse(row.colAt(5)!),
+                row.colAt(4)?.isEmpty ?? true ? null : int.parse(row.colAt(4)!),
+                row.colAt(5)?.isEmpty ?? true ? null : int.parse(row.colAt(5)!),
                 row.colAt(6),
                 row.colAt(7),
-                int.parse(row.colAt(8)!),
-                int.parse(row.colAt(9)!)));
+                row.colAt(8)?.isEmpty ?? true ? null : int.parse(row.colAt(8)!),
+                row.colAt(9)?.isEmpty ?? true
+                    ? null
+                    : int.parse(row.colAt(9)!)));
           }
         } else {
           throw Exception("Błąd bazy danych: Brak meczy do wyświetlenia");

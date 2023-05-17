@@ -98,7 +98,7 @@ class Match {
 
 class MatchBetHistory {
   String? name, teamA, teamB, dateString, leagueId;
-  int scoreA, scoreB, uScoreA, uScoreB, points = 0;
+  int? scoreA, scoreB, uScoreA, uScoreB, points = 0;
   MatchBetHistory(this.name, this.teamA, this.teamB, this.scoreA, this.scoreB,
       this.dateString, this.leagueId, this.uScoreA, this.uScoreB) {
     points = _getPoints(scoreA, scoreB, uScoreA, uScoreB);

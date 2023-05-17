@@ -1,6 +1,5 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/backend/matchesBackend.dart';
 import 'package:test_app/backend/database.dart';
 import 'sideMenu.dart';
@@ -16,13 +15,14 @@ class _BetHistory extends State<BetHistory> {
   String username = "";
   Column matchListView = Column();
   var dao = MatchesDAO();
-  List<Match> matches = [];
+  List<MatchBetHistory> matches = [];
 
   Future<void> getMatches() async {
     try {
-      matches = await dao.matchesList();
+      matches = await dao.matchesUserList();
       matchesView();
     } catch (e) {
+      print(e);
       List<Widget> matchWidgetError = [
         const Text(
           "Brak meczy do wyświetlenia",
@@ -49,18 +49,19 @@ class _BetHistory extends State<BetHistory> {
           match.dateString,
           match.teamA,
           match.teamB,
-          match.id,
-          match.status,
           match.scoreA,
           match.scoreB,
-          match.leagueId));
+          match.leagueId,
+          match.uScoreA,
+          match.uScoreB,
+          match.points));
     }
     matchListView = Column(children: matchWidgets);
     setState(() {});
   }
 
-  Container matchWidget(leagueName, date, teamA, teamB, matchId, status, scoreA,
-      scoreB, leagueId) {
+  Container matchWidget(leagueName, date, teamA, teamB, scoreA, scoreB,
+      leagueId, uScoreA, uScoreB, points) {
     return Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
@@ -144,8 +145,10 @@ class _BetHistory extends State<BetHistory> {
                 Container(
                   padding: const EdgeInsets.fromLTRB(00, 10, 0, 0),
                   child: const Text("Punkty",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 10, color: Colors.green)),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10,
+                          color: Colors.green)),
                 ),
               ],
             ),
@@ -160,15 +163,17 @@ class _BetHistory extends State<BetHistory> {
                 ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  child: Text("21 - 37",
+                  child: Text("$uScoreA" " - " "$uScoreB",
                       style: const TextStyle(
                           fontWeight: FontWeight.w500, fontSize: 30)),
                 ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  child: Text("3",
+                  child: Text(points.toString(),
                       style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 30, color: Colors.green)),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 30,
+                          color: Colors.green)),
                 ),
               ],
             )
