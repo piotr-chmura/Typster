@@ -1,9 +1,19 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
 import 'mainMenu.dart';
 
 void main() async {
+  AwesomeNotifications().initialize(
+      null,
+      [
+        NotificationChannel(
+            channelKey: 'scheduled',
+            channelName: 'Basic notifications',
+            channelDescription: 'Notification channel for basic tests')
+      ],
+      debug: true);
   WidgetsFlutterBinding.ensureInitialized();
   bool flag = false;
   final prefs = await SharedPreferences.getInstance();
