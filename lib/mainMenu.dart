@@ -205,11 +205,7 @@ class _MainMenu extends State<MainMenu> {
 
   Future<void> notification() async {
     bool flag = false;
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-      if (isAllowed) {
-        flag = true;
-      }
-    });
+    flag = await AwesomeNotifications().isNotificationAllowed();
     if (flag) {
       AwesomeNotifications().dismiss(10);
       int i = 0;
