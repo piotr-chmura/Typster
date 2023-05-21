@@ -204,28 +204,35 @@ class _MainMenu extends State<MainMenu> {
   }
 
   Future<void> notification() async {
-    AwesomeNotifications().dismiss(10);
-    int i = 0;
-    for (bool b in bet) {
-      if (b) break;
-      i++;
-    }
-    if (i > 2) return;
-    print(DateTime.now().timeZoneName);
-    String localTimeZone =
-        await AwesomeNotifications().getLocalTimeZoneIdentifier();
+    bool flag = false;
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (isAllowed) {
+        flag = true;
+      }
+    });
+    if (flag) {
+      AwesomeNotifications().dismiss(10);
+      int i = 0;
+      for (bool b in bet) {
+        if (b) break;
+        i++;
+      }
+      if (i > 2) return;
+      String localTimeZone =
+          await AwesomeNotifications().getLocalTimeZoneIdentifier();
 
-    await AwesomeNotifications().createNotification(
-        content: NotificationContent(
-            id: 10,
-            channelKey: 'scheduled',
-            title: 'Masz mecz do obstawienia',
-            body:
-                'Obstaw mecz ${matches[i].teamA} - ${matches[i].teamB} (mecz rozpocznie się ${matches[i].dateString}).',
-            notificationLayout: NotificationLayout.BigPicture,
-            bigPicture: 'asset://assets/images/melted-clock.png'),
-        schedule: NotificationInterval(
-            interval: 30, timeZone: localTimeZone, repeats: false));
+      await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+              id: 10,
+              channelKey: 'scheduled',
+              title: 'Masz mecz do obstawienia',
+              body:
+                  'Obstaw mecz ${matches[i].teamA} - ${matches[i].teamB} (mecz rozpocznie się ${matches[i].dateString}).',
+              notificationLayout: NotificationLayout.BigPicture,
+              bigPicture: 'asset://assets/images/melted-clock.png'),
+          schedule: NotificationInterval(
+              interval: 30, timeZone: localTimeZone, repeats: false));
+    }
   }
 
   @override
