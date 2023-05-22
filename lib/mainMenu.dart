@@ -227,7 +227,7 @@ class _MainMenu extends State<MainMenu> {
               notificationLayout: NotificationLayout.BigPicture,
               bigPicture: 'asset://assets/images/melted-clock.png'),
           schedule: NotificationInterval(
-              interval: 30, timeZone: localTimeZone, repeats: false));
+              interval: 3000, timeZone: localTimeZone, repeats: false));
     }
   }
 

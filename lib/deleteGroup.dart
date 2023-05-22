@@ -98,9 +98,11 @@ class _DeleteGroup extends State<DeleteGroup> {
                             style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     const Color.fromARGB(255, 255, 0, 0)),
-                            onPressed: () {
+                            onPressed:_buttonEnabled
+                            ? () {
                               Navigator.pop(context);
-                            },
+                            } 
+                            : null,
                             child: const Text("NIE"))),
                   ],
                 )

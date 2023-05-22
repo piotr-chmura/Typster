@@ -28,6 +28,7 @@ class _BetMatch extends State<BetMatch> {
   String validate1 = "";
   String validate2 = "";
   var dao = MatchesDAO();
+  bool _buttonEnabled = true;
 
   Future<void> getBet() async {
     try {
@@ -50,6 +51,18 @@ class _BetMatch extends State<BetMatch> {
     super.dispose();
     teamA_bet.dispose();
     teamB_bet.dispose();
+  }
+
+  void _switchButton() {
+    if (_buttonEnabled) {
+      setState(() {
+        _buttonEnabled = false;
+      });
+    } else {
+      setState(() {
+        _buttonEnabled = true;
+      });
+    }
   }
 
   @override
@@ -186,7 +199,9 @@ class _BetMatch extends State<BetMatch> {
                         width: 150,
                         padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                         child: ElevatedButton(
-                            onPressed: () async {
+                            onPressed: _buttonEnabled
+                            ? () async {
+                              _switchButton();
                               var teamABet = teamA_bet.text;
                               var teamBBet = teamB_bet.text;
                               String result = "Obstawiono mecz!";
@@ -205,7 +220,9 @@ class _BetMatch extends State<BetMatch> {
                                 // ignore: use_build_context_synchronously
                                 Navigator.pop(context, result);
                               }
-                            },
+                              _switchButton();
+                            } 
+                            : null,
                             child: const Text("OBSTAW"))),
                     Container(
                         height: 60,
@@ -215,9 +232,11 @@ class _BetMatch extends State<BetMatch> {
                             style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     const Color.fromARGB(255, 255, 0, 0)),
-                            onPressed: () {
+                            onPressed: _buttonEnabled
+                            ? () {
                               Navigator.pop(context, "Wycofano obstawianie");
-                            },
+                            }
+                            : null,
                             child: const Text("WYCOFAJ"))),
                   ],
                 )

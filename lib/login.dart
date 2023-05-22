@@ -23,6 +23,7 @@ class _LoginState extends State<Login> {
   bool validate2 = true;
   bool hidePassword = true;
   bool isChecked = false;
+  bool _buttonEnabled = true;
 
 //alert typu pop-up
 
@@ -36,6 +37,18 @@ class _LoginState extends State<Login> {
     super.dispose();
     usernameController.dispose();
     passwordController.dispose();
+  }
+
+  void _switchButton() {
+    if (_buttonEnabled) {
+      setState(() {
+        _buttonEnabled = false;
+      });
+    } else {
+      setState(() {
+        _buttonEnabled = true;
+      });
+    }
   }
 
   Future<void> _navigateAndDisplaySelection(BuildContext context) async {
@@ -126,7 +139,9 @@ class _LoginState extends State<Login> {
               height: 50,
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: ElevatedButton(
-                  onPressed: () async {
+                  onPressed: _buttonEnabled
+                    ? () async {
+                    _switchButton();
                     String username = usernameController.text;
                     String password = passwordController.text;
                     setState(() {
@@ -180,7 +195,9 @@ class _LoginState extends State<Login> {
                         );
                       }
                     }
-                  },
+                    _switchButton();
+                  }
+                  : null,
                   child: const Text("Zaloguj")),
             ),
             const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
@@ -188,9 +205,11 @@ class _LoginState extends State<Login> {
               const Text("Nie masz konta?"),
               InkWell(
                 child: TextButton(
-                  onPressed: () {
+                  onPressed: _buttonEnabled
+                    ? () {
                     _navigateAndDisplaySelection(context);
-                  },
+                  }
+                  : null,
                   child: const Text("Załóż konto"),
                 ),
               )
@@ -199,11 +218,13 @@ class _LoginState extends State<Login> {
               const Text("Zapomniałeś hasła?"),
               InkWell(
                 child: TextButton(
-                  onPressed: () {
+                  onPressed: _buttonEnabled
+                    ? () {
                     Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const PasswordRecovery())
                     );
-                  },
+                  }
+                  : null,
                   child: const Text("Odzyskaj hasło"),
                 ),
               )

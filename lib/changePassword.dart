@@ -21,6 +21,7 @@ class _ChangePassword extends State<ChangePassword> {
   bool validate3 = true;
   bool hidePassword = true;
   var dao = PasswordRecDAO();
+  bool _buttonEnabled = true;
 
   @override
   void initState() {
@@ -32,6 +33,18 @@ class _ChangePassword extends State<ChangePassword> {
     super.dispose();
     _controller1.dispose();
     _controller2.dispose();
+  }
+
+  void _switchButton() {
+    if (_buttonEnabled) {
+      setState(() {
+        _buttonEnabled = false;
+      });
+    } else {
+      setState(() {
+        _buttonEnabled = true;
+      });
+    }
   }
 
   @override
@@ -94,7 +107,9 @@ class _ChangePassword extends State<ChangePassword> {
                 height: 50,
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: ElevatedButton(
-                    onPressed: () async {
+                    onPressed: _buttonEnabled
+                            ? () async {
+                      _switchButton();
                       String oldPassword = _controller1.text;
                       String newPassword = _controller2.text;
                       String newPassword2 = _controller3.text;
@@ -134,7 +149,9 @@ class _ChangePassword extends State<ChangePassword> {
                           );
                         }
                       }
-                    },
+                      _switchButton();
+                    } 
+                    : null,
                     child: const Text('Zmień hasło')),
               )
             ],

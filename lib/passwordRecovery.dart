@@ -14,7 +14,7 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
   TextEditingController emailController = TextEditingController();
   String validate1 = "";
   var dao = PasswordRecDAO();
-
+  bool _buttonEnabled = true;
 //alert typu pop-up
 
   @override
@@ -26,6 +26,18 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
   void dispose() {
     super.dispose();
     emailController.dispose();
+  }
+
+    void _switchButton() {
+    if (_buttonEnabled) {
+      setState(() {
+        _buttonEnabled = false;
+      });
+    } else {
+      setState(() {
+        _buttonEnabled = true;
+      });
+    }
   }
 
   @override
@@ -70,7 +82,9 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
               height: 50,
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: ElevatedButton(
-                  onPressed: () async {
+                  onPressed: _buttonEnabled
+                    ? () async {
+                    _switchButton();
                     String email = emailController.text;
                     setState(() {
                       validate1 = isValidEmail(email);
@@ -113,7 +127,9 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
                         );
                       }
                     }
-                  },
+                    _switchButton();
+                  }
+                  : null,
                   child: const Text("Odzyskaj hasło")),
             ),
           ],
