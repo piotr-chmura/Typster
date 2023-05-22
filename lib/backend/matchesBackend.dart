@@ -99,16 +99,19 @@ class MatchesDAO extends DAO {
     return matches;
   }
 
-  Future<List<Match>> matchesMainList() async {
+  Future<dynamic> matchesMainList() async {
     List<Match> matches = [];
+    List<bool> bet = [];
     final prefs = await SharedPreferences.getInstance();
     final idUser = prefs.getString('id');
     await db!.getConn().then((conn) async {
       String sql =
-          '''SELECT l.name, m.data, m.team_a, m.team_b, m.id_match, m.score_a, m.score_b, DATE_FORMAT(m.data, '%d.%m %H:%i'), l.id_league
+          '''SELECT l.name, m.data, m.team_a, m.team_b, m.id_match, m.score_a, m.score_b, DATE_FORMAT(m.data, '%d.%m %H:%i'), l.id_league, mu.score_a
               FROM t_matches m 
               INNER JOIN t_leagues l ON m.league_id_league = l.id_league
+              LEFT JOIN t_matches_users mu ON m.id_match = mu.match_id_match
               WHERE m.data BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 24 DAY) 
+              AND (mu.user_id_user = ? OR mu.user_id_user IS NULL)
               AND m.id_match IN
                 (
                   SELECT DISTINCT gm.match_id_match
@@ -123,7 +126,7 @@ class MatchesDAO extends DAO {
               LIMIT 3;''';
       await conn.connect();
       var prepareStatment = await conn.prepare(sql);
-      await prepareStatment.execute([idUser]).then((result) {
+      await prepareStatment.execute([idUser, idUser]).then((result) {
         if (result.numOfRows > 0) {
           for (var row in result.rows) {
             matches.add(Match(
@@ -136,6 +139,11 @@ class MatchesDAO extends DAO {
                 row.colAt(6)?.isEmpty ?? true ? null : int.parse(row.colAt(6)!),
                 row.colAt(7),
                 row.colAt(8)));
+            if (row.colAt(9) == null) {
+              bet.add(true);
+            } else {
+              bet.add(false);
+            }
           }
         } else {
           throw Exception("Błąd bazy danych: Brak meczy do wyświetlenia");
@@ -146,7 +154,7 @@ class MatchesDAO extends DAO {
       await prepareStatment.deallocate();
       await conn.close();
     });
-    return matches;
+    return [matches, bet];
   }
 
   Future<void> placeBet(String idMatch, String scoreA, String scoreB) async {
@@ -216,5 +224,48 @@ class MatchesDAO extends DAO {
       await conn.close();
     });
     return bets;
+  }
+
+  Future<List<MatchBetHistory>> matchesUserList() async {
+    List<MatchBetHistory> matches = [];
+    final prefs = await SharedPreferences.getInstance();
+    final idUser = prefs.getString('id');
+    await db!.getConn().then((conn) async {
+      String sql =
+          '''SELECT l.name, m.data, m.team_a, m.team_b, m.score_a, m.score_b, DATE_FORMAT(m.data, '%d.%m %H:%i'), l.id_league, mu.score_a, mu.score_b
+              FROM t_matches m 
+              INNER JOIN t_leagues l ON m.league_id_league = l.id_league
+              INNER JOIN t_matches_users mu ON m.id_match = mu.match_id_match
+              WHERE (m.score_a IS NOT NULL) AND (mu.user_id_user = ?)
+              ORDER BY m.data DESC
+              ;''';
+      await conn.connect();
+      var prepareStatment = await conn.prepare(sql);
+      await prepareStatment.execute([idUser]).then((result) {
+        if (result.numOfRows > 0) {
+          for (var row in result.rows) {
+            matches.add(MatchBetHistory(
+                row.colAt(0),
+                row.colAt(2),
+                row.colAt(3),
+                row.colAt(4)?.isEmpty ?? true ? null : int.parse(row.colAt(4)!),
+                row.colAt(5)?.isEmpty ?? true ? null : int.parse(row.colAt(5)!),
+                row.colAt(6),
+                row.colAt(7),
+                row.colAt(8)?.isEmpty ?? true ? null : int.parse(row.colAt(8)!),
+                row.colAt(9)?.isEmpty ?? true
+                    ? null
+                    : int.parse(row.colAt(9)!)));
+          }
+        } else {
+          throw Exception("Błąd bazy danych: Brak meczy do wyświetlenia");
+        }
+      }, onError: (details) {
+        throw Exception(details.toString());
+      });
+      await prepareStatment.deallocate();
+      await conn.close();
+    });
+    return matches;
   }
 }

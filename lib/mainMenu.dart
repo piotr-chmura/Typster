@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,11 +20,15 @@ class _MainMenu extends State<MainMenu> {
   Column matchListView = Column();
   var dao = MatchesDAO();
   List<Match> matches = [];
+  List<bool> bet = [];
 
   Future<void> getMatches() async {
     try {
-      matches = await dao.matchesMainList();
+      var temp = await dao.matchesMainList();
+      matches = temp[0];
+      bet = temp[1];
       matchesView();
+      notification();
     } catch (e) {
       List<Widget> matchWidgetError = [
         const Text(
@@ -47,6 +52,11 @@ class _MainMenu extends State<MainMenu> {
 
   @override
   void initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
     getUsername();
     getMatches();
     super.initState();
@@ -157,17 +167,17 @@ class _MainMenu extends State<MainMenu> {
                     Container(
                       padding: const EdgeInsets.fromLTRB(10, 20, 5, 20),
                       child: Image(
-                        width: 150,
-                        image: AssetImage(
-                            "lib/resources/Team logos/$leagueId/$teamA.png")),
+                          width: 150,
+                          image: AssetImage(
+                              "lib/resources/Team logos/$leagueId/$teamA.png")),
                     ),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(5, 20, 10, 20),
                       child: Image(
-                        width: 150,
-                        image: AssetImage(
-                            "lib/resources/Team logos/$leagueId/$teamB.png")),
+                          width: 150,
+                          image: AssetImage(
+                              "lib/resources/Team logos/$leagueId/$teamB.png")),
                     )
                   ],
                 ),
@@ -193,31 +203,59 @@ class _MainMenu extends State<MainMenu> {
             )));
   }
 
+  Future<void> notification() async {
+    bool flag = false;
+    flag = await AwesomeNotifications().isNotificationAllowed();
+    if (flag) {
+      AwesomeNotifications().dismiss(10);
+      int i = 0;
+      for (bool b in bet) {
+        if (b) break;
+        i++;
+      }
+      if (i > 2) return;
+      String localTimeZone =
+          await AwesomeNotifications().getLocalTimeZoneIdentifier();
+
+      await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+              id: 10,
+              channelKey: 'scheduled',
+              title: 'Masz mecz do obstawienia',
+              body:
+                  'Obstaw mecz ${matches[i].teamA} - ${matches[i].teamB} (mecz rozpocznie się ${matches[i].dateString}).',
+              notificationLayout: NotificationLayout.BigPicture,
+              bigPicture: 'asset://assets/images/melted-clock.png'),
+          schedule: NotificationInterval(
+              interval: 30, timeZone: localTimeZone, repeats: false));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         drawer: NavDrawer(),
         appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.green,
-            size: 30,
-          ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              const Expanded(
-                child: Center(child: Text('Typster'))),
-              IconButton(
-                iconSize: 30,
-                icon: const Icon(Icons.account_circle),
-                onPressed: () {
-                  Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Account(userName: username))
-                  );
-                },
-              ), 
-          ])
-        ),
+            iconTheme: const IconThemeData(
+              color: Colors.green,
+              size: 30,
+            ),
+            title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Expanded(child: Center(child: Text('Typster'))),
+                  IconButton(
+                    iconSize: 30,
+                    icon: const Icon(Icons.account_circle),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Account(userName: username)));
+                    },
+                  ),
+                ])),
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(children: <Widget>[

@@ -2,7 +2,7 @@ import 'package:mysql_client/mysql_client.dart';
 import 'dart:async';
 
 class Mysql {
-  static String host = "217.96.213.120",
+  static String host = "217.96.205.29",
       userName = "Host_PCH_API_UPDATE",
       password = "h>k96{U9M8#2Qr8_",
       databaseName = "typster";
@@ -92,6 +92,28 @@ class Match {
       }
     } else {
       return 3;
+    }
+  }
+}
+
+class MatchBetHistory {
+  String? name, teamA, teamB, dateString, leagueId;
+  int? scoreA, scoreB, uScoreA, uScoreB, points = 0;
+  MatchBetHistory(this.name, this.teamA, this.teamB, this.scoreA, this.scoreB,
+      this.dateString, this.leagueId, this.uScoreA, this.uScoreB) {
+    points = _getPoints(scoreA, scoreB, uScoreA, uScoreB);
+  }
+
+  int _getPoints(int? scoreA, int? scoreB, int? uScoreA, int? uScoreB) {
+    if ((scoreA == uScoreA) && (scoreB == uScoreB)) {
+      return 3;
+    } else if (scoreA! - scoreB! == uScoreA! - uScoreB!) {
+      return 2;
+    } else if (((scoreA > scoreB) && (uScoreA > uScoreB)) ||
+        ((scoreA < scoreB) && (uScoreA < uScoreB))) {
+      return 1;
+    } else {
+      return 0;
     }
   }
 }
