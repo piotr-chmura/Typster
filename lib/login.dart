@@ -140,64 +140,66 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: ElevatedButton(
                   onPressed: _buttonEnabled
-                    ? () async {
-                    _switchButton();
-                    String username = usernameController.text;
-                    String password = passwordController.text;
-                    setState(() {
-                      isNullOrEmpty(username)
-                          ? validate1 = false
-                          : validate1 = true;
-                      isNullOrEmpty(password)
-                          ? validate2 = false
-                          : validate2 = true;
-                    });
-                    if (validate1 && validate2) {
-                      User user = User(username, password, "", 0);
-                      String res = "";
-                      await dao.loginUser(user).then((result) {
-                        res = result;
-                      }).catchError((error) {
-                        res = error;
-                      });
-                      if (int.tryParse(res) != null) {
-                        final prefs = await SharedPreferences.getInstance();
-                        await prefs.setString('username', username);
-                        await prefs.setString('id', res);
-                        if (isChecked) {
-                          DateTime now = DateTime.now();
-                          //DateTime(now.year, now.month, now.day);
-                          await prefs.setStringList('date', [
-                            now.day.toString(),
-                            now.month.toString(),
-                            now.year.toString()
-                          ]);
+                      ? () async {
+                          _switchButton();
+                          String username = usernameController.text;
+                          String password = passwordController.text;
+                          setState(() {
+                            isNullOrEmpty(username)
+                                ? validate1 = false
+                                : validate1 = true;
+                            isNullOrEmpty(password)
+                                ? validate2 = false
+                                : validate2 = true;
+                          });
+                          if (validate1 && validate2) {
+                            User user = User(username, password, "", 0);
+                            String res = "";
+                            await dao.loginUser(user).then((result) {
+                              res = result;
+                            }).catchError((error) {
+                              res = error;
+                            });
+                            if (int.tryParse(res) != null) {
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              await prefs.setString('username', username);
+                              await prefs.setString('id', res);
+                              if (isChecked) {
+                                DateTime now = DateTime.now();
+                                //DateTime(now.year, now.month, now.day);
+                                await prefs.setStringList('date', [
+                                  now.day.toString(),
+                                  now.month.toString(),
+                                  now.year.toString()
+                                ]);
+                              }
+                              // ignore: use_build_context_synchronously
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const MainMenu()));
+                            } else {
+                              // ignore: use_build_context_synchronously
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Błąd'),
+                                  content: Text(res),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'OK'),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          }
+                          _switchButton();
                         }
-                        // ignore: use_build_context_synchronously
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MainMenu()));
-                      } else {
-                        // ignore: use_build_context_synchronously
-                        showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Błąd'),
-                            content: Text(res),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, 'OK'),
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    }
-                    _switchButton();
-                  }
-                  : null,
+                      : null,
                   child: const Text("Zaloguj")),
             ),
             const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
@@ -206,10 +208,10 @@ class _LoginState extends State<Login> {
               InkWell(
                 child: TextButton(
                   onPressed: _buttonEnabled
-                    ? () {
-                    _navigateAndDisplaySelection(context);
-                  }
-                  : null,
+                      ? () {
+                          _navigateAndDisplaySelection(context);
+                        }
+                      : null,
                   child: const Text("Załóż konto"),
                 ),
               )
@@ -219,12 +221,14 @@ class _LoginState extends State<Login> {
               InkWell(
                 child: TextButton(
                   onPressed: _buttonEnabled
-                    ? () {
-                    Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const PasswordRecovery())
-                    );
-                  }
-                  : null,
+                      ? () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const PasswordRecovery()));
+                        }
+                      : null,
                   child: const Text("Odzyskaj hasło"),
                 ),
               )
