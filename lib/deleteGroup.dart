@@ -18,6 +18,7 @@ class DeleteGroup extends StatefulWidget {
 
 class _DeleteGroup extends State<DeleteGroup> {
   var dao = EditGroupDAO();
+  bool _buttonEnabled = true;
 
   @override
   void initState() {
@@ -27,6 +28,18 @@ class _DeleteGroup extends State<DeleteGroup> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void _switchButton() {
+    if (_buttonEnabled) {
+      setState(() {
+        _buttonEnabled = false;
+      });
+    } else {
+      setState(() {
+        _buttonEnabled = true;
+      });
+    }
   }
 
   @override
@@ -59,7 +72,9 @@ class _DeleteGroup extends State<DeleteGroup> {
                         width: 150,
                         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         child: ElevatedButton(
-                            onPressed: () async {
+                            onPressed:_buttonEnabled
+                            ? () async {
+                              _switchButton();
                               try {
                                 await dao.deleteGroup(widget.groupId);
                               } catch (e) {
@@ -71,7 +86,9 @@ class _DeleteGroup extends State<DeleteGroup> {
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           const yourGroupsMatches()));
-                            },
+                              _switchButton();
+                            } 
+                            : null,
                             child: const Text("TAK"))),
                     Container(
                         height: 60,
@@ -81,9 +98,11 @@ class _DeleteGroup extends State<DeleteGroup> {
                             style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     const Color.fromARGB(255, 255, 0, 0)),
-                            onPressed: () {
+                            onPressed:_buttonEnabled
+                            ? () {
                               Navigator.pop(context);
-                            },
+                            } 
+                            : null,
                             child: const Text("NIE"))),
                   ],
                 )

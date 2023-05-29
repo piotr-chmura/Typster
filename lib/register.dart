@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_final_fields
 
 import 'package:flutter/material.dart';
+import 'about.dart';
 import 'backend/database.dart';
 import 'backend/registerBackend.dart';
 import 'backend/BuissnesObject.dart';
@@ -23,6 +24,7 @@ class _RegisterState extends State<Register> {
   bool validate3 = true;
   String validate4 = "";
   bool hidePassword = true;
+  bool _buttonEnabled = true;
 
   @override
   void initState() {
@@ -36,6 +38,38 @@ class _RegisterState extends State<Register> {
     _controller2.dispose();
     _controller3.dispose();
     _controller4.dispose();
+  }
+
+    Future<void> _navigateAndDisplaySelection(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const About()),
+    );
+
+    if (!mounted) return;
+    if (result == null) return;
+
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+          content: Center(
+            child: Text('$result', style: const TextStyle(color: Colors.green)),
+          ),
+          duration: const Duration(milliseconds: 3000),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: const Color.fromARGB(255, 66, 66, 66)));
+    }
+
+  void _switchButton() {
+    if (_buttonEnabled) {
+      setState(() {
+        _buttonEnabled = false;
+      });
+    } else {
+      setState(() {
+        _buttonEnabled = true;
+      });
+    }
   }
 
   @override
@@ -99,7 +133,9 @@ class _RegisterState extends State<Register> {
                 height: 50,
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: ElevatedButton(
-                    onPressed: () async {
+                    onPressed: _buttonEnabled
+                      ? () async {
+                      _switchButton();
                       String username = _controller1.text;
                       String password = _controller2.text;
                       String password2 = _controller3.text;
@@ -157,9 +193,25 @@ class _RegisterState extends State<Register> {
                           );
                         }
                       }
-                    },
-                    child: const Text('Załóż konto')),
+                      _switchButton();
+                    }
+                    : null,
+                    child: const Text('Załóż konto')
+                    ),
+              ),
+              const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+              InkWell(
+                child: TextButton(
+                  onPressed: _buttonEnabled
+                    ? () {
+                    _navigateAndDisplaySelection(context);
+                  }
+                  : null,
+                  child: const Text("Zapoznaj się z zasadami działania aplikacji"),
+                ),
               )
+            ]),
             ],
           ),
         ),

@@ -240,14 +240,16 @@ class _EditGroup extends State<EditGroup> {
                     width: 200,
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: _buttonEnabled
+                            ? () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => DeleteGroup(
                                       groupName: widget.groupName,
                                       groupId: widget.groupId)));
-                        },
+                        } 
+                        : null,
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red),
                         child: const Text("Usuń grupę")))

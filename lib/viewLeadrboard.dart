@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_final_fields
+import 'package:awesome_select/awesome_select.dart';
 import 'package:test_app/backend/leaderboardBackend.dart';
 import 'package:test_app/backend/database.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,8 @@ class _ViewLeaderboard extends State<ViewLeaderboard> {
   var dao = LeaderboardDAO();
   List<UserPlacement> users = [];
   List<DataRow> rows = [];
+  int value = 1;
+  List<S2Choice<int>> sezonsList = [S2Choice(value: 1, title: "Aktualny sezon"), S2Choice(value: 2, title: "Sezon 2022")];
   SingleChildScrollView table = SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: SingleChildScrollView(
@@ -151,6 +154,37 @@ class _ViewLeaderboard extends State<ViewLeaderboard> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
+                child: SmartSelect<int>.single(
+                  choiceLayout: S2ChoiceLayout.wrap,
+                  choiceStyle: const S2ChoiceStyle(
+                      color: Colors.green,
+                      titleStyle: TextStyle(color: Colors.green),
+                      subtitleStyle: TextStyle(color: Colors.green)),
+                  modalType: S2ModalType.popupDialog,
+                  modalConfig: S2ModalConfig(
+                      useConfirm: true,
+                      confirmIcon: null,
+                      confirmLabel: Container(
+                          decoration: const BoxDecoration(
+                              color: Colors.green,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          width: 100,
+                          height: 30,
+                          child: const Center(
+                              child: Text("Potwierdź",
+                                  style: TextStyle(color: Colors.white))))),
+                  modalHeaderStyle: const S2ModalHeaderStyle(
+                      textStyle: TextStyle(color: Colors.white)
+                      ),
+                  selectedValue: value,
+                  choiceItems: sezonsList,
+                  title: "Wybierz sezon",
+                  onChange: (state) => setState(() => value = state.value),
+                )
+                ),
               const SizedBox(height: 20),
               Center(child: table)
             ])));

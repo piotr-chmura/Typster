@@ -104,20 +104,22 @@ class _yourGroupsMatches extends State<yourGroupsMatches> {
 
   void createTable() {
     table = SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-                showCheckboxColumn: false,
-                columns: const [
-                  DataColumn(
-                    label: Text('Nazwa'),
-                  ),
-                  DataColumn(
-                    label: Text('Właściciel'),
-                  ),
-                ],
-                rows: rows)));
+      scrollDirection: Axis.vertical,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          showCheckboxColumn: false,
+          columns: const [
+            DataColumn(
+              label: Text('Nazwa'),
+            ),
+            DataColumn(
+              label: Text('Właściciel'),
+            ),
+          ],
+          rows: rows)
+      )
+    );
     setState(() {});
   }
 
@@ -134,29 +136,32 @@ class _yourGroupsMatches extends State<yourGroupsMatches> {
                 margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
                 child: const Center(child: Text('Typster')))),
         body: Padding(
-            padding: const EdgeInsets.all(10),
-            child: ListView(children: <Widget>[
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(30),
-                child: const Text(
-                  "Twoje grupy",
-                  style: TextStyle(
-                      fontSize: 26,
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold),
-                ),
+          padding: const EdgeInsets.all(10),
+          child: ListView(children: <Widget>[
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(30),
+              child: const Text(
+                "Twoje grupy",
+                style: TextStyle(
+                    fontSize: 26,
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold),
               ),
-              Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 50),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 2,
-                          color: const Color.fromRGBO(100, 100, 100, 1)),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10))),
-                  child: table)
-            ])));
+            ),
+            Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 50),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        width: 2,
+                        color: const Color.fromRGBO(100, 100, 100, 1)),
+                    borderRadius:
+                        const BorderRadius.all(Radius.circular(10))),
+                child: table)
+            ]
+          )
+        )
+      );
   }
 }

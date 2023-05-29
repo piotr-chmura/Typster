@@ -19,6 +19,7 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
       List.generate(5, (_) => TextEditingController());
   List<bool> validate = List.generate(5, (_) => true);
   var dao = PasswordRecDAO();
+  bool _buttonEnabled = true;
 
   @override
   void initState() {
@@ -33,6 +34,18 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
     code[2].dispose();
     code[3].dispose();
     code[4].dispose();
+  }
+
+  void _switchButton() {
+    if (_buttonEnabled) {
+      setState(() {
+        _buttonEnabled = false;
+      });
+    } else {
+      setState(() {
+        _buttonEnabled = true;
+      });
+    }
   }
 
   Expanded CodeGen(TextEditingController code, validate) {
@@ -98,7 +111,9 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
               height: 50,
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: ElevatedButton(
-                  onPressed: () async {
+                  onPressed: _buttonEnabled
+                    ? () async {
+                    _switchButton();
                     String fullCode = code[0].text +
                         code[1].text +
                         code[2].text +
@@ -148,7 +163,9 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
                         );
                       }
                     }
-                  },
+                    _switchButton();
+                  }
+                  : null,
                   child: const Text("Odzyskaj hasło")),
             ),
             const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
@@ -156,14 +173,18 @@ class _PasswordRecoveryCode extends State<PasswordRecoveryCode> {
               const Text("Kod nie przyszedł?"),
               InkWell(
                 child: TextButton(
-                  onPressed: () async {
+                  onPressed: _buttonEnabled
+                    ? () async {
+                    _switchButton();
                     try {
                       widget.code =
                           await dao.sendCode2(widget.email, widget.name);
                     } catch (e) {
                       print(e.toString());
                     }
-                  },
+                    _switchButton();
+                  }
+                  : null,
                   child: const Text("Wyślij ponownie"),
                 ),
               )

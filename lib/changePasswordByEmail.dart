@@ -21,6 +21,7 @@ class _ChangePasswordByEmail extends State<ChangePasswordByEmail> {
   bool validate2 = true;
   bool hidePassword = true;
   var dao = PasswordRecDAO();
+  bool _buttonEnabled = true;
 
   @override
   void initState() {
@@ -32,6 +33,18 @@ class _ChangePasswordByEmail extends State<ChangePasswordByEmail> {
     super.dispose();
     _controller1.dispose();
     _controller2.dispose();
+  }
+
+    void _switchButton() {
+    if (_buttonEnabled) {
+      setState(() {
+        _buttonEnabled = false;
+      });
+    } else {
+      setState(() {
+        _buttonEnabled = true;
+      });
+    }
   }
 
   @override
@@ -87,7 +100,9 @@ class _ChangePasswordByEmail extends State<ChangePasswordByEmail> {
                 height: 50,
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: ElevatedButton(
-                    onPressed: () async {
+                    onPressed: _buttonEnabled
+                            ? () async {
+                      _switchButton();
                       String password = _controller1.text;
                       String password2 = _controller2.text;
                       setState(() {
@@ -108,7 +123,9 @@ class _ChangePasswordByEmail extends State<ChangePasswordByEmail> {
                             MaterialPageRoute(
                                 builder: (context) => const Login()));
                       }
-                    },
+                      _switchButton();
+                    }
+                    : null,
                     child: const Text('Zmień hasło')),
               )
             ],
