@@ -76,6 +76,7 @@ flutter:
   - lib/resources/Team logos/140/
   - lib/resources/Team logos/848/
   - lib/resources/Crowns/
+  - lib/resources/App Logo/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
