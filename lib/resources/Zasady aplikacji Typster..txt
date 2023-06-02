@@ -19,3 +19,4 @@ Poprawny typ - 1 punkt.
 Po zakończeniu spotkania punkty są automatycznie przyznawane i aktualizują się tabele z liderami poszczególnych grup.
 Jeżeli użytkownik nie wytypował wyniku spotkania nie otrzymuje za nie żadnych punktów.
 Założyciel grupy może przewidzieć nagrody dla najlepszych typerów w jego lidze.
+Użytkownicy ograniczeni są do należenia do maksymalnie 10 grup.
