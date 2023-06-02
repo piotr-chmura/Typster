@@ -168,7 +168,7 @@ class _CreateGroup extends State<CreateGroup> {
                                       result =
                                           "Istnieje już grupa o takiej nazwie";
                                     } else {
-                                      result = "Błąd bazy: $e";
+                                      result = e.toString().substring(11);
                                     }
                                   }
                                   if (result == "Uworzono grupę") {

@@ -7,8 +7,27 @@ class CreateGroupDAO extends DAO {
     final prefs = await SharedPreferences.getInstance();
     final idUser = prefs.getString('id');
     await db!.getConn().then((conn) async {
-      String sql = 'insert into t_groups values (?, ?, ?, ?);';
+      String sql1 =
+          'SELECT COUNT(*) FROM t_groups_users WHERE user_id_user = ?;';
       await conn.connect();
+      var prepStatment = await conn.prepare(sql1);
+      await prepStatment.execute([idUser]).then((result) {
+        if (result.numOfRows > 0) {
+          for (var row in result.rows) {
+            if (int.parse(row.colAt(0)!) >= 10) {
+              throw Exception(
+                  "Użytkownik jest już członkiem maksymalnej ilości grup czyli 10");
+            }
+          }
+        } else {
+          throw Exception("Błąd bazy danych");
+        }
+      }, onError: (details) {
+        throw Exception(details.toString());
+      });
+      await prepStatment.deallocate();
+
+      String sql = 'insert into t_groups values (?, ?, ?, ?);';
       var prepareStatment = await conn.prepare(sql);
       await prepareStatment
           .execute([null, group.name, idUser, group.description]).then(
