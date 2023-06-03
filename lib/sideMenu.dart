@@ -20,17 +20,13 @@ class NavDrawer extends StatelessWidget {
         children: <Widget>[
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.green,
-              /*
-                image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage('assets/images/cover.jpg'))
-                    */
+              color: Color.fromRGBO(50, 50, 50, 1.0),  
             ),
-            child: Text(
-              'Side menu',
-              style: TextStyle(color: Colors.white, fontSize: 25),
-            ),
+            child: Image(
+                      width: 120,
+                      image: AssetImage(
+                          "lib/resources/App Logo/typster-baner.png")
+                      ),
           ),
           ListTile(
             leading: const Icon(Icons.home),

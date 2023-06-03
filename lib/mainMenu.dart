@@ -243,7 +243,14 @@ class _MainMenu extends State<MainMenu> {
             title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  const Expanded(child: Center(child: Text('Typster'))),
+                  const Expanded(child: 
+                    Center(child: Image(
+                      width: 120,
+                      image: AssetImage(
+                          "lib/resources/App Logo/typster-baner.png")
+                      )
+                    )
+                  ),
                   IconButton(
                     iconSize: 30,
                     icon: const Icon(Icons.account_circle),
@@ -269,7 +276,7 @@ class _MainMenu extends State<MainMenu> {
               ),
               Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 150),
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
                 child: Text(
                   username,
                   style: const TextStyle(color: Colors.green, fontSize: 20),
@@ -279,7 +286,7 @@ class _MainMenu extends State<MainMenu> {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 50),
                 child: const Text(
-                  "Zbliżające się wydarzenie",
+                  "Zbliżające się wydarzenia",
                   style: TextStyle(fontSize: 20),
                 ),
               ),

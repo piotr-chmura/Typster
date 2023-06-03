@@ -1,0 +1,36 @@
+BIAŁY
+1. Aplikacja powstała aby umożliwiać jej użytkownikom rywalizację w typowaniu wyników meczów piłkarskich. 
+W aplikacji każdy użytkownik może dołączyć do grupy aby rywalizować z pozostałymi jej członkami lub utworzyć swoją grupę i rywalizować w niej ze znajomymi.
+Tworząc grupę podajemy jej nazwę oraz opis, w którym możemy zawrzeć np. proponowane przez założyciela nagrody dla najlepszych typerów. 
+Założyciel grupy wybiera ligi, których mecze będą mogły być obstawiane przez członków grupy. 
+
+2. Można wybierać spośród 9 lig:
+ZIELONY
+    UEFA Champions League
+    UEFA Europa League
+    UEFA Conference League
+    Premier League
+    La Liga
+    Bundesliga
+    Ligue 1
+    Serie A
+    Ekstraklasa
+
+BIAŁY
+3. Można wybrać od 1 do nawet 9 lig. Każdy z członków grupy aż do momentu rozpoczęcia meczu może typować jego wynik lub edytować wcześniejszy typ. W momencie rozpoczęcia spotkania typowanie będzie niemożliwe.
+
+4. Za każdy mecz można zdobyć maksymalnie 3 punkty. Zasady Punktacji wyglądają następująco:
+ZIELONY
+    Dokładny wynik - 3 punkty.
+    Różnica bramek - 2 punkty.
+    Poprawny typ - 1 punkt.
+
+BIAŁY
+5. Po zakończeniu spotkania punkty są automatycznie przyznawane i aktualizują się tabele z liderami poszczególnych grup.
+
+6. Jeżeli użytkownik nie wytypował wyniku spotkania nie otrzymuje za nie żadnych punktów.
+
+7. Założyciel grupy może przewidzieć nagrody dla najlepszych typerów w jego lidze.
+
+8. Użytkownicy ograniczeni są do należenia do maksymalnie 10 grup.
+

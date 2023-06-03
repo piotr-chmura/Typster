@@ -77,7 +77,14 @@ class _EditGroup extends State<EditGroup> {
         appBar: AppBar(
             title: Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-                child: const Center(child: Text('Typster')))),
+                child: const Center(child: Image(
+                      width: 120,
+                      image: AssetImage(
+                          "lib/resources/App Logo/typster-baner.png")
+                      )
+                    )
+        )
+        ),
         body: ListView(children: <Widget>[
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
               Widget>[
