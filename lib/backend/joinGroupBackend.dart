@@ -16,7 +16,7 @@ class JoinGroupDAO extends DAO {
           for (var row in result.rows) {
             if (int.parse(row.colAt(0)!) >= 10) {
               throw Exception(
-                  "Użytkownik należy już do maksymalnej ilości grup czyli 10");
+                  "Należysz już do maksymalnej ilości grup czyli 10");
             }
           }
         } else {
