@@ -22,10 +22,12 @@ class ViewLeaderboard extends StatefulWidget {
 
 class _ViewLeaderboard extends State<ViewLeaderboard> {
   var dao = LeaderboardDAO();
-  List<UserPlacement> users = [];
+  List<Leaderboard> usersAllSeasons = [];
   List<DataRow> rows = [];
   int value = 1;
-  List<S2Choice<int>> sezonsList = [S2Choice(value: 1, title: "Aktualny sezon"), S2Choice(value: 2, title: "Sezon 2022")];
+  List<S2Choice<int>> sezonsList = [
+    S2Choice(value: 1, title: "Aktualny sezon")
+  ];
   SingleChildScrollView table = SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: SingleChildScrollView(
@@ -48,8 +50,13 @@ class _ViewLeaderboard extends State<ViewLeaderboard> {
 
   Future<void> getUsers() async {
     try {
-      users = await dao.leaderboard(widget.groupId, widget.isTop10);
-      getRows();
+      usersAllSeasons = await dao.leaderboard(widget.groupId, widget.isTop10);
+      for (var season in usersAllSeasons) {
+        if (season.name == '1') continue;
+        sezonsList.add(S2Choice(
+            value: int.parse(season.name!), title: "Sezon ${season.name}"));
+      }
+      getRows(1);
     } catch (e) {
       print(e);
     }
@@ -95,10 +102,17 @@ class _ViewLeaderboard extends State<ViewLeaderboard> {
     }
   }
 
-  void getRows() {
+  void getRows(int choice) {
+    value = choice;
+
     List<DataRow> rows = [];
-    for (var user in users) {
-      rows.add(row(user.username, user.id, user.points));
+    for (var season in usersAllSeasons) {
+      if (season.name == value.toString()) {
+        for (var user in season.leaderboard) {
+          rows.add(row(user.username, user.id, user.points));
+        }
+        break;
+      }
     }
     this.rows = rows;
     createTable();
@@ -139,14 +153,11 @@ class _ViewLeaderboard extends State<ViewLeaderboard> {
             ),
             title: Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-                child: const Center(child: Image(
-                      width: 120,
-                      image: AssetImage(
-                          "lib/resources/App Logo/typster-baner.png")
-                      )
-                    )
-            )
-        ),
+                child: const Center(
+                    child: Image(
+                        width: 120,
+                        image: AssetImage(
+                            "lib/resources/App Logo/typster-baner.png"))))),
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(children: <Widget>[
@@ -162,36 +173,34 @@ class _ViewLeaderboard extends State<ViewLeaderboard> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
-                child: SmartSelect<int>.single(
-                  choiceLayout: S2ChoiceLayout.wrap,
-                  choiceStyle: const S2ChoiceStyle(
-                      color: Colors.green,
-                      titleStyle: TextStyle(color: Colors.green),
-                      subtitleStyle: TextStyle(color: Colors.green)),
-                  modalType: S2ModalType.popupDialog,
-                  modalConfig: S2ModalConfig(
-                      useConfirm: true,
-                      confirmIcon: null,
-                      confirmLabel: Container(
-                          decoration: const BoxDecoration(
-                              color: Colors.green,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                          width: 100,
-                          height: 30,
-                          child: const Center(
-                              child: Text("Potwierdź",
-                                  style: TextStyle(color: Colors.white))))),
-                  modalHeaderStyle: const S2ModalHeaderStyle(
-                      textStyle: TextStyle(color: Colors.white)
-                      ),
-                  selectedValue: value,
-                  choiceItems: sezonsList,
-                  title: "Wybierz sezon",
-                  onChange: (state) => setState(() => value = state.value),
-                )
-                ),
+                  padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
+                  child: SmartSelect<int>.single(
+                    choiceLayout: S2ChoiceLayout.wrap,
+                    choiceStyle: const S2ChoiceStyle(
+                        color: Colors.green,
+                        titleStyle: TextStyle(color: Colors.green),
+                        subtitleStyle: TextStyle(color: Colors.green)),
+                    modalType: S2ModalType.popupDialog,
+                    modalConfig: S2ModalConfig(
+                        useConfirm: true,
+                        confirmIcon: null,
+                        confirmLabel: Container(
+                            decoration: const BoxDecoration(
+                                color: Colors.green,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            width: 100,
+                            height: 30,
+                            child: const Center(
+                                child: Text("Potwierdź",
+                                    style: TextStyle(color: Colors.white))))),
+                    modalHeaderStyle: const S2ModalHeaderStyle(
+                        textStyle: TextStyle(color: Colors.white)),
+                    selectedValue: value,
+                    choiceItems: sezonsList,
+                    title: "Wybierz sezon",
+                    onChange: (state) => getRows(value = state.value),
+                  )),
               const SizedBox(height: 20),
               Center(child: table)
             ])));

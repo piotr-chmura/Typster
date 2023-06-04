@@ -63,6 +63,13 @@ class UserPlacement {
   UserPlacement(this.id, this.username, this.points);
 }
 
+class Leaderboard {
+  String? name;
+  List<UserPlacement> leaderboard = [];
+
+  Leaderboard(this.name, this.leaderboard);
+}
+
 class GroupUserPlacement {
   String? name, place, points, id;
 
