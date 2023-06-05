@@ -109,9 +109,8 @@ class MatchesDAO extends DAO {
           '''SELECT l.name, m.data, m.team_a, m.team_b, m.id_match, m.score_a, m.score_b, DATE_FORMAT(m.data, '%d.%m %H:%i'), l.id_league, mu.score_a
               FROM t_matches m 
               INNER JOIN t_leagues l ON m.league_id_league = l.id_league
-              LEFT JOIN t_matches_users mu ON m.id_match = mu.match_id_match
-              WHERE m.data BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 24 DAY) 
-              AND (mu.user_id_user = ? OR mu.user_id_user IS NULL)
+              LEFT JOIN (SELECT user_id_user, match_id_match, score_a FROM t_matches_users WHERE user_id_user = ?) mu ON m.id_match = mu.match_id_match
+              WHERE m.data BETWEEN NOW() AND DATE(NOW() + INTERVAL 7 DAY) 
               AND m.id_match IN
                 (
                   SELECT DISTINCT gm.match_id_match

@@ -243,14 +243,12 @@ class _MainMenu extends State<MainMenu> {
             title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  const Expanded(child: 
-                    Center(child: Image(
-                      width: 120,
-                      image: AssetImage(
-                          "lib/resources/App Logo/typster-baner.png")
-                      )
-                    )
-                  ),
+                  const Expanded(
+                      child: Center(
+                          child: Image(
+                              width: 120,
+                              image: AssetImage(
+                                  "lib/resources/App Logo/typster-baner.png")))),
                   IconButton(
                     iconSize: 30,
                     icon: const Icon(Icons.account_circle),
