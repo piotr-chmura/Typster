@@ -25,7 +25,7 @@ class NavDrawer extends StatelessWidget {
             child: Image(
                       width: 120,
                       image: AssetImage(
-                          "lib/resources/App Logo/typster-baner.png")
+                          "lib/resources/App Logo/typster-baner2.png")
                       ),
           ),
           ListTile(
