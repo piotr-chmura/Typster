@@ -139,19 +139,6 @@ class _Leaderboard extends State<Leaderboard> {
                 ),
               ),
               Container(
-                  child: TextField(
-                      controller: searchBarController,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Wyszukaj grupę",
-                          suffixIcon: IconButton(
-                            icon: Icon(Icons.search),
-                            onPressed: () {
-                              //wyszukaj z bazy dancyh po wartości controlera
-                            },
-                          )))),
-              const SizedBox(height: 20),
-              Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 50),
                   decoration: BoxDecoration(
