@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'backend/database.dart';
 import 'backend/registerBackend.dart';
 import 'backend/BuissnesObject.dart';
@@ -16,9 +17,10 @@ class About extends StatefulWidget {
 
 class _About extends State<About> {
   bool textColor = false;
+  Column RULES = Column();
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
   }
 
@@ -51,13 +53,13 @@ class _About extends State<About> {
     }
   }
 
-  Column rules() {
-    // Ścieżka do pliku tekstowego
-    var filePath = 'lib/resources/Zasady aplikacji Typster.txt';
+  Future<String> readTextFile() async {
+    final String data = await rootBundle.loadString('lib/resources/ZasadyAplikacjiTypster.txt');
+    return data;
+  }
 
-    // Otwieranie pliku
-    var file = File(filePath);
-    var contents = file.readAsStringSync();
+  Future<void> rules() async{
+    var contents = await readTextFile();
     List<String> parts = contents.split('\n');
     Column Y = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,11 +67,14 @@ class _About extends State<About> {
           return rule(item);
         }).toList());
 
-    return Y;
+    setState(() {
+    RULES = Y;
+  });
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
+    rules();
     return Scaffold(
         appBar: AppBar(
             title: Container(
@@ -89,7 +94,7 @@ class _About extends State<About> {
           )),
           Container(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-            child: rules(),
+            child: RULES,
           )
         ]));
   }
