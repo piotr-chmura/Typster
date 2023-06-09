@@ -12,6 +12,46 @@ import 'mainMenu.dart';
 class NavDrawer extends StatelessWidget {
   const NavDrawer({super.key});
 
+  void showPopup(BuildContext context) {
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Czy chcesz się wylogować ?'),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                child: const Text('Anuluj'),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Zamknięcie okienka
+                },
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const Text('Potwierdź'),
+                onPressed: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.remove('username');
+                  await prefs.remove('date');
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/login',
+                    (Route<dynamic> route) => false, // Usunięcie wszystkich poprzednich tras
+                  );
+              },
+            ),
+          ]
+          )
+        ],
+      );
+    },
+  );
+}
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -81,6 +121,12 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Wyloguj'),
+            
+            onTap: () {
+              showPopup(context);
+            },
+            
+            /*
             onTap: () async {
               final prefs = await SharedPreferences.getInstance();
               await prefs.remove('username');
@@ -89,6 +135,7 @@ class NavDrawer extends StatelessWidget {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => const Login()));
             },
+            */
           ),
         ],
       ),

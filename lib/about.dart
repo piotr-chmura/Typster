@@ -1,12 +1,6 @@
 // ignore_for_file: prefer_final_fields
-
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'backend/database.dart';
-import 'backend/registerBackend.dart';
-import 'backend/BuissnesObject.dart';
 
 class About extends StatefulWidget {
   const About({super.key});
