@@ -152,7 +152,7 @@ class _EditGroup extends State<EditGroup> {
               children: <Widget>[
                 Container(
                     height: 70,
-                    width: 200,
+                    width: 160,
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: ElevatedButton(
                         onPressed: _buttonEnabled
@@ -244,7 +244,7 @@ class _EditGroup extends State<EditGroup> {
                         child: const Text("Edytuj grupę"))),
                 Container(
                     height: 70,
-                    width: 200,
+                    width: 160,
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: ElevatedButton(
                         onPressed: _buttonEnabled

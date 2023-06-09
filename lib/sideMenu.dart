@@ -23,27 +23,33 @@ class NavDrawer extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ElevatedButton(
-                child: const Text('Anuluj'),
-                onPressed: () {
-                  Navigator.of(context).pop(); // Zamknięcie okienka
-                },
+              SizedBox(
+                width: 100,
+                child: ElevatedButton(
+                  child: const Text('Anuluj'),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Zamknięcie okienka
+                  },
+                ),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: const Text('Potwierdź'),
-                onPressed: () async {
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.remove('username');
-                  await prefs.remove('date');
-                  // ignore: use_build_context_synchronously
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/login',
-                    (Route<dynamic> route) => false, // Usunięcie wszystkich poprzednich tras
-                  );
-              },
-            ),
+              SizedBox(
+                width: 100,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  child: const Text('Potwierdź'),
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.remove('username');
+                    await prefs.remove('date');
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/login',
+                      (Route<dynamic> route) => false, // Usunięcie wszystkich poprzednich tras
+                    );
+                  },
+              ),
+            )
           ]
           )
         ],
