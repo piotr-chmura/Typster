@@ -163,8 +163,6 @@ class _LoginState extends State<Login> {
                             minutesDiff = difference.inMinutes;
                           }else{
                             minutesDiff = 2;
-                            print(counter);
-                            print(minutesDiff);
                           }
                           if(minutesDiff >= 1){
 
