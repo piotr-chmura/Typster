@@ -28,7 +28,7 @@ class LeaderboardDAO extends DAO {
             i += 1;
           }
         } else {
-          throw Exception("Błąd bazy danych (leaderboard)");
+          throw Exception("Błąd bazy danych (leaderboard1)");
         }
       }, onError: (details) {
         throw Exception(details.toString());
@@ -50,7 +50,7 @@ class LeaderboardDAO extends DAO {
             tabels.add(row.colAt(0)!);
           }
         } else {
-          throw Exception("Błąd bazy danych (leaderboard)");
+          throw Exception("Błąd bazy danych (leaderboard2)");
         }
       }, onError: (details) {
         throw Exception(details.toString());
@@ -58,6 +58,7 @@ class LeaderboardDAO extends DAO {
       await prepareStatment2.deallocate();
 
       for (var tabel in tabels) {
+        bool flag = false;
         String sql3 = '''SELECT u.nickname, gu.points
                       FROM t_users u
                       INNER JOIN $tabel gu ON u.id_user = gu.user_id_user
@@ -66,21 +67,22 @@ class LeaderboardDAO extends DAO {
         var prepareStatment3 = await conn.prepare(sql3);
         await prepareStatment3.execute([groupId]).then((result) {
           if (result.numOfRows > 0) {
+            flag = true;
             int i = 1;
             for (var row in result.rows) {
               leaderBoard
                   .add(UserPlacement(i.toString(), row.colAt(0), row.colAt(1)));
               i += 1;
             }
-          } else {
-            throw Exception("Błąd bazy danych (leaderboard)");
           }
         }, onError: (details) {
           throw Exception(details.toString());
         });
         await prepareStatment3.deallocate();
-        leaderBoards.add(
-            Leaderboard(tabel.replaceAll('t_groups_users_', ''), leaderBoard));
+        if (flag) {
+          leaderBoards.add(Leaderboard(
+              tabel.replaceAll('t_groups_users_', ''), leaderBoard));
+        }
         leaderBoard = [];
       }
       await conn.close();
