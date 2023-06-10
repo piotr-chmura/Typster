@@ -24,6 +24,8 @@ class _LoginState extends State<Login> {
   bool hidePassword = true;
   bool isChecked = false;
   bool _buttonEnabled = true;
+  String usernameGlobal = "";
+  int counter = 0;
 
 //alert typu pop-up
 
@@ -150,6 +152,25 @@ class _LoginState extends State<Login> {
                   onPressed: _buttonEnabled
                       ? () async {
                           _switchButton();
+                          var time = await SharedPreferences.getInstance();
+                          var dateList = time.getStringList('timeFailLogin');
+                          int minutesDiff;
+                          if(dateList != null){
+                            print("CZAS W PRZESZLOSCI " + dateList[0]);
+                            print("CZAS TERAZ "+DateTime.now().minute.toString());
+                            var DateSaved = DateTime(int.parse(dateList[4]), int.parse(dateList[3]),
+                            int.parse(dateList[2]), int.parse(dateList[1]), int.parse(dateList[0]));
+                            var dateNow = DateTime.now();
+                            Duration difference = dateNow.difference(DateSaved);
+                            minutesDiff = difference.inMinutes;
+                            print("Roznicza "+minutesDiff.toString());
+                          }else{
+                            minutesDiff = 2;
+                            print(counter);
+                            print(minutesDiff);
+                          }
+                          if(minutesDiff >= 1){
+
                           String username = usernameController.text;
                           String password = passwordController.text;
                           setState(() {
@@ -182,12 +203,51 @@ class _LoginState extends State<Login> {
                                   now.year.toString()
                                 ]);
                               }
+                              counter = 0; //przywrócenie licznika
                               // ignore: use_build_context_synchronously
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => const MainMenu()));
                             } else {
+                              if(usernameGlobal == usernameController.text)
+                              {
+                                counter++;
+                              }else
+                              {
+                                usernameGlobal = usernameController.text;
+                              }
+                              //Ustawienie blokady jeżeli próbowano zalogować sie 5 razy na to samo konto
+                              if(counter >= 5)
+                              {
+                              final prefs = await SharedPreferences.getInstance();
+                                DateTime now = DateTime.now();
+                                //DateTime(now.year, now.month, now.day);
+                                await prefs.setStringList('timeFailLogin', [
+                                  now.minute.toString(),
+                                  now.hour.toString(),
+                                  now.day.toString(),
+                                  now.month.toString(),
+                                  now.year.toString()
+                                ]);
+                                counter = 0;
+                                // ignore: use_build_context_synchronously
+                                await showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Błąd logowania'),
+                                  content: const Text("Następuje blokada logowania spróbuj ponownie za minute"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'OK'),
+                                      child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              //Jeżeli nie przekroczono limitu prób
+                              }else{
                               // ignore: use_build_context_synchronously
                               showDialog<String>(
                                 context: context,
@@ -203,7 +263,26 @@ class _LoginState extends State<Login> {
                                   ],
                                 ),
                               );
+                              }
                             }
+                          }
+                          }else{
+                            //różnica czasu mniejsza niż 1 minut czyli nie upłynoł czas blokady
+                            // ignore: use_build_context_synchronously
+                           showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Błąd logowania'),
+                                  content: const Text("Nastąpiła blokada logowania spróbuj ponownie za minute"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'OK'),
+                                      child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
                           }
                           _switchButton();
                         }
