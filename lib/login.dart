@@ -156,14 +156,11 @@ class _LoginState extends State<Login> {
                           var dateList = time.getStringList('timeFailLogin');
                           int minutesDiff;
                           if(dateList != null){
-                            print("CZAS W PRZESZLOSCI " + dateList[0]);
-                            print("CZAS TERAZ "+DateTime.now().minute.toString());
-                            var DateSaved = DateTime(int.parse(dateList[4]), int.parse(dateList[3]),
+                            var dateSaved = DateTime(int.parse(dateList[4]), int.parse(dateList[3]),
                             int.parse(dateList[2]), int.parse(dateList[1]), int.parse(dateList[0]));
                             var dateNow = DateTime.now();
-                            Duration difference = dateNow.difference(DateSaved);
+                            Duration difference = dateNow.difference(dateSaved);
                             minutesDiff = difference.inMinutes;
-                            print("Roznicza "+minutesDiff.toString());
                           }else{
                             minutesDiff = 2;
                             print(counter);
