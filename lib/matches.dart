@@ -290,7 +290,7 @@ class _Matches extends State<Matches> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     SizedBox(
-                      width: 120,
+                      width: 100,
                       height: 40,
                       child: ElevatedButton(
                         onPressed: () => matchesView(),
@@ -300,13 +300,13 @@ class _Matches extends State<Matches> {
                       ),
                     ),
                     SizedBox(
-                        width: 120,
+                        width: 100,
                         height: 40,
                         child: ElevatedButton(
                             onPressed: () => matchesViewAvailable(),
                             child: const Text("Dostępne"))),
                     SizedBox(
-                        width: 120,
+                        width: 110,
                         height: 40,
                         child: ElevatedButton(
                             onPressed: () => matchesViewEnded(),
