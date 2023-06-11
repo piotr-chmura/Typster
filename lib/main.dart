@@ -50,7 +50,6 @@ class MyApp extends StatelessWidget {
     }
     return MaterialApp(
       title: 'Typster',
-      initialRoute: '/login',
       routes: {
         '/login': (context) => Login(), // Ekran logowania jako ścieżka '/login'
         // Dodaj inne ścieżki do innych ekranów
