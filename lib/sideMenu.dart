@@ -18,7 +18,7 @@ class NavDrawer extends StatelessWidget {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Czy chcesz się wylogować ?'),
+        content: const Text('Czy chcesz się wylogować ?'),
         actions: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -26,6 +26,7 @@ class NavDrawer extends StatelessWidget {
               SizedBox(
                 width: 100,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                   child: const Text('Anuluj'),
                   onPressed: () {
                     Navigator.of(context).pop(); // Zamknięcie okienka
@@ -35,7 +36,6 @@ class NavDrawer extends StatelessWidget {
               SizedBox(
                 width: 100,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                   child: const Text('Potwierdź'),
                   onPressed: () async {
                     final prefs = await SharedPreferences.getInstance();

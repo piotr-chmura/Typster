@@ -89,7 +89,8 @@ class _RegisterState extends State<Register> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Column(
+          child: ListView(children: [
+          Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.max,
@@ -217,6 +218,7 @@ class _RegisterState extends State<Register> {
                 ),
               )
             ]),
+            ])
             ],
           ),
         ),
