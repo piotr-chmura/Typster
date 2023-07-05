@@ -1,0 +1,93 @@
+CREATE TABLE t_groups (
+    id_group    INTEGER NOT NULL AUTO_INCREMENT,
+    name        VARCHAR(30) NOT NULL UNIQUE,
+    id_admin    INTEGER NOT NULL,
+    description VARCHAR(1000),
+	PRIMARY KEY (id_group)
+);
+
+
+CREATE TABLE t_groups_matches (
+	id 
+    group_id_group INTEGER NOT NULL,
+    match_id_match INTEGER NOT NULL
+);
+
+ALTER TABLE t_groups_matches ADD CONSTRAINT group_match_pk PRIMARY KEY ( group_id_group,
+                                                                       match_id_match );
+
+CREATE TABLE t_groups_users (
+    group_id_group INTEGER NOT NULL,
+    user_id_user   INTEGER NOT NULL
+);
+
+ALTER TABLE t_groups_users ADD CONSTRAINT group_user_pk PRIMARY KEY ( group_id_group,
+                                                                    user_id_user );
+
+
+CREATE TABLE t_leagues (
+    id_league INTEGER NOT NULL,
+    name      INTEGER NOT NULL
+);
+
+ALTER TABLE t_leagues ADD CONSTRAINT league_pk PRIMARY KEY ( id_league );
+
+CREATE TABLE t_matches (
+    id_match         INTEGER NOT NULL,
+    team_a           VARCHAR(40) NOT NULL,
+    team_b           VARCHAR(40) NOT NULL,
+    scor_a           INTEGER,
+    scor_b           INTEGER,
+    league_id_league INTEGER,
+    data             DATE NOT NULL
+);
+
+ALTER TABLE t_matches ADD CONSTRAINT match_pk PRIMARY KEY ( id_match );
+
+CREATE TABLE t_matches_users (
+    user_id_user   INTEGER NOT NULL,
+    match_id_match INTEGER NOT NULL,
+    score_a INTEGER NOT NULL,
+    score_b INTEGER NOT NULL
+);
+
+ALTER TABLE t_matches_users ADD CONSTRAINT match_user_pk PRIMARY KEY ( user_id_user,
+                                                                     match_id_match );
+
+CREATE TABLE t_users (
+    id_user  INTEGER NOT NULL AUTO_INCREMENT,
+    nickname VARCHAR(20) NOT NULL UNIQUE,
+    password VARCHAR(30) NOT NULL,
+    e_mail   VARCHAR(30) NOT NULL UNIQUE,
+	PRIMARY KEY (id_user)
+);
+
+ALTER TABLE t_groups_matches
+    ADD CONSTRAINT group_match_group_fk FOREIGN KEY ( group_id_group )
+        REFERENCES t_groups ( id_group );
+
+ALTER TABLE t_groups_matches
+    ADD CONSTRAINT group_match_match_fk FOREIGN KEY ( match_id_match )
+        REFERENCES t_matches ( id_match );
+
+ALTER TABLE t_groups_users
+    ADD CONSTRAINT group_user_group_fk FOREIGN KEY ( group_id_group )
+        REFERENCES t_groups ( id_group );
+
+ALTER TABLE t_groups_users
+    ADD CONSTRAINT group_user_user_fk FOREIGN KEY ( user_id_user )
+        REFERENCES t_users ( id_user );
+
+ALTER TABLE t_matches
+    ADD CONSTRAINT match_league_fk FOREIGN KEY ( league_id_league )
+        REFERENCES t_leagues ( id_league );
+
+ALTER TABLE t_matches_users
+    ADD CONSTRAINT match_user_match_fk FOREIGN KEY ( match_id_match )
+        REFERENCES t_matches ( id_match );
+
+ALTER TABLE t_matches_users
+    ADD CONSTRAINT match_user_user_fk FOREIGN KEY ( user_id_user )
+        REFERENCES t_users ( id_user );
+
+
